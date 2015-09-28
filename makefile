@@ -1,11 +1,12 @@
 CC=gcc
-CFLAGS= -Wall -Wextra -std=c99 -pedantic -O3
-GTKFLAGS= `pkg-config --libs --cflags gtk+-2.0`
-SDLFLAGS= `sdl2-config --cflags`
-LIBS= `sdl2-config --libs`
+CPPFLAGS= `pkg-config --cflags sdl gtk+-2.0`
+CFLAGS= -std=c99 -pedantic -O3 #-Wall -Wextra -std=c99 -pedantic -O3
+LDFLAGS=
+LDLIBS= `pkg-config --libs sdl gtk+-2.0` -lSDL_image
+SRC= main.c
 
-#temporary
-gtkall:
-	$(CC) maingtk-example.c -o gtkexe $(CFLAGS) $(GTKFLAGS)
-sdlall:
-	$(CC) $(CFLAGS) mainsdl-example.c -o sdlexe $(SDLFLAGS) $(LIBS)
+all:
+	$(CC) $(CFLAGS) $(SRC) -o facedetect $(CPPFLAGS) $(LDLIBS)
+clean:
+	rm -f *~ *.o
+	rm -f facedetect
