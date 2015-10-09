@@ -8,7 +8,6 @@ LDLIBS= `pkg-config --libs sdl gtk+-2.0` -lSDL_image
 
 
 FILES= main.c ./src/IntegralImage.c
-#OBJ=$(FILES:.c=.o)
 
 all: main
 
@@ -16,5 +15,5 @@ main:
 	$(CC) $(CFLAGS) $(FILES) -o $(EXE) $(CPPFLAGS) $(LDLIBS)
 
 clean:
-	rm -f *~ *.o
+	rm -f *~ ./src/*.o
 	rm -f $(EXE)

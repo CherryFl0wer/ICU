@@ -54,17 +54,33 @@ void putpixel(SDL_Surface *surface, unsigned x, unsigned y, Uint32 pixel) {
 }
 
 
-Uint32 sumRowII(SDL_Surface* img, int x, int y) {
+Uint32 sumRowII(SDL_Surface *img, int x, int y) {
 	return (y == -1) ? 0 : sumRowII(img,x,y-1) + getpixel(img, x, y);
 }
 
-Uint32 sumII(SDL_Surface* img, int x, int y) {
+Uint32 sumII(SDL_Surface *img, int x, int y) {
 	return (x == -1) ? 0 : sumII(img,x-1,y) + sumRowII(img,x,y);
 }
 
-void integralimage(SDL_Surface* img) {
+void integralImg(SDL_Surface *img) {
 	if(img == NULL) return;
 	for(int i = 0; i < img->w; i++)
 		for(int j = 0; j < img->h; j++)
 			putpixel(img, i, j, sumII(img, i, j));
+}
+
+void imgToGreyScale(SDL_Surface *img) {
+	Uint8 r, g, b;
+
+	Uint32 pixel = 0;
+	float luminance = 0.0;
+	for(int i = 0; i < img->w; i++) {
+		for(int j = 0; j < img->h; j++) {
+			SDL_GetRGB(getpixel(img, i, j), img->format, &r, &g, &b);
+			luminance = 0.299 * r + 0.587 * g + 0.114 * b;
+			r = g = b = luminance / 3;
+			pixel = SDL_MapRGB(img->format, r, g, b);
+			putpixel(img, i, j, pixel);
+		}
+	}
 }

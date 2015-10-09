@@ -31,7 +31,7 @@ int main(int argc, const char* argv[])
   }
 	
 	SDL_LockSurface(image);
- 	integralimage(image);
+	imgToGreyScale(image); 
 	SDL_UnlockSurface(image);
 
   screen = SDL_SetVideoMode(image->w, image->h, image->format->BitsPerPixel,
