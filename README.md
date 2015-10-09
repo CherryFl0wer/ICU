@@ -19,8 +19,12 @@ Use git with terminal command
 After that
 ==========
 Une fois connecté par SSH par git ainsi que l'installation de GTK2 et SDL1.2, il vous reste plus qu'à clone le projet.
-`git clone  git://github.com/Gumcher/ICU.git`
+`git clone  git@github.com:Gumcher/ICU.git`
 
 Vous avez désormais un dossier `./ICU`
+
+More about git 
+======
+> Cool website http://rogerdudler.github.io/git-guide/
 
 
