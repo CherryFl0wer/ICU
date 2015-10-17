@@ -1,3 +1,6 @@
+# ifndef _HAARFEATURES_H_
+# define _HAARFEATURES_H_
+
 #include<stdlib.h>
 #include<stdio.h>
 
@@ -10,4 +13,8 @@ struct HaarFeat
 };
 
 
-void MakeVectWithFeat(HaarFeat [],int tab[][]);
+void MakeVectWithFeat(struct HaarFeat [],int arr[24][24]);
+
+struct Haarfeat* FillVectFeatA(struct HaarFeat *vect,int arr[24][24]);
+
+#endif
