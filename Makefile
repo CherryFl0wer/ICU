@@ -7,12 +7,12 @@ LDFLAGS=
 LDLIBS= `pkg-config --libs sdl gtk+-2.0` -lSDL_image
 
 
-FILES= main.c ./src/IntegralImage.c
+SRC= main.c ./src/IntegralImage.c
 
 all: main
 
 main:  
-	$(CC) $(CFLAGS) $(FILES) -o $(EXE) $(CPPFLAGS) $(LDLIBS)
+	$(CC) $(CFLAGS) $(SRC) -o $(EXE) $(CPPFLAGS) $(LDLIBS)
 
 clean:
 	rm -f *~ ./src/*.o
