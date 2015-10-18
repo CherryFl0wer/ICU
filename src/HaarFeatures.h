@@ -21,4 +21,8 @@ struct Haarfeat* FillVectFeatB(struct HaarFeat *vect,int arr[5][5]);
 
 struct Haarfeat* FillVectFeatC(struct HaarFeat *vect,int arr[5][5]);
 
+struct Haarfeat* FillVectFeatD(struct HaarFeat *vect,int arr[5][5]);
+
+struct Haarfeat* FillVectFeatE(struct HaarFeat *vect,int arr[5][5]);
+
 #endif

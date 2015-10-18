@@ -27,8 +27,11 @@ void MakeVectWithFeat(struct HaarFeat *vect,int arr[5][5])
 	vect = FillVectFeatA(vect,arr);
     vect = FillVectFeatB(vect,arr);
     vect = FillVectFeatC(vect,arr);
+    vect = FillVectFeatD(vect,arr);
+    vect = FillVectFeatE(vect,arr);
     vect->w = 100; 
 }
+
 // compute the value of each features of type a
 struct Haarfeat* FillVectFeatA(struct HaarFeat *vect, int arr[5][5])
 {
@@ -161,4 +164,94 @@ struct Haarfeat* FillVectFeatC(struct HaarFeat *vect, int arr[5][5])
     return vect;
 }
 
+//Compute FeatD in vect
+struct Haarfeat* FillVectFeatD(struct HaarFeat *vect, int arr[5][5])
+{
+    int length = 5;
+    struct HaarFeat *haar = malloc(sizeof(struct HaarFeat));
+    haar->feat = 4;
 
+    
+    int a = 0,b = 0, c = 0, d = 0, e = 0, f = 0, g = 0, i = 0;
+	for(int x = 0; x<length; x++)
+	{
+		for(int y = 0; y<length; y++)
+		{
+			for(int h = 1; x+3*h<length; h++)
+			{
+				for(int w = 1; y+w<length; w++)
+				{
+                    //compute haar->val
+                    a = arr[x][y];
+                    b = arr[x][y+w];
+                    c = arr[x+h][y];
+                    d = arr[x+h][y+w];
+                    e = arr[x+2*h][y];
+                    f = arr[x+2*h][y+w];
+                    g = arr[x+3*h][y];
+                    i = arr[x+3*h][y+w];
+
+                    haar->x = x;
+                    haar->y = y;
+                    haar->w = w;
+                    haar->h = h;
+                    haar->val = -a -2*d + b + 2*c -2*e + 2*f - i + g;
+                
+                    
+                    *vect = *haar;
+                    vect++;
+				}
+			}
+		}
+	}
+
+    free(haar);
+    return vect;
+}
+
+
+//Compute FeatE in vect
+struct Haarfeat* FillVectFeatE(struct HaarFeat *vect, int arr[5][5])
+{
+    int length = 5;
+    struct HaarFeat *haar = malloc(sizeof(struct HaarFeat));
+    haar->feat = 5;
+
+    
+    int a = 0,b = 0, c = 0, d = 0, e = 0, f = 0, g = 0, i = 0, j = 0;
+	for(int x = 0; x<length; x++)
+	{
+		for(int y = 0; y<length; y++)
+		{
+			for(int h = 1; x+2*h<length; h++)
+			{
+				for(int w = 1; y+2*w<length; w++)
+				{
+                    //compute haar->val
+                    a = arr[x][y];
+                    b = arr[x][y+w];
+                    c = arr[x+h][y];
+                    d = arr[x+h][y+w];
+                    e = arr[x][y+2*w];
+                    f = arr[x+h][y+2*w];
+                    g = arr[x+2*h][y];
+                    i = arr[x+2*h][y+w];
+                    j = arr[x+2*h][y+2*w];
+
+                    haar->x = x;
+                    haar->y = y;
+                    haar->w = w;
+                    haar->h = h;
+                    haar->val = -a -4*d + 2*b + 2*c -e + 2*f +2*i - g - j;
+                
+                    
+                    *vect = *haar;
+                    vect++;
+				}
+			}
+		}
+	}
+
+    free(haar);
+    return vect;
+}
