@@ -7,7 +7,7 @@ LDFLAGS=
 LDLIBS= `pkg-config --libs sdl gtk+-2.0` -lSDL_image
 
 
-FILES= main.c ./src/IntegralImage.c
+FILES= main.c ./src/ArrayUtils.c ./src/IntegralImage.c
 
 all: main
 

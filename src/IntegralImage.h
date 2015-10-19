@@ -1,18 +1,16 @@
-#ifndef _II_HEADER 
-#define _II_HEADER
+#ifndef _INTEGRAL_IMAGE_HEADER 
+#define _INTEGRAL_IMAGE_HEADER
 
 #include<stdint.h>
 #include<SDL.h>
 
-Uint32 getpixel(SDL_Surface *surface, unsigned x, unsigned y);
 
-void putpixel(SDL_Surface *surface, unsigned x, unsigned y, Uint32 pixel);
+uint32_t getpixel(SDL_Surface *surface, unsigned x, unsigned y);
 
-Uint32 sumRowII(SDL_Surface *img, int x, int y);
+void putpixel(SDL_Surface *surface, unsigned x, unsigned y, uint32_t pixel);
 
-Uint32 sumII(SDL_Surface *img, int x, int y);
+void integralImg(uint8_t **arr, int x, int y);
 
-void integralImg(SDL_Surface *img);
+void imgToGreyScale(SDL_Surface *img, uint8_t **arr);
 
-void imgToGreyScale(SDL_Surface *img);
 #endif
