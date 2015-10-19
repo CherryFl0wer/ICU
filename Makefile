@@ -6,8 +6,7 @@ CFLAGS= -Wall -Wextra -std=c99 -pedantic -O3
 LDFLAGS=
 LDLIBS= `pkg-config --libs sdl gtk+-2.0` -lSDL_image
 
-
-SRC= main.c ./src/IntegralImage.c
+SRC= main.c ./src/IntegralImage.c ./src/ArrayUtils.c
 
 all: main
 
