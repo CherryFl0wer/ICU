@@ -1,4 +1,4 @@
-### Exemple of the database ###
+### Exemple of a database ###
 # |name|number of picture|picture 1|picture 2|picture 3|
 # name have to be in alphabetic order to find them  
 
