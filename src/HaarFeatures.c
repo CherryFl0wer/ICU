@@ -3,10 +3,7 @@
 
 #include"HaarFeatures.h"
 
-int main()
-{
-    return 0;
-}
+
 
 void MakeVectWithFeat(struct HaarFeat *vect,int arr[24][24])
 {
