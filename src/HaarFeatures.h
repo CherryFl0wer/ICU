@@ -13,16 +13,16 @@ struct HaarFeat
 };
 
 
-void MakeVectWithFeat(struct HaarFeat [],int arr[5][5]);
+void MakeVectWithFeat(struct HaarFeat [],int arr[24][24]);
 
-struct Haarfeat* FillVectFeatA(struct HaarFeat *vect,int arr[5][5]);
+struct HaarFeat* FillVectFeatA(struct HaarFeat *vect,int arr[24][24]);
 
-struct Haarfeat* FillVectFeatB(struct HaarFeat *vect,int arr[5][5]);
+struct HaarFeat* FillVectFeatB(struct HaarFeat *vect,int arr[24][24]);
 
-struct Haarfeat* FillVectFeatC(struct HaarFeat *vect,int arr[5][5]);
+struct HaarFeat* FillVectFeatC(struct HaarFeat *vect,int arr[24][24]);
 
-struct Haarfeat* FillVectFeatD(struct HaarFeat *vect,int arr[5][5]);
+struct HaarFeat* FillVectFeatD(struct HaarFeat *vect,int arr[24][24]);
 
-struct Haarfeat* FillVectFeatE(struct HaarFeat *vect,int arr[5][5]);
+struct HaarFeat* FillVectFeatE(struct HaarFeat *vect,int arr[24][24]);
 
 #endif
