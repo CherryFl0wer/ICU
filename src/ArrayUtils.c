@@ -1,6 +1,7 @@
 #include "ArrayUtils.h"
+#include "SDLPixel.h"
 
-uint8_t** allocMemArr(int rows, int cols) {
+uint8_t** Uint8Array(int rows, int cols) {
 	uint8_t		**arr;
 	arr = malloc(rows * sizeof(uint8_t*));
 	for(int i = 0; i < rows; i++)
@@ -8,13 +9,35 @@ uint8_t** allocMemArr(int rows, int cols) {
 	return arr;
 }
 
-void freeMemArr(uint8_t **arr, int rows) {
+void freeUint8Array(uint8_t **arr, int rows) {
 	for(int i = 0; i < rows; i++)
 		free(arr[i]);
 
 	free(arr);
 }
 
+
+uint32_t** imgToArray(SDL_Surface* img) {
+	uint32_t **arr;
+	arr = malloc(img->w * sizeof(uint32_t*));
+	for(int i = 0; i < img->w; i++)
+		arr[i] = malloc(img->h * sizeof(uint32_t));
+
+	for(int i = 0; i < img->h; i++) {
+		for(int j = 0; j < img->w; j++) {
+			arr[j][i] =  getpixel(img, j, i);		
+		}
+	}
+
+	return arr;
+}
+
+void freeImgArray(uint32_t** imgArr, int rows) {
+	for(int i = 0; i < rows; i++)
+		free(imgArr[i]);
+
+	free(imgArr);
+}
 
 void print_array2D(uint8_t **arr, size_t xmin, size_t xmax, size_t ymin, size_t ymax, int log) {	
 	if(!log) {
