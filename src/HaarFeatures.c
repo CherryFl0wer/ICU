@@ -4,7 +4,7 @@
 #include"HaarFeatures.h"
 
 
-
+// Fill vect with all different features with different sizes
 void MakeVectWithFeat(struct HaarFeat *vect,int arr[24][24])
 {
 	vect = FillVectFeatA(vect,arr);
