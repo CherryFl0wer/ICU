@@ -1,20 +1,18 @@
 CC=clang
-EXE=
-
-CPPFLAGS= `pkg-config --cflags sdl gtk+-2.0`
-CFLAGS= -Wall -Wextra -std=c99 -pedantic -O3
+  
+CPPFLAGS=
+CFLAGS= -Wall -Wextra -std=c99 -O3
 LDFLAGS=
-LDLIBS= `pkg-config --libs sdl gtk+-2.0` -lSDL_image
+LDLIBS=
 
+SRC1= db.c  
+OBJ1= ${SRC1:.c=.o} 
 
-SRC= main.c
+all: db
 
-all: database
-
-main:  
-	$(CC) $(CFLAGS) $(SRC) -o $(EXE) $(CPPFLAGS) $(LDLIBS)
+db:${OBJ1}
+	${CC} ${OBJ1} ${CFLAGS} ${LDLIBS} -o db
 
 clean:
-	rm -f *~ ./src/*.o
-	rm -f $(EXE)
-	rm -f database
+	rm -f db
+	rm -f *.o *~

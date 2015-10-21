@@ -1,7 +1,0 @@
-### Exemple of a database ###
-# |name|number of picture|picture 1|picture 2|picture 3|
-# name have to be in alphabetic order to find them  
-
-|jack|2|jack_p1.jpg|jack_p2.jpg|
-|james|1|james_p1.jpg|
-|john|3|john_p1.jpg|john_p2.jpg|john_p3.jpg|
