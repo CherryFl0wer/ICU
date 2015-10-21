@@ -121,80 +121,93 @@ void ergo()
 
 void ManageDatabase()
 {
-	int choice;
-	printf("Choose an option : \n");
-	printf("1 - Initialize with basic person faces\n");
-        printf("2 - Add a person\n");
-	printf("3 - Remove a person\n");
- 	printf("4 - Modify a person\n");
-	printf("5 - Print database\n");
-	FILE *db = fopen("database.obj","wb");
-	scanf("%d",&choice);
-	if (choice == 1) //Add a basic number of people
-	{
-		char maxou[20] = "Maxime";
-        	char bapt[20] = "Baptiste";
-        	char coco[20] = "Corentin";
-        	char adri[20] = "Adrien";
+	int choice = 0;
 
-        	//FILE *init_db = fopen("database.obj","wb");
-        	serialization(maxou,db);
-        	serialization(bapt, db);
-        	serialization(coco, db);
-        	serialization(adri, db);
-        	printf("Serializatio: ok\n");
-		printf("Init database: ok");
-        	fclose(db);
-        	print(db);
-        	//deserialization(maxou);
-        	printf("\n");
-        	modify(maxou, "john");
-        	print(db);
-        	printf("\n");
-        	//remov();
-        	//print(init_db);
-	}
-	if (choice == 2)//Add working good
+	char maxou[20] = "Maxime";
+	char bapt[20] = "Baptiste";
+	char coco[20] = "Corentin";
+	char adri[20] = "Adrien";
+	char name[20];
+
+	while(choice != 6)
 	{
-		//FILE *db = fopen("database.obj","wb");
-		printf("Enter a name : ");
-		char name[20];
-		scanf("%s",name);
-		if (isindatabase(name,db))
-		{
-			printf("%s is aleady in database", name);
-		}
-		else
-		{
-			serialization(name,db);
-			printf("Add with success");
-		}
+		printf("\nChoose an option : \n");
+
+		printf("1 - Initialize with basic person faces\n");
+    	printf("2 - Add a person\n");
+		printf("3 - Remove a person\n");
+ 		printf("4 - Modify a person\n");
+		printf("5 - Print database\n");
+		printf("6 - Quit\n");
+
+		FILE *db = fopen("database.obj","wb");
 		
-	}
-	if (choice == 3) //Remove working
-	{
-		char name[20];
-		printf("Enter a name : ");
-		scanf("%s",name);
-		remov(name);
-		
-	}
-	if (choice == 4) // some problem here but it's basically working or not :p
-	{
-		printf("Enter a name to modif : ");
-		char namemodif[20];
-		scanf("%s",namemodif);
-		printf("Enter the new name : ");
-		char newname[20];
-		scanf("%s",newname);
-		modify(namemodif,newname);
-	}
-	if (choice == 5)
-	{
-		//FILE *db = fopen("database.obj","wb");
-		print(db);
-	}
+		scanf("%d",&choice);
+
+		switch(choice)
+		{
+			case 1: //Add a basic number of people
+				/*char maxou[20] = "Maxime";
+        		char bapt[20] = "Baptiste";
+        		char coco[20] = "Corentin";
+        		char adri[20] = "Adrien";*/
+
+        		//FILE *init_db = fopen("database.obj","wb");
+        		serialization(maxou, db);
+        		serialization(bapt, db);
+        		serialization(coco, db);
+        		serialization(adri, db);
+        		printf("Serializatio: ok\n");
+				printf("Init database: ok");
+        		fclose(db);
+        		print(db);
+        		//deserialization(maxou);
+        		printf("\n");
+        		modify(maxou, "john");
+        		print(db);
+        		printf("\n");
+        		//remov();
+        		//print(init_db);
+				break;
+
+			case 2: //Add working good
+				//FILE *db = fopen("database.obj","wb");
+				printf("Enter a name : ");
+				scanf("%s",name);
+				if (isindatabase(name,db))
+				{
+					printf("%s is aleady in database", name);
+				}
+				else
+				{
+					serialization(name,db);
+					printf("Add with success\n");
+				}
+				break;
+				
+			case 3: //Remove working
+				printf("Enter a name : ");
+				scanf("%s",name);
+				remov(name);
+				break;		
 	
+			case 4: // some problem here but it's basically working or not :p
+				printf("Enter a name to modif : ");
+				char namemodif[20];
+				scanf("%s",namemodif);
+				printf("Enter the new name : ");
+				char newname[20];
+				scanf("%s",newname);
+				modify(namemodif,newname);
+				break;
+
+			case 5:
+				//FILE *db = fopen("database.obj","wb");
+				print(db);
+				break;
+		}
+
+	}
 	//An option for print database will be there soon :)
 
 }
