@@ -3,14 +3,12 @@
 
 #include<stdlib.h>
 #include<stdio.h>
+#include<stdint.h>
 #include<SDL.h>
-
+#include<SDL_image.h>
 
 void normalize(SDL_Surface *img);
 
 void equalize(SDL_Surface *img);
-
-void image_to_grey(SDL_Surface *img);
-
 
 #endif

@@ -16,18 +16,17 @@ void integralImg(uint8_t **arr, int x, int y) {
 }
 
 
-void imgToGreyScale(SDL_Surface* img, uint32_t** imgArr, uint8_t **bwImgTab) {
+void imgToGreyScale(SDL_Surface* img) {
 	uint8_t r, g, b;
-
+	uint32_t pixel = 0;
 	float luminance = 0.0;
 	for(int i = 0; i < img->w; i++) {
 		for(int j = 0; j < img->h; j++) {
-			SDL_GetRGB(imgArr[i][j], img->format, &r, &g, &b);
+			SDL_GetRGB(getpixel(img,i,j), img->format, &r, &g, &b);
 			luminance = 0.299 * r + 0.587 * g + 0.114 * b;
 			r = g = b = luminance / 3;
-			bwImgTab[i][j] = r; // or g or b whatever
-		//	pixel = SDL_MapRGB(img->format, r, g, b);
-		//	putpixel(img, i, j, pixel);
+		  pixel = SDL_MapRGB(img->format, r, g, b);
+		  putpixel(img, i, j, pixel);
 		}
 	}
 }

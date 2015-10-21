@@ -5,6 +5,6 @@
 
 void integralImg(uint8_t **arr, int x, int y);
 
-void imgToGreyScale(SDL_Surface* img, uint32_t** imgArr, uint8_t **arr);
+void imgToGreyScale(SDL_Surface* img);
 
 #endif

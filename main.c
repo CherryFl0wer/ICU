@@ -9,6 +9,7 @@
 #include "./src/IntegralImage.h"
 #include "./src/ArrayUtils.h"
 #include "./src/SDLPixel.h"
+#include "./src/Treatment.h"
 
 int main(int argc, const char* argv[])
 {
@@ -21,22 +22,18 @@ int main(int argc, const char* argv[])
   image = loadimg(argv[1]);
 
 	// _____________________ //
-
-
-	uint8_t **tabImg = Uint8Array(image->w, image->h);	
 	
 	SDL_LockSurface(image);
 
-	uint32_t **img_array = imgToArray(image);
-
- 	imgToGreyScale(image, img_array, tabImg);
-
+ 	imgToGreyScale(image);
+	normalize(image);
+	equalize(image);
+	uint8_t **tabImg = imgToArray(image);
 	integralImg(tabImg, image->w, image->h);
 
 	SDL_UnlockSurface(image);
 
 	freeUint8Array(tabImg, image->w);
-	freeImgArray(img_array, image->w);
 
 	displayImg(image);  
   return 0;

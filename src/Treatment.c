@@ -1,8 +1,5 @@
-#include<stdlib.h>
-#include<stdio.h>
-#include<SDL/SDL.h>
-#include<SDL/SDL_image.h>
-#include"IntegralImage.h"
+#include "Treatment.h"
+#include "SDLPixel.h"
 
 
 // increase the contrast of a picture
@@ -77,30 +74,3 @@ void equalize(SDL_Surface *img)
         }
     } 
 }
-
-void image_to_grey(SDL_Surface *img)
-{   
-     Uint8 r = 0,g = 0,b = 0;
-     Uint32 pix = 0;
-     float lum = 0.0;
-     for(int i = 0; i < img->w ; i++)
-     {
-         for(int j = 0; j < img->h; j++)
-         {
-             pix = getpixel(img,i,j);
-             SDL_GetRGB(pix, img->format,&r,&g,&b);
-             lum = (0.2126 * r + 0.7152  * g + 0.0722  * b)/3;
-             r  = g = b = lum;
-             pix = SDL_MapRGB(img->format, r, g, b);
-             putpixel(img, i, j, pix);
-         }
-    }
-}
-
-
-
-
-
-
-
-
