@@ -1,8 +1,4 @@
-# include <stdlib.h>
-# include <stdio.h>
-# include <string.h>
-# include <stdbool.h>
-# include "db.h"
+#include "db.h"
 
 typedef struct Person { 
 	char name[20];	//Have to implement some caracteritic for each
