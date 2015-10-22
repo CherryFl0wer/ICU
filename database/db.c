@@ -1,9 +1,5 @@
 #include "db.h"
 
-typedef struct Person { 
-	char name[20];	//Have to implement some caracteritic for each
-} person;
-
 bool isindatabase(char name[20], FILE *database)
 {	
 	person answer;
