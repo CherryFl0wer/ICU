@@ -5,6 +5,12 @@
 #include <string.h>
 #include <stdbool.h> // Try to avoid stdbool and use int 0 = false 1 = true 
 
+
+typedef struct Person { 
+	char name[20];	//Have to implement some caracteritic for each
+} person;
+
+
 void serialization(char name[20], FILE *database);
 void deserialization(char name[20]);
 void modify(char name[20], char *n);
