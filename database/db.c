@@ -138,12 +138,7 @@ void ManageDatabase()
 
 		switch(choice)
 		{
-			case 1: //Add a basic number of people
-				/*char maxou[20] = "Maxime";
-        		char bapt[20] = "Baptiste";
-        		char coco[20] = "Corentin";
-        		char adri[20] = "Adrien";*/
-
+			case 1: //Add a basic number of people	
         		//FILE *init_db = fopen("database.obj","wb");
         		serialization(maxou, db);
         		serialization(bapt, db);
@@ -196,6 +191,14 @@ void ManageDatabase()
 			case 5:
 				//FILE *db = fopen("database.obj","wb");
 				print(db);
+				break;
+
+			case 6:
+				break;
+
+			default:
+				fputs("Incorrect option\n", stderr);
+				exit(-1);
 				break;
 		}
 

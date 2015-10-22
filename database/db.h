@@ -6,8 +6,11 @@
 #include <stdbool.h> // Try to avoid stdbool and use int 0 = false 1 = true 
 
 
-typedef struct Person { 
-	char name[20];	//Have to implement some caracteritic for each
+typedef struct Person 	//Have to implement some caracteritic for each
+{ 
+	char name[20];	//name of the person
+	int nb_pics;	//number of pictures
+	char *pics[3];	//array with the path to the picture
 } person;
 
 
