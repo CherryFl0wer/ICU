@@ -15,8 +15,8 @@ struct WeakClassifier {
 };
 
 struct StrongClassifier {
-    struct WeakClassifier wc[1000];
-    int alpha[1000];
+    struct WeakClassifier wc[1000]; /* 1000 = number of tested image */
+    int alpha[1000]; /* same as above */
 };
 
 void Boost(struct StrongClassifier *sc, int nbImg, int pos);
