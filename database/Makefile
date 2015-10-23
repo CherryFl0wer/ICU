@@ -16,3 +16,7 @@ db:${OBJ1}
 clean:
 	rm -f db
 	rm -f *.o *~
+cleana:
+	rm -f db
+	rm -f *.o *~
+	rm database.obj
