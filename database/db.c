@@ -1,58 +1,57 @@
 #include "db.h"
 
-bool isindatabase(char name[20], FILE *database)
+void serialization(char name[20], FILE *database) // Vu qu'il ya eu une modif de la structure Person ici il n'y a que le nom de pris en compte => il faudrait rajouter des argument pour prendre en compte le nb image ect .. mais je suis fatiguer on verra se demain :p
 {	
 	person answer;
 	bool find = false;
 	while((fread(&answer, sizeof(person), 1, database)) && !find)
 	{
+		
 		if (strcmp(answer.name, name)==0)
 		{
 			find = true;
+			printf("%s is already in database\n",name);
 		}
 	}
-	return find;
+	if (!find)
+	{
+		person new;
+		strcpy(new.name,name); // Ici que le nom est add
+		fwrite(&new, sizeof(person), 1, database);
+		printf("Add %s succeed\n",name);
+		
+	}
 }
 
 static void print(FILE *f)
 {
-  f = fopen("database.obj", "rb");
+  f = fopen("database.obj", "r");
   fseek(f, 0, SEEK_CUR);
 
   person a;
   printf("\n");
-  printf("Print database : \n");
+  printf("Print database : \n\n");
 
-  for(int i = 0; i < 4; i++)
+  while ((!feof(f))&&(fread(&a, sizeof(person), 1, f)))   //for(int i = 0; i < 4; i++)
   {
-    fread(&a,sizeof(person), 1, f);
     printf("%s\n", a.name);
   }
 
   fclose(f);
 }
 
-void serialization(char newname[20], FILE *database) // serialize data into file
-{
-  person new;
-  strcpy(new.name,newname);
-  fwrite(&new, sizeof(person), 1, database); // write into file
-}
-
-
 void modify(char oldname[20], char n[20]) //deserialize database
 {
-  FILE *database = fopen("database.obj","r+b");
+  FILE *database = fopen("database.obj","r+");
   fseek(database, 0, SEEK_SET);
   person answer;
-  int c = -1;
+  int c = 0;
 
   while(fread(&answer, sizeof(person), 1, database))
   {
-    c++;
     if (strcmp(answer.name, oldname)==0)
     {
-      fseek(database, c - sizeof(person), SEEK_CUR); 
+      fseek(database, -sizeof(person), SEEK_CUR); 
       person modif;
       strcpy(modif.name,n);
       fwrite(&modif, sizeof(person), 1, database);
@@ -64,44 +63,35 @@ void modify(char oldname[20], char n[20]) //deserialize database
 void remov(char name[25])
 {
   FILE *database, *ndb;
-  database = fopen("database.obj", "r+b");
-  ndb = fopen("d.obj", "w+b");
+  database = fopen("database.obj", "rb");
+  ndb = fopen("temp.obj", "w+b");
   fseek(database, 0, SEEK_SET);
   person answer;
-  int c = 0;
-  int i = 0;
-  while (fread(&answer, sizeof(person), 1, database)) 
+  int found = 0;
+  while ((fread(&answer, sizeof(person), 1, database))) //While we can read a struct
   {
-    i++;
+    //i++;
     if (strcmp(name, answer.name) == 0) 
     {
       printf("A record with requested name found and deleted.\n");
-      c = 1;
+      found = 1;
     } 
     else 
     {
-      fwrite(&answer, sizeof(person), 1, ndb);
+      fwrite(&answer, sizeof(person), 1, ndb); // Writing struct in the new database ndb
     }
   }
   
-  fseek(database, i - sizeof(person), SEEK_CUR); 
-  
-  person nul;
-  strcpy(nul.name,"");  
-  fwrite(&nul, sizeof(person), 1, ndb);
-  
-  if (c == 0) 
+  if (found == 0) 
   {
-    printf("No record(s) found with the requested name: %s\n", name);
+    printf("No record(s) found with the requested name: %s\n", name); //Name doesn't exists in database
   }
-
   fclose(database);
   fclose(ndb);
 
   remove("database.obj");
-  rename("d.obj", "database.obj");
+  rename("temp.obj", "database.obj");
 }
-
 
 void ergo()
 {
@@ -126,59 +116,48 @@ void ManageDatabase()
 		printf("\nChoose an option : \n");
 
 		printf("1 - Initialize with basic person faces\n");
-    	printf("2 - Add a person\n");
+    		printf("2 - Add a person\n");
 		printf("3 - Remove a person\n");
  		printf("4 - Modify a person\n");
 		printf("5 - Print database\n");
 		printf("6 - Quit\n");
 
-		FILE *db = fopen("database.obj","wb");
+		FILE *db;
 		
 		scanf("%d",&choice);
 
 		switch(choice)
 		{
-			case 1: //Add a basic number of people	
-        		//FILE *init_db = fopen("database.obj","wb");
-        		serialization(maxou, db);
-        		serialization(bapt, db);
-        		serialization(coco, db);
-        		serialization(adri, db);
-        		printf("Serializatio: ok\n");
+			case 1:{      			
+				db = fopen("database.obj","r+b");
+        			serialization(maxou,db);
+        			serialization(bapt,db);
+        			serialization(coco,db);
+        			serialization(adri,db);
+        			printf("Serialization: ok\n");
 				printf("Init database: ok");
-        		fclose(db);
-        		print(db);
-        		//deserialization(maxou);
-        		printf("\n");
-        		modify(maxou, "john");
-        		print(db);
-        		printf("\n");
-        		//remov();
-        		//print(init_db);
-				break;
+        			fclose(db);
+        			print(db);
+				break;}
 
-			case 2: //Add working good
-				//FILE *db = fopen("database.obj","wb");
+			case 2:{ //Add working good
+				db = fopen("database.obj","r+b");
 				printf("Enter a name : ");
 				scanf("%s",name);
-				if (isindatabase(name,db))
-				{
-					printf("%s is aleady in database", name);
-				}
-				else
-				{
-					serialization(name,db);
-					printf("Add with success\n");
-				}
-				break;
+				serialization(name,db);
+				fclose(db);
+				break;}
 				
-			case 3: //Remove working
+			case 3:{ //Remove working
+				db = fopen("database.obj","r+b");
 				printf("Enter a name : ");
 				scanf("%s",name);
 				remov(name);
-				break;		
+				fclose(db);
+				break;}	
 	
-			case 4: // some problem here but it's basically working or not :p
+			case 4:{ // some problem here but it's basically working or not :p
+				db = fopen("database.obj","r+b");
 				printf("Enter a name to modif : ");
 				char namemodif[20];
 				scanf("%s",namemodif);
@@ -186,10 +165,9 @@ void ManageDatabase()
 				char newname[20];
 				scanf("%s",newname);
 				modify(namemodif,newname);
-				break;
-
+				fclose(db);
+				break;}
 			case 5:
-				//FILE *db = fopen("database.obj","wb");
 				print(db);
 				break;
 
@@ -201,16 +179,15 @@ void ManageDatabase()
 				exit(-1);
 				break;
 		}
-
 	}
-	//An option for print database will be there soon :)
-
 }
+
 int main(int argc,char **argv)
 {
 	int choice;
 	ergo();
-
+	FILE *db = fopen("database.obj","w"); // create database if she doesn't exists
+	fclose(db);
 
 	printf("Choose an option : \n");
 	printf("1 - Manage database\n");
