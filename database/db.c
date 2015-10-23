@@ -186,7 +186,7 @@ int main(int argc,char **argv)
 {
 	int choice;
 	ergo();
-	FILE *db = fopen("database.obj","w"); // create database if she doesn't exists
+	FILE *db = fopen("database.obj","a"); // create database if she doesn't exists
 	fclose(db);
 
 	printf("Choose an option : \n");
