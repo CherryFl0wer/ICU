@@ -1,5 +1,22 @@
 #include "db.h"
 
+/* In construction (Baptiste)
+ 
+int array_length(char *a[])
+{
+	return (sizeof(*a) / sizeof(char));
+}
+
+int path_in_array(person guy, char *path, FILE *databse)
+{
+	for (int i = 1; i < array_length(guy.pics); i++)
+	{
+
+	}
+}
+
+*/
+
 void serialization(char name[20], FILE *database) // Vu qu'il ya eu une modif de la structure Person ici il n'y a que le nom de pris en compte => il faudrait rajouter des argument pour prendre en compte le nb image ect .. mais je suis fatiguer on verra se demain :p
 {	
 	person answer;
@@ -18,6 +35,32 @@ void serialization(char name[20], FILE *database) // Vu qu'il ya eu une modif de
 		person new;
 		strcpy(new.name,name); // Ici que le nom est add
 		fwrite(&new, sizeof(person), 1, database);
+
+/* In construction (Baptiste)
+
+		printf("Add picture(s) of %s ?\n", name);
+		printf("Key 1 for YES other key for NO\n");
+		scanf("%d", choice);
+
+		if (choice == 1)
+		{
+			printf("How many pictures do you want to add ? : ");
+			scanf("%d", choice_nb_pics);
+
+			if(choice_nb_pics >= 1)
+			{
+				for (int i = 1; i <= choice_nb_pics; i++)
+				{
+					printf("Path of the picture : ");
+					scanf("%s", path);
+					
+					
+				}
+			}	
+		}
+
+*/
+
 		printf("Add %s succeed\n",name);
 		
 	}
