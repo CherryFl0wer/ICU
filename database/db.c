@@ -139,7 +139,7 @@ static void print(FILE *f)
   while ((!feof(f))&&(fread(&a, sizeof(person), 1, f)))   
 		  //for(int i = 0; i < 4; i++)
   {
-    printf("%s\n", a.name);
+    printf("%s      %d\n\n", a.name,a.nb_pics);
   }
 
   fclose(f);
@@ -292,8 +292,8 @@ void ManageDatabase()
 
 int main(int argc,char **argv)
 {
-	argc = argc;
-	argv = argv;
+	(void) argc;
+	(void) argv;
 	int choice;
 	ergo();
 	FILE *db = fopen("database.obj","a"); 
