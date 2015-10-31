@@ -28,7 +28,7 @@ int main(int argc, const char* argv[])
  	imgToGreyScale(image);
 	normalize(image);
 	equalize(image);
-	uint8_t **tabImg = imgToArray(image);
+	uint32_t **tabImg = imgToArray(image);
 	integralImg(tabImg, image->w, image->h);
 
 	SDL_UnlockSurface(image);
