@@ -24,7 +24,7 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
     int t = 0;
     int T = 200;
     int numImg = 0;
-
+    struct HaarFeat* Haar = malloc(sizeof(struct HaarFeat));
     double weights[T][nbImg];
     /* initialisation of weights */
     for(int i = 0;i<pos;i++)
@@ -69,7 +69,7 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
 			                {
                     		    for(int i = 0;i<nbImg;i++)
                                 {
-                    		        ValFeatD(haar,img->[i].integ); 
+                    		        ValFeatA(haar,img->[i].integ); 
                                     img->wc[i].feature = haar;
                                 }
                             }
@@ -90,7 +90,7 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
 			                {
                     		    for(int i = 0;i<nbImg;i++)
                                 {
-                    		        ValFeatD(haar,img->[i].integ); 
+                    		        ValFeatB(haar,img->[i].integ); 
                                     img->wc[i].feature = haar;
                                 }
                             }
@@ -112,7 +112,7 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
 			                {                    
                     		    for(int i = 0;i<nbImg;i++)
                                 {
-                    		        ValFeatD(haar,img->[i].integ); 
+                    		        ValFeatC(haar,img->[i].integ); 
                                     img->wc[i].feature = haar;
                                 }
                             }
