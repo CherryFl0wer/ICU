@@ -6,12 +6,36 @@ int array_length(char *a[])
 	return (sizeof(*a) / sizeof(char));
 }
 
-int path_in_array(person guy, char *path, FILE *databse)
+int path_in_array(person guy, char *path)
 {
-	for (int i = 1; i < array_length(guy.pics); i++)
+	int ret = 0;
+	int nb = guy.nb_pics;
+	int i = 0;
+	int j=0;
+	while (nb !=0)
 	{
-								
+		while (*(guy.pics + i) != '~' && *(path+j) != '\0')
+		{
+			if (!(*(guy.pics + i) == *(path+i)))
+			{
+				ret = 0;
+			}
+			else
+			{
+				ret =1;
+			}
+			i++;
+			j++;
+		}
+		if (ret == 1 && *(guy.pics + i) == '~')
+			{return 1;}
+		i++;
+		j=0;
+		nb--;
+		ret = 0;
 	}
+
+	return ret;
 }
 
 
@@ -127,7 +151,7 @@ void modify(char oldname[20], char n[20]) //deserialize database
   fseek(database, 0, SEEK_SET);
   person answer;
   int c = 0;
-"
+
   while(fread(&answer, sizeof(person), 1, database))
   {
     if (strcmp(answer.name, oldname)==0)
