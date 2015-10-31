@@ -1,17 +1,30 @@
-#ifndef ADABOOST_HEADER
-#define ADABOOST_HEADER
+#ifndef _ADABOOST_H_
+#define _ADABOOST_H_
+
 #include<stdlib.h>
-#include<stdint.h>
 #include<stdio.h>
+#include"HaarFeatures.h"
 
-typedef struct t_weak_classifier {
-	int polarity;  // Polarité de la feature
-	int threshold; // seuil 
-	uint32_t subwindow[24][24];
-	HaarFeat* feature;
-} WeakClassifier;
 
-int h(WeakClassifier *weak);
 
-void polarityImage(char* posdir, char* negdir);
+struct WeakClassifier { 
+    struct HaarFeat* feature;
+    int threshold;
+    int integ[24][24];
+    int polarity;
+};
+
+struct ImgVal {
+    struct WeakClassifier wc[1000];// 1000 = number of image to test
+}
+
+
+
+struct StrongClassifier {
+    struct WeakClassifier wc[200]; /* 200 = number of weakclassifier needed */
+    int alpha[200]; /* same as above */
+};
+
+void Boost(struct StrongClassifier *sc, int nbImg, int pos);
+
 #endif
