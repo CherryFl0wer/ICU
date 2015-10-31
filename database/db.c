@@ -298,6 +298,8 @@ void ManageDatabase()
 
 int main(int argc,char **argv)
 {
+	argc = argc;
+	argv = argv;
 	int choice;
 	ergo();
 	FILE *db = fopen("database.obj","a"); 
