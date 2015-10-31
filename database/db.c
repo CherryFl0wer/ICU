@@ -1,6 +1,5 @@
 #include "db.h"
 
-/* In construction (Baptiste)
  
 int array_length(char *a[])
 {
@@ -11,13 +10,57 @@ int path_in_array(person guy, char *path, FILE *databse)
 {
 	for (int i = 1; i < array_length(guy.pics); i++)
 	{
-
+								
 	}
 }
 
-*/
+void add_picture(path)
+{
+	
+	if(path_in_array(path))
+	{
+		int already_exist = 0;
 
-void serialization(char name[20], FILE *database) // Vu qu'il ya eu une modif de la structure Person ici il n'y a que le nom de pris en compte => il faudrait rajouter des argument pour prendre en compte le nb image ect .. mais je suis fatiguer on verra se demain :p
+		while (!already_exist)
+		{	
+			printf("This picture is already in the database\n");
+			printf("What do you want to do ?\n");
+
+			printf("1. Replace it\n");
+			printf("2. Rename\n");
+			printf("3. Cancel\n");
+
+			scanf("%d", choice_what_to_do);
+
+			switch(choice_what_to_do)
+			{
+				case 1:
+					//Add fonction replace picture
+					already_exist = 1;
+					break;
+								
+				case 2:
+					//Add fonction rename
+					if(!path_in_array(path))
+					already_exist = 1;
+					break;
+
+				case 3:
+					already_exist = 1;
+					break;
+
+				default:
+					fputs("Incorrect option\n", stderr);
+					exist(-1);
+					break;
+			}
+		}			
+	}
+}
+
+
+
+void serialization(char name[20], FILE *database) 
 {	
 	person answer;
 	bool find = false;
@@ -36,7 +79,6 @@ void serialization(char name[20], FILE *database) // Vu qu'il ya eu une modif de
 		strcpy(new.name,name); // Ici que le nom est add
 		fwrite(&new, sizeof(person), 1, database);
 
-/* In construction (Baptiste)
 
 		printf("Add picture(s) of %s ?\n", name);
 		printf("Key 1 for YES other key for NO\n");
@@ -53,13 +95,11 @@ void serialization(char name[20], FILE *database) // Vu qu'il ya eu une modif de
 				{
 					printf("Path of the picture : ");
 					scanf("%s", path);
-					
-					
+
+					add_picture(path);
 				}
 			}	
 		}
-
-*/
 
 		printf("Add %s succeed\n",name);
 		
