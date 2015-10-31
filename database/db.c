@@ -14,10 +14,10 @@ int path_in_array(person guy, char *path, FILE *databse)
 	}
 }
 
-void add_picture(path)
+void add_picture(person new, char *path)
 {
 	
-	if(path_in_array(path))
+	if(path_in_array(person new, *path, *database))
 	{
 		int already_exist = 0;
 
@@ -56,6 +56,9 @@ void add_picture(path)
 			}
 		}			
 	}
+
+	new.pics[new.nb_pics] = path;
+	new.nb_pics++;
 }
 
 
@@ -63,13 +66,13 @@ void add_picture(path)
 void serialization(char name[20], FILE *database) 
 {	
 	person answer;
-	bool find = false;
+	int find = 0;
 	while((fread(&answer, sizeof(person), 1, database)) && !find)
 	{
 		
 		if (strcmp(answer.name, name)==0)
 		{
-			find = true;
+			find = 1;
 			printf("%s is already in database\n",name);
 		}
 	}
@@ -96,7 +99,7 @@ void serialization(char name[20], FILE *database)
 					printf("Path of the picture : ");
 					scanf("%s", path);
 
-					add_picture(path);
+					add_picture(new, path);
 				}
 			}	
 		}
@@ -115,7 +118,8 @@ static void print(FILE *f)
   printf("\n");
   printf("Print database : \n\n");
 
-  while ((!feof(f))&&(fread(&a, sizeof(person), 1, f)))   //for(int i = 0; i < 4; i++)
+  while ((!feof(f))&&(fread(&a, sizeof(person), 1, f)))   
+		  //for(int i = 0; i < 4; i++)
   {
     printf("%s\n", a.name);
   }
@@ -129,7 +133,7 @@ void modify(char oldname[20], char n[20]) //deserialize database
   fseek(database, 0, SEEK_SET);
   person answer;
   int c = 0;
-
+"
   while(fread(&answer, sizeof(person), 1, database))
   {
     if (strcmp(answer.name, oldname)==0)
@@ -151,7 +155,8 @@ void remov(char name[25])
   fseek(database, 0, SEEK_SET);
   person answer;
   int found = 0;
-  while ((fread(&answer, sizeof(person), 1, database))) //While we can read a struct
+  while ((fread(&answer, sizeof(person), 1, database))) 
+		  //While we can read a struct
   {
     //i++;
     if (strcmp(name, answer.name) == 0) 
@@ -161,13 +166,15 @@ void remov(char name[25])
     } 
     else 
     {
-      fwrite(&answer, sizeof(person), 1, ndb); // Writing struct in the new database ndb
+      fwrite(&answer, sizeof(person), 1, ndb); 
+	  // Writing struct in the new database ndb
     }
   }
   
   if (found == 0) 
   {
-    printf("No record(s) found with the requested name: %s\n", name); //Name doesn't exists in database
+    printf("No record(s) found with the requested name: %s\n", name); 
+	//Name doesn't exists in database
   }
   fclose(database);
   fclose(ndb);
@@ -199,7 +206,7 @@ void ManageDatabase()
 		printf("\nChoose an option : \n");
 
 		printf("1 - Initialize with basic person faces\n");
-    		printf("2 - Add a person\n");
+    	printf("2 - Add a person\n");
 		printf("3 - Remove a person\n");
  		printf("4 - Modify a person\n");
 		printf("5 - Print database\n");
@@ -213,14 +220,14 @@ void ManageDatabase()
 		{
 			case 1:{      			
 				db = fopen("database.obj","r+b");
-        			serialization(maxou,db);
-        			serialization(bapt,db);
-        			serialization(coco,db);
-        			serialization(adri,db);
-        			printf("Serialization: ok\n");
+        		serialization(maxou,db);
+        		serialization(bapt,db);
+        		serialization(coco,db);
+        		serialization(adri,db);
+        		printf("Serialization: ok\n");
 				printf("Init database: ok");
-        			fclose(db);
-        			print(db);
+        		fclose(db);
+        		print(db);
 				break;}
 
 			case 2:{ //Add working good
@@ -269,7 +276,8 @@ int main(int argc,char **argv)
 {
 	int choice;
 	ergo();
-	FILE *db = fopen("database.obj","a"); // create database if she doesn't exists
+	FILE *db = fopen("database.obj","a"); 
+	// create database if she doesn't exists
 	fclose(db);
 
 	printf("Choose an option : \n");

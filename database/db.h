@@ -10,7 +10,7 @@ typedef struct Person 	//Have to implement some caracteritic for each
 { 
 	char name[20];	//name of the person
 	int nb_pics;	//number of pictures
-	char *pics[10];	//array with the path to the picture
+	char *pics;	//array with the path to the picture
 } person;
 
 
