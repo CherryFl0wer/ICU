@@ -16,7 +16,7 @@ int path_in_array(person guy, char *path)
 	{
 		while (*(guy.pics + i) != '|' && *(path+j) != '\0')
 		{
-			if (!(*(guy.pics + i) == *(path+i)))
+			if (!(*(guy.pics + i) == *(path+j)))
 			{
 				ret = 0;
 			}
@@ -27,12 +27,18 @@ int path_in_array(person guy, char *path)
 			i++;
 			j++;
 		}
-		if (ret == 1 && *(guy.pics + i) == '|')
-			{return 1;}
+		if (ret == 1 && *(guy.pics + i) == '|' && *(path+j) == '\0')
+		{
+			return 1;
+		}
+		while (*(guy.pics + i) != '|')
+		{
+			i++;
+		}
+		ret = 0;
 		i++;
 		j=0;
 		nb--;
-		ret = 0;
 	}
 
 	return ret;
