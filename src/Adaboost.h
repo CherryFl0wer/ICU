@@ -9,14 +9,15 @@
 
 struct WeakClassifier { 
     struct HaarFeat* feature;
-    int threshold;
+    int w;
     int integ[24][24];
     int polarity;
 };
 
 struct ImgVal {
     struct WeakClassifier wc[1000];// 1000 = number of image to test
-}
+    int theta;
+};
 
 
 
@@ -25,6 +26,6 @@ struct StrongClassifier {
     int alpha[200]; /* same as above */
 };
 
-void Boost(struct StrongClassifier *sc, int nbImg, int pos);
+void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos);
 
 #endif

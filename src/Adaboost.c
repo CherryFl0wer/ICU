@@ -2,19 +2,20 @@
 #include<stdio.h>
 
 
-#include"AdaBoost.h"
+#include"Adaboost.h"
 #include"HaarFeatures.h"
+#include"Sort.h"
 
 int main()
 {
     return 0;
 }
 
-double sumWeight(double weights[],int size)
+double sumWeight(struct WeakClassifier *wc,int size)
 {
     double res = 0.0;
     for(int i = 0;i<size;i++)
-        res += weights[i];
+        res += wc[i].w;
     return res;
 
 }
@@ -24,18 +25,17 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
     int t = 0;
     int T = 200;
     int numImg = 0;
-    struct HaarFeat* Haar = malloc(sizeof(struct HaarFeat));
-    double weights[T][nbImg];
+    struct HaarFeat* haar = malloc(sizeof(struct HaarFeat));
     /* initialisation of weights */
     for(int i = 0;i<pos;i++)
     {
-        weights[1][i] = 1/(2*pos);
+        img->wc[i].w = 1/(2*pos);
         (img->wc[i]).polarity = 1;
     }
 
     for(int i = pos;i<nbImg;i++)
     {
-        weights[1][i] = 1/(2*(nbImg-pos));
+        img->wc[i].w = 1/(2*(nbImg-pos));
         (img->wc[i]).polarity = -1;                
     }
 
@@ -46,7 +46,7 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
     {
         for(int i = 0;i<nbImg;i++)
         {
-            weights[t][i] /= sumWeight(weights[t],nbImg);
+            img->wc[i].w /= sumWeight(img->wc,nbImg);
         }
 
         /* select the best weak classifier */
@@ -59,17 +59,17 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
             if(feat ==1)
             {
                 haar->feat = 1;
-        		for(int haar->x = 0; haar->x<24; haar->x++)
+        		for(haar->x = 0; haar->x<24; haar->x++)
 	        	{
-		            for(int haar->y = 0; haar->y<24; haar->y++)
+		            for(haar->y = 0; haar->y<24; haar->y++)
 		            {
-			            for(int haar->h = 1; haar->x+haar->h<24; haar->h++)
+			            for(haar->h = 1; haar->x+haar->h<24; haar->h++)
 			            {
-			                for(int haar->w = 1;haar->y+2*haar->w<24; haar->w++)
+			                for(haar->w = 1;haar->y+2*haar->w<24; haar->w++)
 			                {
                     		    for(int i = 0;i<nbImg;i++)
                                 {
-                    		        ValFeatA(haar,img->[i].integ); 
+                    		        ValFeatA(haar,img->wc[i].integ); 
                                     img->wc[i].feature = haar;
                                 }
                             }
@@ -80,17 +80,17 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
             else if(feat == 2)
             {
                 haar->feat = 2;
-        		for(int haar->x = 0; haar->x<24; haar->x++)
+        		for(haar->x = 0; haar->x<24; haar->x++)
 	        	{
-		            for(int haar->y = 0; haar->y<24; haar->y++)
+		            for(haar->y = 0; haar->y<24; haar->y++)
 		            {
-			            for(int haar->h = 1; haar->x+haar->h<24; haar->h++)
+			            for(haar->h = 1; haar->x+haar->h<24; haar->h++)
 			            {
-			                for(int haar->w = 1;haar->y+3*haar->w<24; haar->w++)
+			                for(haar->w = 1;haar->y+3*haar->w<24; haar->w++)
 			                {
                     		    for(int i = 0;i<nbImg;i++)
                                 {
-                    		        ValFeatB(haar,img->[i].integ); 
+                    		        ValFeatB(haar,img->wc[i].integ); 
                                     img->wc[i].feature = haar;
                                 }
                             }
@@ -102,17 +102,17 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
             else if(feat == 3)
             {
                 haar->feat = 3;
-        		for(int haar->x = 0; haar->x<24; haar->x++)
+        		for(haar->x = 0; haar->x<24; haar->x++)
 	        	{
-		            for(int haar->y = 0; haar->y<24; haar->y++)
+		            for(haar->y = 0; haar->y<24; haar->y++)
 		            {
-			            for(int haar->h = 1; haar->x+2*haar->h<24; haar->h++)
+			            for(haar->h = 1; haar->x+2*haar->h<24; haar->h++)
 			            {
-			                for(int haar->w = 1; haar->y+haar->w<24; haar->w++)
+			                for(haar->w = 1; haar->y+haar->w<24; haar->w++)
 			                {                    
                     		    for(int i = 0;i<nbImg;i++)
                                 {
-                    		        ValFeatC(haar,img->[i].integ); 
+                    		        ValFeatC(haar,img->wc[i].integ); 
                                     img->wc[i].feature = haar;
                                 }
                             }
@@ -124,17 +124,17 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
             else if(feat == 4)
             {
                 haar->feat = 4;
-        		for(int haar->x = 0; haar->x<24; haar->x++)
+        		for(haar->x = 0; haar->x<24; haar->x++)
 	        	{
-		            for(int haar->y = 0; haar->y<24; haar->y++)
+		            for(haar->y = 0; haar->y<24; haar->y++)
 		            {
-			            for(int haar->h = 1; haar->x+3*haar->h<24; haar->h++)
+			            for(haar->h = 1; haar->x+3*haar->h<24; haar->h++)
 			            {
-			                for(int haar->w = 1; haar->y+haar->w<24; haar->w++)
+			                for(haar->w = 1; haar->y+haar->w<24; haar->w++)
 			                {
                                 for(int i = 0;i<nbImg;i++)
                                 {
-                    		        ValFeatD(haar,img->[i].integ); 
+                    		        ValFeatD(haar,img->wc[i].integ); 
                                     img->wc[i].feature = haar;
                                 }
 			                }
@@ -146,17 +146,17 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
             else if(feat == 5)
             {
                 haar->feat = 5;
-        		for(int haar->x = 0; haar->x<24; haar->x++)
+        		for(haar->x = 0; haar->x<24; haar->x++)
 	        	{
-		            for(int haar->y = 0; haar->y<24; haar->y++)
+		            for(haar->y = 0; haar->y<24; haar->y++)
 		            {
-			            for(int haar->h = 1; haar->x+2*haar->h<24; haar->h++)
+			            for(haar->h = 1; haar->x+2*haar->h<24; haar->h++)
 			            {
-			                for(int haar->w = 1;haar->y+2*haar->w<24; haar->w++)
+			                for(haar->w = 1;haar->y+2*haar->w<24; haar->w++)
 			                {
                                 for(int i = 0;i<nbImg;i++)
                                 {
-                    		        ValFeatE(haar,img->[i].integ); 
+                    		        ValFeatE(haar,img->wc[i].integ); 
                                     img->wc[i].feature = haar;
                                 }
 			                }
@@ -174,4 +174,8 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
 }
 
 
-void selectBestFeat(
+//void selectBestFeat(struct ImgVal *img,double *weights,int nbImg)
+//{
+//    sorted img + weights
+//    quick_sort    
+//}
