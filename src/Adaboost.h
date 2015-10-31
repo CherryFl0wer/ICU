@@ -17,6 +17,9 @@ struct WeakClassifier {
 struct ImgVal {
     struct WeakClassifier wc[1000];// 1000 = number of image to test
     int theta;
+    int T;
+    int M;
+    double e;
 };
 
 
@@ -28,4 +31,5 @@ struct StrongClassifier {
 
 void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos);
 
+void selectBestFeat(struct ImgVal *img,int nbImg);
 #endif
