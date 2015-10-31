@@ -1,11 +1,5 @@
 #include "db.h"
 
- 
-int array_length(char *a[])
-{
-	return (sizeof(*a) / sizeof(char));
-}
-
 int path_in_array(person guy, char *path)
 {
 	int ret = 0;
