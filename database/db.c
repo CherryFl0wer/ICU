@@ -14,12 +14,14 @@ int path_in_array(person guy, char *path, FILE *databse)
 	}
 }
 
-void add_picture(person new, char *path)
+
+
+int add_picture(person new, char *path)
 {
 	
 	if(path_in_array(person new, *path, *database))
 	{
-		int already_exist = 0;
+/*		int already_exist = 0;
 
 		while (!already_exist)
 		{	
@@ -42,7 +44,7 @@ void add_picture(person new, char *path)
 				case 2:
 					//Add fonction rename
 					if(!path_in_array(path))
-					already_exist = 1;
+						already_exist = 1;
 					break;
 
 				case 3:
@@ -54,11 +56,15 @@ void add_picture(person new, char *path)
 					exist(-1);
 					break;
 			}
-		}			
+		}
+*/		
+		printf("Sorry, this picture already exist\n");
+		return 0;	
 	}
+	
+	//Add pic
+	return 1;	
 
-	new.pics[new.nb_pics] = path;
-	new.nb_pics++;
 }
 
 
@@ -80,7 +86,7 @@ void serialization(char name[20], FILE *database)
 	{
 		person new;
 		strcpy(new.name,name); // Ici que le nom est add
-		fwrite(&new, sizeof(person), 1, database);
+//		fwrite(&new, sizeof(person), 1, database);
 
 
 		printf("Add picture(s) of %s ?\n", name);
@@ -96,10 +102,13 @@ void serialization(char name[20], FILE *database)
 			{
 				for (int i = 1; i <= choice_nb_pics; i++)
 				{
-					printf("Path of the picture : ");
-					scanf("%s", path);
+					do
+					{	
+						printf("Path of the picture : ");
+						scanf("%s", path);
 
-					add_picture(new, path);
+						add_picture(new, path);
+					}while(!add_picture(new, path);
 				}
 			}	
 		}
