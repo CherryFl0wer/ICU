@@ -16,54 +16,39 @@ int path_in_array(person guy, char *path, FILE *databse)
 
 
 
-int add_picture(person new, char *path)
+int add_picture(person new, char *my_path)
 {
 	
-	if(path_in_array(person new, *path, *database))
-	{
-/*		int already_exist = 0;
-
-		while (!already_exist)
-		{	
-			printf("This picture is already in the database\n");
-			printf("What do you want to do ?\n");
-
-			printf("1. Replace it\n");
-			printf("2. Rename\n");
-			printf("3. Cancel\n");
-
-			scanf("%d", choice_what_to_do);
-
-			switch(choice_what_to_do)
-			{
-				case 1:
-					//Add fonction replace picture
-					already_exist = 1;
-					break;
-								
-				case 2:
-					//Add fonction rename
-					if(!path_in_array(path))
-						already_exist = 1;
-					break;
-
-				case 3:
-					already_exist = 1;
-					break;
-
-				default:
-					fputs("Incorrect option\n", stderr);
-					exist(-1);
-					break;
-			}
-		}
-*/		
+	if(path_in_array(person new, *my_path, *database))
+	{	
 		printf("Sorry, this picture already exist\n");
 		return 0;	
 	}
-	
-	//Add pic
-	return 1;	
+	else
+	{
+		char *output = malloc(strlen(new.path) + strlen(my_path) + 1);
+		
+		unsigned long i = 0;
+		while(i < strlen(new.path))
+		{
+			*(output + i) = *(str1 + i);
+			i++;
+		}
+		*(output + i) = '|'; //Add of the separation 
+		i++;
+
+		unsigned long j = 0;
+		while(j < strlen(my_path))
+		{
+			*(output + i + j) = *(str2 + j);
+			j++;
+		}
+		*(output + i + j) = '\0';
+
+		strcpy(new.path, output); //Here we add the new path to the string of path
+
+		return 1;
+	}	
 
 }
 
@@ -86,8 +71,6 @@ void serialization(char name[20], FILE *database)
 	{
 		person new;
 		strcpy(new.name,name); // Ici que le nom est add
-//		fwrite(&new, sizeof(person), 1, database);
-
 
 		printf("Add picture(s) of %s ?\n", name);
 		printf("Key 1 for YES other key for NO\n");
@@ -112,7 +95,9 @@ void serialization(char name[20], FILE *database)
 				}
 			}	
 		}
-
+		
+		
+		fwrite(&new, sizeof(person), 1, database);
 		printf("Add %s succeed\n",name);
 		
 	}
