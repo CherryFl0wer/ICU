@@ -12,15 +12,18 @@
 
 typedef struct WeakClassifier { 
     struct HaarFeat* feature;
-    int threshold;
+    int w;
     int integ[24][24];
     int polarity;
 } WeakClassifier;
 
 struct ImgVal {
-    WeakClassifier wc[NBIMG];// 1000 = number of image to test
-		int theta;
-}
+    struct WeakClassifier wc[1000];// 1000 = number of image to test
+    int theta;
+    int T;
+    int M;
+    double e;
+};
 
 
 typedef struct StrongClassifier {
@@ -36,7 +39,13 @@ double alpha_calcul(int epsError);
 
 int wc_calcul(WeakClassifier* wc);
 
+
 void update_weight(int epsError, double weight[T][NBIMG], struct ImgVal* img, int posimg, int round);
 
 int final_sc(StrongClassifier* sc);
+
+void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos);
+
+void selectBestFeat(struct ImgVal *img,int nbImg);
+
 #endif
