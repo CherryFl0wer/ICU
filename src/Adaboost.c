@@ -77,6 +77,7 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
                   if(img->e<e)
                   {
                     e = img->e;
+                    img->wc[i].threshold = img->theta;
                     sc->wc[t] = img->wc[i];
                   }
                 }
@@ -104,6 +105,7 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
                   if(img->e<e)
                   {
                     e = img->e;
+                    img->wc[i].threshold = img->theta;
                     sc->wc[t] = img->wc[i];
                   }
                 }
@@ -132,6 +134,7 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
                   if(img->e<e)
                   {
                     e = img->e;
+                    img->wc[i].threshold = img->theta;
                     sc->wc[t] = img->wc[i];
                   }
                 }
@@ -160,6 +163,7 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
                   if(img->e<e)
                   {
                     e = img->e;
+                    img->wc[i].threshold = img->theta;
                     sc->wc[t] = img->wc[i];
                   }
                 }
