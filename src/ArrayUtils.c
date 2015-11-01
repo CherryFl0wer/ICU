@@ -1,7 +1,7 @@
 #include "ArrayUtils.h"
 #include "SDLPixel.h"
 
-void freeUint8Array(uint32_t **arr, int rows) {
+void freeUint8Array(int **arr, int rows) {
 	for(int i = 0; i < rows; i++)
 		free(arr[i]);
 
@@ -9,11 +9,11 @@ void freeUint8Array(uint32_t **arr, int rows) {
 }
 
 
-uint32_t** imgToArray(SDL_Surface* img) {
-	uint32_t **arr;
-	arr = malloc(img->w * sizeof(uint32_t*));
+int** imgToArray(SDL_Surface* img) {
+	int **arr;
+	arr = malloc(img->w * sizeof(int*));
 	for(int i = 0; i < img->w; i++)
-		arr[i] = malloc(img->h * sizeof(uint32_t));
+		arr[i] = malloc(img->h * sizeof(int));
 
 	for(int i = 0; i < img->h; i++) {
 		for(int j = 0; j < img->w; j++) {

@@ -1,7 +1,7 @@
 #include "IntegralImage.h"
 #include "SDLPixel.h"
 
-void integralImg(uint32_t **arr, int x, int y) { 
+void integralImg(int **arr, int x, int y) { 
 
 	for(int i = 1; i < x; i++)
 		arr[i][0] += arr[i-1][0]; 

@@ -3,7 +3,7 @@
 #include<stdint.h>
 #include<SDL.h>
 
-void integralImg(uint32_t **arr, int x, int y);
+void integralImg(int **arr, int x, int y);
 
 void imgToGreyScale(SDL_Surface* img);
 

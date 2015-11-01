@@ -10,6 +10,9 @@
 #include "./src/ArrayUtils.h"
 #include "./src/SDLPixel.h"
 #include "./src/Treatment.h"
+#include "./src/HaarFeatures.h"
+//#include "./src/Adaboost.h"
+
 void loadImg();
 
 int main(int argc, const char* argv[])
@@ -30,7 +33,7 @@ int main(int argc, const char* argv[])
  	imgToGreyScale(image);
 	normalize(image);
 	equalize(image);
-	uint32_t **tabImg = imgToArray(image);
+	int **tabImg = imgToArray(image);
 	integralImg(tabImg, image->w, image->h);
 
 	SDL_UnlockSurface(image);
@@ -44,13 +47,26 @@ int main(int argc, const char* argv[])
 void loadImg(struct ImgVal *img)
 {
     int pos = 2400;
-    char s[14] = "face00000.pgm";
+    SDL_Surface *image;
+    char s[] = "./src/face/face00000.pgm";
     for(int i = 1;i<2401;i++)
     {
-        s[8] = i % 10 + '0';
-        s[7] = i/10 % 10 + '0';
-        s[6] = i/100 % 10 + '0';
-        s[5] = i/1000 % 10 + '0';
-        
+        s[19] = i % 10 + '0';
+        s[18] = i/10 % 10 + '0';
+        s[17] = i/100 % 10 + '0';
+        s[16] = i/1000 % 10 + '0';
+        image = loadimg(s);
+        printf("2\n");
+	    int **tabImg = imgToArray(image);
+	    int arr[19][19];
+        for(int i = 0;i<19;i++)
+        {
+            for(int j = 0;j<19;j++)
+                arr[i][j] = tabImg[i][j];
+        }
+        integralImg(tabImg, image->w, image->h);
+        printf("OK\n");
+        struct HaarFeat *vect = malloc(2*sizeof(struct HaarFeat));
+        MakeVectWithFeat(vect,arr);
     }
 }
