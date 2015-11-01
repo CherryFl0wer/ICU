@@ -5,7 +5,7 @@
 
 
 // Fill vect with all different features with different sizes
-void MakeVectWithFeat(struct HaarFeat *vect,int arr[24][24])
+void MakeVectWithFeat(struct HaarFeat *vect,int arr[20][20])
 {
 	vect = FillVectFeatA(vect,arr);
     vect = FillVectFeatB(vect,arr);
@@ -16,9 +16,9 @@ void MakeVectWithFeat(struct HaarFeat *vect,int arr[24][24])
 }
 
 // compute the value of each features of type a
-struct HaarFeat* FillVectFeatA(struct HaarFeat *vect, int arr[24][24])
+struct HaarFeat* FillVectFeatA(struct HaarFeat *vect, int arr[20][20])
 {
-    int length = 24;
+    int length = 20;
     struct HaarFeat *haar = malloc(sizeof(struct HaarFeat));
     haar->feat = 1;
 
@@ -60,9 +60,9 @@ struct HaarFeat* FillVectFeatA(struct HaarFeat *vect, int arr[24][24])
 
 
 //Compute FeatB in vect
-struct HaarFeat* FillVectFeatB(struct HaarFeat *vect, int arr[24][24])
+struct HaarFeat* FillVectFeatB(struct HaarFeat *vect, int arr[20][20])
 {
-    int length = 24;
+    int length = 20;
     struct HaarFeat *haar = malloc(sizeof(struct HaarFeat));
     haar->feat = 2;
 
@@ -105,9 +105,9 @@ struct HaarFeat* FillVectFeatB(struct HaarFeat *vect, int arr[24][24])
 }
 
 //Compute FeatC in vect
-struct HaarFeat* FillVectFeatC(struct HaarFeat *vect, int arr[24][24])
+struct HaarFeat* FillVectFeatC(struct HaarFeat *vect, int arr[20][20])
 {
-    int length = 24;
+    int length = 20;
     struct HaarFeat *haar = malloc(sizeof(struct HaarFeat));
     haar->feat = 3;
 
@@ -148,9 +148,9 @@ struct HaarFeat* FillVectFeatC(struct HaarFeat *vect, int arr[24][24])
 }
 
 //Compute FeatD in vect
-struct HaarFeat* FillVectFeatD(struct HaarFeat *vect, int arr[24][24])
+struct HaarFeat* FillVectFeatD(struct HaarFeat *vect, int arr[20][20])
 {
-    int length = 24;
+    int length = 20;
     struct HaarFeat *haar = malloc(sizeof(struct HaarFeat));
     haar->feat = 4;
 
@@ -194,9 +194,9 @@ struct HaarFeat* FillVectFeatD(struct HaarFeat *vect, int arr[24][24])
 
 
 //Compute FeatE in vect
-struct HaarFeat* FillVectFeatE(struct HaarFeat *vect, int arr[24][24])
+struct HaarFeat* FillVectFeatE(struct HaarFeat *vect, int arr[20][20])
 {
-    int length = 24;
+    int length = 20;
     struct HaarFeat *haar = malloc(sizeof(struct HaarFeat));
     haar->feat = 5;
 

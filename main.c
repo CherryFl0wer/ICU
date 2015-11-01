@@ -10,9 +10,11 @@
 #include "./src/ArrayUtils.h"
 #include "./src/SDLPixel.h"
 #include "./src/Treatment.h"
+void loadImg();
 
 int main(int argc, const char* argv[])
 {
+  loadImg();
   SDL_Surface  *image;	
 
   if(argc != 2) return 1;
@@ -37,4 +39,18 @@ int main(int argc, const char* argv[])
 
 	displayImg(image);  
   return 0;
+}
+
+void loadImg(struct ImgVal *img)
+{
+    int pos = 2400;
+    char s[14] = "face00000.pgm";
+    for(int i = 1;i<2401;i++)
+    {
+        s[8] = i % 10 + '0';
+        s[7] = i/10 % 10 + '0';
+        s[6] = i/100 % 10 + '0';
+        s[5] = i/1000 % 10 + '0';
+        
+    }
 }
