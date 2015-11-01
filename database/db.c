@@ -70,7 +70,8 @@ int add_picture(person new, char *my_path)
 		*(output + i + j) = '\0';
 
 		strcpy(new.pics, output); //Here we add the new path to the string of path
-
+	
+		free(output);
 		return 1;
 	}	
 
@@ -95,10 +96,12 @@ void serialization(char name[20], FILE *database)
 	{
 		person new;
 		strcpy(new.name,name); // Ici que le nom est add
+		new.nb_pics = 0;
+		strcpy(new.pics, "");
 
-		printf("Add picture(s) of %s ?\n", name);
 		int choice;
-		printf("Key 1 for YES other key for NO\n");
+		printf("Add picture(s) of %s ?\n", name);
+		printf("1. YES\n");
 		
 		scanf("%d", &choice);
 
@@ -112,7 +115,9 @@ void serialization(char name[20], FILE *database)
 			{
 				for (int i = 1; i <= choice_nb_pics; i++)
 				{
-					char *path = NULL;
+					char pat;
+
+					char *path = &pat;
 					do
 					{	
 						printf("Path of the picture : ");
@@ -121,7 +126,17 @@ void serialization(char name[20], FILE *database)
 						add_picture(new, path);
 					}while(!add_picture(new, path));
 				}
+			}
+			else
+			{
+				fputs("Incorrect option (How many picture(s))\n", stderr);
+				exit(-1);
 			}	
+		}
+		else
+		{
+			fputs("Incorrect option (Add picture(s))\n", stderr);
+			exit(-1);
 		}
 		
 		
@@ -254,7 +269,7 @@ void ManageDatabase()
 			case 2:{ //Add working good
 				db = fopen("database.obj","r+b");
 				printf("Enter a name : ");
-				scanf("%s",name);
+				scanf("%s", name);
 				serialization(name,db);
 				fclose(db);
 				break;}
