@@ -12,6 +12,15 @@ struct HaarFeat
 	int feat,x,y,w,h,val;
 };
 
+void ValFeatA(struct HaarFeat *haar,int arr[24][24]);
+
+void ValFeatB(struct HaarFeat *haar,int arr[24][24]);
+
+void ValFeatC(struct HaarFeat *haar,int arr[24][24]);
+
+void ValFeatD(struct HaarFeat *haar,int arr[24][24]);
+
+void ValFeatE(struct HaarFeat *haar,int arr[24][24]);
 
 void MakeVectWithFeat(struct HaarFeat [],int arr[19][19]);
 

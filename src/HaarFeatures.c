@@ -4,6 +4,106 @@
 #include"HaarFeatures.h"
 
 
+void ValFeatA(struct HaarFeat *haar,int arr[24][24])
+{
+    int x = haar->x;
+    int y = haar->y;
+    int w = haar->w;
+    int h = haar->h;
+    
+    int a = arr[x][y];
+    int b = arr[x][y+w];
+    int c = arr[x+h][y];
+    int d = arr[x+h][y+w];
+    int e = arr[x][y+2*w];
+    int f = arr[x+h][y+2*w];
+    
+    haar->val = -a -2*d + 2*b + c - e + f;
+   
+}
+
+void ValFeatB(struct HaarFeat *haar,int arr[24][24])
+{ 
+    int x = haar->x;
+    int y = haar->y;
+    int w = haar->w;
+    int h = haar->h;
+    
+    int a = arr[x][y];
+    int b = arr[x][y+w];
+    int c = arr[x+h][y];
+    int d = arr[x+h][y+w];
+    int e = arr[x][y+2*w];
+    int f = arr[x+h][y+2*w];
+    int g = arr[x][y+3*w];
+    int i = arr[x+h][y+3*w];
+
+                  
+    haar->val = -a -2*d + 2*b + c -2*e + 2*f - i + g;
+                
+
+}
+
+void ValFeatC(struct HaarFeat *haar,int arr[24][24])
+{ 
+    int x = haar->x;
+    int y = haar->y;
+    int w = haar->w;
+    int h = haar->h;
+    
+    int a = arr[x][y];
+    int b = arr[x][y+w];
+    int c = arr[x+h][y];
+    int d = arr[x+h][y+w];
+    int e = arr[x+2*h][y];
+    int f = arr[x+2*h][y+w];
+
+    haar->val = -a -2*d + b +2*c - e + f;
+}
+
+
+void ValFeatD(struct HaarFeat *haar,int arr[24][24])
+{ 
+    int x = haar->x;
+    int y = haar->y;
+    int w = haar->w;
+    int h = haar->h;
+    
+    int a = arr[x][y];
+    int b = arr[x][y+w];
+    int c = arr[x+h][y];
+    int d = arr[x+h][y+w];
+    int e = arr[x+2*h][y];
+    int f = arr[x+2*h][y+w];
+    int g = arr[x+3*h][y];
+    int i = arr[x+3*h][y+w];
+
+    haar->val = -a -2*d + b + 2*c -2*e + 2*f - i + g;
+            
+}
+
+
+void ValFeatE(struct HaarFeat *haar,int arr[24][24])
+{ 
+    int x = haar->x;
+    int y = haar->y;
+    int w = haar->w;
+    int h = haar->h;
+                    
+    int a = arr[x][y];
+    int b = arr[x][y+w];
+    int c = arr[x+h][y];
+    int d = arr[x+h][y+w];
+    int e = arr[x][y+2*w];
+    int f = arr[x+h][y+2*w];
+    int g = arr[x+2*h][y];
+    int i = arr[x+2*h][y+w];
+    int j = arr[x+2*h][y+2*w];
+
+    haar->val = -a -4*d + 2*b + 2*c -e + 2*f +2*i - g - j;
+}
+
+
 // Fill vect with all different features with different sizes
 void MakeVectWithFeat(struct HaarFeat *vect,int arr[19][19])
 {
@@ -23,7 +123,6 @@ struct HaarFeat* FillVectFeatA(struct HaarFeat *vect, int arr[19][19])
     haar->feat = 1;
 
     
-    int a = 0,b = 0, c = 0, d = 0, e = 0, f = 0;
 	for(int x = 0; x<length; x++)
 	{
 		for(int y = 0; y<length; y++)
@@ -33,19 +132,13 @@ struct HaarFeat* FillVectFeatA(struct HaarFeat *vect, int arr[19][19])
 				for(int w = 1; y+2*w<length; w++)
 				{
                     //compute haar->val
-                    a = arr[x][y];
-                    b = arr[x][y+w];
-                    c = arr[x+h][y];
-                    d = arr[x+h][y+w];
-                    e = arr[x][y+2*w];
-                    f = arr[x+h][y+2*w];
 
                     haar->x = x;
                     haar->y = y;
                     haar->w = w;
                     haar->h = h;
-                    haar->val = -a -2*d + 2*b + c - e + f;
-                
+                    
+                    ValFeatA(haar,arr); 
                     
                     *vect = *haar;
                     vect++;
@@ -67,7 +160,6 @@ struct HaarFeat* FillVectFeatB(struct HaarFeat *vect, int arr[19][19])
     haar->feat = 2;
 
     
-    int a = 0,b = 0, c = 0, d = 0, e = 0, f = 0, g = 0, i = 0;
 	for(int x = 0; x<length; x++)
 	{
 		for(int y = 0; y<length; y++)
@@ -77,21 +169,12 @@ struct HaarFeat* FillVectFeatB(struct HaarFeat *vect, int arr[19][19])
 				for(int w = 1; y+3*w<length; w++)
 				{
                     //compute haar->val
-                    a = arr[x][y];
-                    b = arr[x][y+w];
-                    c = arr[x+h][y];
-                    d = arr[x+h][y+w];
-                    e = arr[x][y+2*w];
-                    f = arr[x+h][y+2*w];
-                    g = arr[x][y+3*w];
-                    i = arr[x+h][y+3*w];
-
                     haar->x = x;
                     haar->y = y;
                     haar->w = w;
                     haar->h = h;
-                    haar->val = -a -2*d + 2*b + c -2*e + 2*f - i + g;
-                
+                    
+                    ValFeatB(haar,arr); 
                     
                     *vect = *haar;
                     vect++;
@@ -112,7 +195,6 @@ struct HaarFeat* FillVectFeatC(struct HaarFeat *vect, int arr[19][19])
     haar->feat = 3;
 
     
-    int a = 0,b = 0, c = 0, d = 0, e = 0, f = 0;
 	for(int x = 0; x<length; x++)
 	{
 		for(int y = 0; y<length; y++)
@@ -122,19 +204,12 @@ struct HaarFeat* FillVectFeatC(struct HaarFeat *vect, int arr[19][19])
 				for(int w = 1; y+w<length; w++)
 				{
                     //compute haar->val
-                    a = arr[x][y];
-                    b = arr[x][y+w];
-                    c = arr[x+h][y];
-                    d = arr[x+h][y+w];
-                    e = arr[x+2*h][y];
-                    f = arr[x+2*h][y+w];
-
                     haar->x = x;
                     haar->y = y;
                     haar->w = w;
                     haar->h = h;
-                    haar->val = -a -2*d + b +2*c - e + f;
-                
+                    
+                    ValFeatC(haar,arr); 
                     
                     *vect = *haar;
                     vect++;
@@ -155,7 +230,6 @@ struct HaarFeat* FillVectFeatD(struct HaarFeat *vect, int arr[19][19])
     haar->feat = 4;
 
     
-    int a = 0,b = 0, c = 0, d = 0, e = 0, f = 0, g = 0, i = 0;
 	for(int x = 0; x<length; x++)
 	{
 		for(int y = 0; y<length; y++)
@@ -165,22 +239,13 @@ struct HaarFeat* FillVectFeatD(struct HaarFeat *vect, int arr[19][19])
 				for(int w = 1; y+w<length; w++)
 				{
                     //compute haar->val
-                    a = arr[x][y];
-                    b = arr[x][y+w];
-                    c = arr[x+h][y];
-                    d = arr[x+h][y+w];
-                    e = arr[x+2*h][y];
-                    f = arr[x+2*h][y+w];
-                    g = arr[x+3*h][y];
-                    i = arr[x+3*h][y+w];
-
                     haar->x = x;
                     haar->y = y;
                     haar->w = w;
                     haar->h = h;
-                    haar->val = -a -2*d + b + 2*c -2*e + 2*f - i + g;
-                
-                    
+                   
+                    ValFeatD(haar,arr); 
+
                     *vect = *haar;
                     vect++;
 				}
@@ -201,7 +266,6 @@ struct HaarFeat* FillVectFeatE(struct HaarFeat *vect, int arr[19][19])
     haar->feat = 5;
 
     
-    int a = 0,b = 0, c = 0, d = 0, e = 0, f = 0, g = 0, i = 0, j = 0;
 	for(int x = 0; x<length; x++)
 	{
 		for(int y = 0; y<length; y++)
@@ -211,22 +275,12 @@ struct HaarFeat* FillVectFeatE(struct HaarFeat *vect, int arr[19][19])
 				for(int w = 1; y+2*w<length; w++)
 				{
                     //compute haar->val
-                    a = arr[x][y];
-                    b = arr[x][y+w];
-                    c = arr[x+h][y];
-                    d = arr[x+h][y+w];
-                    e = arr[x][y+2*w];
-                    f = arr[x+h][y+2*w];
-                    g = arr[x+2*h][y];
-                    i = arr[x+2*h][y+w];
-                    j = arr[x+2*h][y+2*w];
-
                     haar->x = x;
                     haar->y = y;
                     haar->w = w;
                     haar->h = h;
-                    haar->val = -a -4*d + 2*b + 2*c -e + 2*f +2*i - g - j;
-                
+               
+                    ValFeatE(haar,arr); 
                     
                     *vect = *haar;
                     vect++;
