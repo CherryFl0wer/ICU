@@ -43,19 +43,19 @@ int path_in_array(person guy, char *path)
 int add_picture(person new, char *my_path)
 {
 	
-	if(path_in_array(person new, *my_path, *database))
+	if(path_in_array(new, my_path))
 	{	
 		printf("Sorry, this picture already exist\n");
 		return 0;	
 	}
 	else
 	{
-		char *output = malloc(strlen(new.path) + strlen(my_path) + 1);
+		char *output = malloc(strlen(new.pics) + strlen(my_path) + 1);
 		
 		unsigned long i = 0;
-		while(i < strlen(new.path))
+		while(i < strlen(new.pics))
 		{
-			*(output + i) = *(str1 + i);
+			*(output + i) = *(new.pics + i);
 			i++;
 		}
 		*(output + i) = '|'; //Add of the separation 
@@ -64,12 +64,12 @@ int add_picture(person new, char *my_path)
 		unsigned long j = 0;
 		while(j < strlen(my_path))
 		{
-			*(output + i + j) = *(str2 + j);
+			*(output + i + j) = *(my_path + j);
 			j++;
 		}
 		*(output + i + j) = '\0';
 
-		strcpy(new.path, output); //Here we add the new path to the string of path
+		strcpy(new.pics, output); //Here we add the new path to the string of path
 
 		return 1;
 	}	
@@ -97,25 +97,29 @@ void serialization(char name[20], FILE *database)
 		strcpy(new.name,name); // Ici que le nom est add
 
 		printf("Add picture(s) of %s ?\n", name);
+		int choice;
 		printf("Key 1 for YES other key for NO\n");
-		scanf("%d", choice);
+		
+		scanf("%d", &choice);
 
 		if (choice == 1)
 		{
+			int choice_nb_pics = 0;
 			printf("How many pictures do you want to add ? : ");
-			scanf("%d", choice_nb_pics);
-
+			scanf("%d", &choice_nb_pics);
+			
 			if(choice_nb_pics >= 1)
 			{
 				for (int i = 1; i <= choice_nb_pics; i++)
 				{
+					char *path = NULL;
 					do
 					{	
 						printf("Path of the picture : ");
 						scanf("%s", path);
 
 						add_picture(new, path);
-					}while(!add_picture(new, path);
+					}while(!add_picture(new, path));
 				}
 			}	
 		}
@@ -150,7 +154,6 @@ void modify(char oldname[20], char n[20]) //deserialize database
   FILE *database = fopen("database.obj","r+");
   fseek(database, 0, SEEK_SET);
   person answer;
-  int c = 0;
 
   while(fread(&answer, sizeof(person), 1, database))
   {
@@ -276,6 +279,7 @@ void ManageDatabase()
 				fclose(db);
 				break;}
 			case 5:
+				db = fopen("database.obj","r+b");
 				print(db);
 				break;
 
