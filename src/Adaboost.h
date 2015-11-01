@@ -6,16 +6,16 @@
 #include<math.h> 
 #include"HaarFeatures.h"
 
-#define T 200 //nbr of round
 #define NBIMG 1000
 
+const int T = 200; //nbr of round
 
-typedef struct WeakClassifier { 
+struct WeakClassifier { 
     struct HaarFeat* feature;
-    int w;
+    int w,threshold;
     int integ[24][24];
     int polarity;
-} WeakClassifier;
+};
 
 struct ImgVal {
     struct WeakClassifier wc[1000];// 1000 = number of image to test
@@ -26,23 +26,22 @@ struct ImgVal {
 };
 
 
-typedef struct StrongClassifier {
-    WeakClassifier wc[200]; /* 200 = number of weakclassifier needed */
+struct StrongClassifier {
+    struct WeakClassifier wc[200]; /* 200 = number of weakclassifier needed */
     int alpha[200]; /* same as above */
-} StrongClassifier;
+};
 
-void Boost(StrongClassifier *sc, int nbImg, int pos);
 
-void add_wc(StrongClassifer* sc, struct HaarFeat* feat, int seuil, int pol, int sw[24][24], int epsError, int round);
+void add_wc(struct StrongClassifier* sc, struct HaarFeat* feat, int threshold, int pol, int sw[24][24], int epsError, int round);
 
 double alpha_calcul(int epsError);
 
-int wc_calcul(WeakClassifier* wc);
+int wc_calcul(struct WeakClassifier* wc);
 
 
-void update_weight(int epsError, double weight[T][NBIMG], struct ImgVal* img, int posimg, int round);
+void update_weight(int epsError, struct ImgVal* img,int round);
 
-int final_sc(StrongClassifier* sc);
+int final_sc(struct StrongClassifier* sc);
 
 void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos);
 

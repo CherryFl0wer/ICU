@@ -1,12 +1,13 @@
-#include"AdaBoost.h"
+#include"Adaboost.h"
+#include"HaarFeatures.h"
 #include"Sort.h"
 
 
 int main()
 {
-  StrongClassifer* sc = malloc(sizeof(StrongClassifier));
-  Boost(sc, NULL, 200, 50);
-  free(sc);
+  //struct StrongClassifer* sc = malloc(sizeof(struct StrongClassifier));
+  //Boost(sc, NULL, 200, 50);
+  //free(sc);
 
   return 0;
 }
@@ -23,8 +24,6 @@ double sumWeight(struct WeakClassifier *wc,int size)
 void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
 {
   int t = 0;
-  int numImg = 0; 
-  double weights[T][nbImg];
   double e = 2;
   struct HaarFeat* haar = malloc(sizeof(struct HaarFeat));
 
@@ -213,12 +212,16 @@ double alpha_calcul(int epsError) {
 
 
 // Don't know if it's better to replace by WeakClassifier wc
-void add_wc(StrongClassifier* sc, struct HaarFeat* feat, int threshold, int pol, int sw[24][24], int epsError, int round) {
-  WeakClassifier weak;
+void add_wc(struct StrongClassifier* sc, struct HaarFeat* feat, int threshold, int pol, int sw[24][24], int epsError, int round) {
+  struct WeakClassifier weak;
   weak.feature 		= feat;
-  weak.threshold  = threshold;
+  weak.threshold = threshold;
   weak.polarity 	= pol;
-  weak.integ 			= sw;
+  for(int i =0;i<24;i++)
+  {
+    for(int j = 0;j<24;j++)
+      weak.integ[i][j]			= sw[i][j];
+  }
 
   sc->wc[round] 	= weak;
 
@@ -226,21 +229,21 @@ void add_wc(StrongClassifier* sc, struct HaarFeat* feat, int threshold, int pol,
   sc->alpha[round] = alpha_calcul(epsError);
 }
 
-int wc_calcul(WeakClassifier* wc) {
+int wc_calcul(struct WeakClassifier* wc) {
   return (wc->feature->val * wc->polarity < wc->threshold * wc->polarity) ? 1 : 0;  
 }
 
-void update_weight(int epsError, double weight[T][NBIMG], struct ImgVal* img, int posimg, int round) {
+void update_weight(int epsError, struct ImgVal* img, int round) {
   if(round < T) {
-    double beta = epsError / (1 - espError);
+    double beta = epsError / (1 - epsError);
     int ei = 0;
     for(int i = 1; i < NBIMG; i++) { 
-      if(wc_calcul(img->wc[i]) * img->wc[i].polarity * -alpha_calcul(epsError) > 0)
+      if(wc_calcul(&(img->wc[i])) * img->wc[i].polarity * -alpha_calcul(epsError) > 0)
         ei = 1;
       else
         ei = 0;
 
-      weight[round+1][i] = weight[round][i] * pow(beta, 1-ei);
+      img->wc[i].w *= pow(beta, 1-ei);
     } 
 
   }
@@ -249,10 +252,10 @@ void update_weight(int epsError, double weight[T][NBIMG], struct ImgVal* img, in
 
 // C(X) where X is an image. 
 // TODO : final_sc(SDL_Surface* img, StrongClassifier* sc) ??
-int	final_sc(StrongClassifier* sc) {
+int	final_sc(struct StrongClassifier* sc) {
   double sumSC = 0, sumAlpha = 0;
   for(int i = 0; i < T; i++) {
-    sumSC += sc->alpha[i] * wc_calcul(sc->wc[round]);
+    sumSC += sc->alpha[i] * wc_calcul(&(sc->wc[i]));
     sumAlpha += sc->alpha[i] * 0.5;
   }
 
