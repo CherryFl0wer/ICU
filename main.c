@@ -49,6 +49,12 @@ int main()
 	  displayImg(image);
       segIm(image);
       displayImg(image);
+      int **array = imgToArrayFace(image);
+      integralImg(array,image->w,image->h);
+      int *x = malloc(sizeof(int)),*y = malloc(sizeof(int)),*w = malloc(sizeof(int));
+      face(array,x,y,w,image->w,image->h);
+      square(image,*x,*y,*w);
+      displayImg(image);
       image = loadimg(path);
       displayImg(image);
  	  imgToGreyScale(image);
@@ -75,7 +81,6 @@ int main()
     case 4:
       img = malloc(sizeof(struct ImgVal));
       loadImg(img);
-      printf("load_img OK");
       struct StrongClassifier *sc = malloc(sizeof(struct StrongClassifier));
       Boost(sc,img,6400,2400);
       free(img);
@@ -104,7 +109,6 @@ void loadImg(struct ImgVal *img)
             for(int y = 0;y<19;y++)
             {
                 img->wc[i-1].integ[x][y] = tabImg[x][y];
-                printf("%d",img->wc[i-1].integ[x][y]);
             }   
         }
         

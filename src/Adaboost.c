@@ -17,18 +17,18 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
   int t = 0;
   double e = 2;
   struct HaarFeat* haar = malloc(sizeof(struct HaarFeat));
-  int T = 200;
+  int T = 5;
   /* initialisation of weights */
   for(int i = 0;i<pos;i++)
   {
     img->wc[i].w = 1/(2*pos);
-    (img->wc[i]).polarity = 1;
+    img->wc[i].polarity = 1;
   }
 
   for(int i = pos;i<nbImg;i++)
   {
     img->wc[i].w = 1/(2*(nbImg-pos));
-    (img->wc[i]).polarity = -1;                
+    img->wc[i].polarity = -1;                
   }
 
 
@@ -75,8 +75,12 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
                   for(int i = 0;i<nbImg;i++)
                   {
                     img->wc[i].threshold = img->theta;
-                    sc->wc[t] = img->wc[i];
                   }
+                  
+                  sc->wc[t].feature = haar;
+                  printf("%d %d %d %d %d\n",haar->x,haar->y,haar->w,haar->h,haar->feat);
+                  sc->wc[t].threshold = img->theta;
+                  sc->wc[t].polarity = img->T;
                 }
               }
             }
@@ -106,8 +110,11 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
                   for(int i = 0;i<nbImg;i++)
                   {
                     img->wc[i].threshold = img->theta;
-                    sc->wc[t] = img->wc[i];
                   }
+                  
+                  sc->wc[t].feature = img->wc[0].feature;
+                  sc->wc[t].threshold = img->theta;
+                  sc->wc[t].polarity = img->T;
                 }
               }
             }
@@ -138,8 +145,11 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
                   for(int i = 0;i<nbImg;i++)
                   {
                     img->wc[i].threshold = img->theta;
-                    sc->wc[t] = img->wc[i];
                   }
+                  
+                  sc->wc[t].feature = img->wc[0].feature;
+                  sc->wc[t].threshold = img->theta;
+                  sc->wc[t].polarity = img->T;
                 }
               }
             }
@@ -170,8 +180,11 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
                   for(int i = 0;i<nbImg;i++)
                   {
                     img->wc[i].threshold = img->theta;
-                    sc->wc[t] = img->wc[i];
                   }
+                  
+                   sc->wc[t].feature = img->wc[0].feature;
+                   sc->wc[t].threshold = img->theta;
+                   sc->wc[t].polarity = img->T;
                 }
               }
             }
@@ -202,8 +215,11 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
                   for(int i = 0;i<nbImg;i++)
                   {
                     img->wc[i].threshold = img->theta;
-                    sc->wc[t] = img->wc[i];
                   }
+                  
+                   sc->wc[t].feature = img->wc[0].feature;
+                   sc->wc[t].threshold = img->theta;
+                   sc->wc[t].polarity = img->T;
                 }
               }
             }
@@ -220,7 +236,7 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
 
   }  
   free(haar);
-  save_training(sc,200);
+  save_training(sc,5);
 }
 
 
@@ -252,10 +268,10 @@ int wc_calcul(struct WeakClassifier* wc) {
 }
 
 void update_weight(double epsError, struct ImgVal* img, int round) {
-  if(round < 200) {
+  if(round < 5) {
     double beta = epsError / (1 - epsError);
     int ei = 0;
-    for(int i = 1; i < NBIMG; i++) { 
+    for(int i = 1; i < 6400; i++) { 
       if(wc_calcul(&(img->wc[i])) * img->wc[i].polarity * -alpha_calcul(epsError) > 0)
         ei = 1;
       else
@@ -272,7 +288,7 @@ void update_weight(double epsError, struct ImgVal* img, int round) {
 // TODO : final_sc(SDL_Surface* img, StrongClassifier* sc) ??
 int	final_sc(struct StrongClassifier* sc) {
   double sumSC = 0, sumAlpha = 0;
-  for(int i = 0; i < 200; i++) {
+  for(int i = 0; i < 5; i++) {
     sumSC += sc->alpha[i] * wc_calcul(&(sc->wc[i]));
     sumAlpha += sc->alpha[i] * 0.5;
   }

@@ -2,14 +2,14 @@
 
 void save_training(struct StrongClassifier* sc, int round) {
   FILE *trainingFile = NULL;
-  trainingFile = fopen("../Strong/training.bin", "a+"); 
+  trainingFile = fopen("./training.bin", "a+"); 
   if (!trainingFile) {
     //perror("Failed opening file %s", kTrainingFileName);
     exit(1);
   }
  
   for(int i = 0; i < round; i++) {
-    fprintf(trainingFile, 
+     fprintf(trainingFile, 
         "Fx:%d,Fy:%d,Fw:%d,Fh:%d,Ft:%d,Th:%d,Po:%d,Al:%d\n",
         sc->wc[i].feature->x,
         sc->wc[i].feature->y,
@@ -26,7 +26,7 @@ void save_training(struct StrongClassifier* sc, int round) {
 
 void get_training(struct StrongClassifier* sc) {
   FILE *trainingFile = NULL;
-  trainingFile = fopen("../Strong/training.bin", "r");
+  trainingFile = fopen("./training.bin", "r");
   if(!trainingFile) {
    exit(1);
   }
@@ -89,7 +89,7 @@ int create_sc_with_string(struct StrongClassifier* sc, char* str, int round) {
 
 /*int main(int argc, char* argv[]) {
   struct StrongClassifier *sc = malloc(sizeof(struct StrongClassifier));
-  for(int i = 0; i < 200; i++) {
+  for(int i = 0; i < 5; i++) {
     struct WeakClassifier weak;
     weak.feature = malloc(sizeof(struct HaarFeat));
     weak.feature->x = 1;
@@ -110,7 +110,7 @@ int create_sc_with_string(struct StrongClassifier* sc, char* str, int round) {
     sc->alpha[i] = i % 3;
   }
   
-  save_training(sc, 200);
+  save_training(sc, 5);
   
   free(sc);
 
@@ -118,7 +118,7 @@ int create_sc_with_string(struct StrongClassifier* sc, char* str, int round) {
   
   get_training(nsc);
   
-  for(int i = 0; i <  200; i++) {
+  for(int i = 0; i <  5; i++) {
     printf("Round %d: Fx :%d / Fy :%d / Fw :%d / Fh :%d / Feature :%d / Threshold : %d / Polarity : %d / Alpha :%d \n", i, 
         nsc->wc[i].feature->x, 
         nsc->wc[i].feature->y,
@@ -129,7 +129,7 @@ int create_sc_with_string(struct StrongClassifier* sc, char* str, int round) {
         nsc->wc[i].polarity,
         nsc->alpha[i]);
   } 
-  for(int i = 0; i < 200; i++) 
+  for(int i = 0; i < 5; i++) 
     free(nsc->wc[i].feature);
   free(nsc);
 
