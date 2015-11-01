@@ -12,6 +12,7 @@
 #include "./src/Treatment.h"
 #include "./src/HaarFeatures.h"
 #include "./src/Adaboost.h"
+#include "./db/db.h"
 
 void loadImg(struct ImgVal *img);
 
@@ -77,6 +78,7 @@ int main()
     case 2:
       break;
     case 3:
+      ManageDatabase();
       break;
     case 4:
       img = malloc(sizeof(struct ImgVal));
