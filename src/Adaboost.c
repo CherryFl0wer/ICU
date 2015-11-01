@@ -188,6 +188,7 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
                   if(img->e<e)
                   {
                     e = img->e;
+                    img->wc[i].threshold = img->theta;
                     sc->wc[t] = img->wc[i];
                   }
                 }
@@ -199,6 +200,8 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
       }
 
     }
+    sc->alpha[t] = alpha_calcul(e);
+    update_weight(e,img,t);
 
 
   }  
@@ -206,7 +209,7 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
 }
 
 
-double alpha_calcul(int epsError) {
+double alpha_calcul(double epsError) {
   return log((1-epsError)/epsError);
 }
 
@@ -233,7 +236,7 @@ int wc_calcul(struct WeakClassifier* wc) {
   return (wc->feature->val * wc->polarity < wc->threshold * wc->polarity) ? 1 : 0;  
 }
 
-void update_weight(int epsError, struct ImgVal* img, int round) {
+void update_weight(double epsError, struct ImgVal* img, int round) {
   if(round < T) {
     double beta = epsError / (1 - epsError);
     int ei = 0;
