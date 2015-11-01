@@ -1,4 +1,4 @@
-#include "./Utils.h"
+#include "Utils.h"
 /* Copyright (C) 1993 Free Software Foundation, Inc.
 
    This program is free software; you can redistribute it and/or
@@ -13,12 +13,7 @@
 
 /* Written by Jan Brittenson, bson@gnu.ai.mit.edu.  */
 
-int getstr (lineptr, n, stream, terminator, offset)
-  char **lineptr;
-  size_t *n;
-  FILE *stream;
-  char terminator;
-  int offset;
+int getstr (char **lineptr,size_t *n,FILE *stream,char terminator,int offset)
 {
   int nchars_avail;        /* Allocated but unused chars in *LINEPTR.  */
   char *read_pos;        /* Where we're reading into *LINEPTR. */
@@ -107,7 +102,7 @@ int getstr (lineptr, n, stream, terminator, offset)
   return ret;
 }
 
-int getline (lineptr, n, stream)
+int getlines (lineptr, n, stream)
   char **lineptr;
   size_t *n;
   FILE *stream;

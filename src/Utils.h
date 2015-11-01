@@ -1,3 +1,5 @@
+#ifndef _UTILS_HEADER
+#define _UTILS_HEADER
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -21,4 +23,5 @@
 
 int getstr(char **lineptr, size_t *n, FILE *stream, char terminator, int offset);
 
-int getline(char** lineptr, size_t *n, FILE *stream);
+int getlines(char** lineptr, size_t *n, FILE *stream);
+#endif

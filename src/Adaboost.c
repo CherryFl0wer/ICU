@@ -1,7 +1,7 @@
 #include"Adaboost.h"
 #include"HaarFeatures.h"
 #include"Sort.h"
-
+#include"Training.h"
 
 double sumWeight(struct WeakClassifier *wc,int size)
 {
@@ -36,14 +36,17 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
   /* main loop */
   for(;t<T;t++)
   {
+    printf("start");
     for(int i = 0;i<nbImg;i++)
     {
       img->wc[i].w /= sumWeight(img->wc,nbImg);
     }
+    printf("end");
 
     /* select the best weak classifier */
     for(int feat = 1;feat<=5;feat++)
     {
+      printf("%d",feat);
       haar->x = 0;
       haar->y = 0;
       haar->w = 0;
@@ -212,11 +215,12 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
     }
     sc->alpha[t] = alpha_calcul(e);
     update_weight(e,img,t);
+    printf("%d",t);
 
 
   }  
   free(haar);
-  //save wc
+  save_training(sc,200);
 }
 
 

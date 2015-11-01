@@ -74,9 +74,10 @@ int main()
       break;
     case 4:
       img = malloc(sizeof(struct ImgVal));
+      loadImg(img);
+      printf("load_img OK");
       struct StrongClassifier *sc = malloc(sizeof(struct StrongClassifier));
       Boost(sc,img,6400,2400);
-      loadImg(img);
       free(img);
       break;
     default:
@@ -101,7 +102,10 @@ void loadImg(struct ImgVal *img)
         for(int x = 0;x<19;x++)
         {
             for(int y = 0;y<19;y++)
+            {
                 img->wc[i-1].integ[x][y] = tabImg[x][y];
+                printf("%d",img->wc[i-1].integ[x][y]);
+            }   
         }
         
     }

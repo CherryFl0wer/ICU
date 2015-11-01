@@ -1,8 +1,8 @@
-#include "./Training.h"
+#include "Training.h"
 
 void save_training(struct StrongClassifier* sc, int round) {
   FILE *trainingFile = NULL;
-  trainingFile = fopen(kTrainingFileName, "a+"); 
+  trainingFile = fopen("../Strong/training.bin", "a+"); 
   if (!trainingFile) {
     //perror("Failed opening file %s", kTrainingFileName);
     exit(1);
@@ -26,15 +26,16 @@ void save_training(struct StrongClassifier* sc, int round) {
 
 void get_training(struct StrongClassifier* sc) {
   FILE *trainingFile = NULL;
-  trainingFile = fopen(kTrainingFileName, "r");
+  trainingFile = fopen("../Strong/training.bin", "r");
   if(!trainingFile) {
    exit(1);
   }
  
-  char line[256];
+ // char line[256];
   int i = 0;
-
-  while(fgets(line, sizeof(line), trainingFile)) {
+  char *line = NULL;
+  size_t len;
+  while(getlines(&line, &len, trainingFile)!=-1) {
    if(!create_sc_with_string(sc, line, i)) break;
    i++;
   }
@@ -85,8 +86,8 @@ int create_sc_with_string(struct StrongClassifier* sc, char* str, int round) {
 
   return 0;
 }
-/*
-int main(int argc, char* argv[]) {
+
+/*int main(int argc, char* argv[]) {
   struct StrongClassifier *sc = malloc(sizeof(struct StrongClassifier));
   for(int i = 0; i < 200; i++) {
     struct WeakClassifier weak;

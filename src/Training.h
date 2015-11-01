@@ -5,11 +5,11 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
-#include "./Utils.h"
-#include "./Adaboost.h"
-#include "./HaarFeature.h"
+#include "Utils.h"
+#include "Adaboost.h"
+#include "HaarFeatures.h"
 
-const char* kTrainingFileName = "./training.bin";
+//const char* kTrainingFileName = "../Strong/training.bin";
 
 void save_training(struct StrongClassifier* sc, int round); 
 void get_training(struct StrongClassifier* sc);

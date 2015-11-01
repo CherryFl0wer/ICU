@@ -6,7 +6,7 @@ CFLAGS= -Wall -Wextra -std=c99 -pedantic -O3
 LDFLAGS=
 LDLIBS= `pkg-config --libs sdl gtk+-2.0` -lSDL_image -lm
 
-SRC= main.c ./src/IntegralImage.c ./src/ArrayUtils.c ./src/HaarFeatures.c ./src/SDLPixel.c ./src/Treatment.c ./src/Adaboost.c ./src/Sort.c  
+SRC= main.c ./src/IntegralImage.c ./src/ArrayUtils.c ./src/HaarFeatures.c ./src/SDLPixel.c ./src/Treatment.c ./src/Adaboost.c ./src/Sort.c ./src/Training.c ./src/Utils.c 
 
 all: main
 
