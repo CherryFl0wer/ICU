@@ -11,42 +11,82 @@
 #include "./src/SDLPixel.h"
 #include "./src/Treatment.h"
 #include "./src/HaarFeatures.h"
-//#include "./src/Adaboost.h"
+#include "./src/Adaboost.h"
 
-void loadImg();
+void loadImg(struct ImgVal *img);
 
-int main(int argc, const char* argv[])
+int main()
 {
-  loadImg();
-  SDL_Surface  *image;	
+  printf("Tapez l'étape voulue : \n");
+  printf("-1 : pré-traitement de l'image\n");
+  printf("-2 : reconnaissance visage\n");
+  printf("-3 : accès à la base de donnée\n");
+  printf("-4 : création du strongclassifier\n");
+  int input = 0;
+  if(!(scanf("%d",&(input))))
+  {
+    printf("error d'acquisition");
+    return 0;
+  }
+  SDL_Surface  *image;  
+  struct ImgVal *img;
+  switch(input)
+  {
+    case 1:
+      
 
-  if(argc != 2) return 1;
-	
-	SDLInit();
+      SDLInit();
+      printf("entrez le chemin d'une image\n");
+      char path[255];
+      if(!(scanf("%s",path)))
+      {
+        printf("erreur d'acquisition");
+        return 0;
+      }      
+      image = loadimg(path);
+      
+	  // _____________________ //
+	  displayImg(image);
+      segIm(image);
+      displayImg(image);
+      image = loadimg(path);
+      displayImg(image);
+ 	  imgToGreyScale(image);
+      displayImg(image);
+	  normalize(image);
+      displayImg(image);
+	  equalize(image);
+      displayImg(image);
+	  SDL_LockSurface(image);
+      int **tabImg = imgToArray(image);
+	  integralImg(tabImg, image->w, image->h);
 
-  image = loadimg(argv[1]);
+	  SDL_UnlockSurface(image);
 
-	// _____________________ //
-	
-	SDL_LockSurface(image);
+	  freeUint8Array(tabImg, image->w);
 
- 	imgToGreyScale(image);
-	normalize(image);
-	equalize(image);
-	int **tabImg = imgToArray(image);
-	integralImg(tabImg, image->w, image->h);
-
-	SDL_UnlockSurface(image);
-
-	freeUint8Array(tabImg, image->w);
-
-	displayImg(image);  
+      SDL_FreeSurface(image);
+      SDL_Quit();
+      break;
+    case 2:
+      break;
+    case 3:
+      break;
+    case 4:
+      img = malloc(sizeof(struct ImgVal));
+      struct StrongClassifier *sc = malloc(sizeof(struct StrongClassifier));
+      Boost(sc,img,6400,2400);
+      loadImg(img);
+      free(img);
+      break;
+    default:
+      break;
+  }
   return 0;
 }
 
 void loadImg(struct ImgVal *img)
 {
-    int pos = 2400;
     SDL_Surface *image;
     char s[] = "./src/face/face00000.pgm";
     for(int i = 1;i<2401;i++)
@@ -56,17 +96,30 @@ void loadImg(struct ImgVal *img)
         s[17] = i/100 % 10 + '0';
         s[16] = i/1000 % 10 + '0';
         image = loadimg(s);
-        printf("2\n");
-	    int **tabImg = imgToArray(image);
-	    int arr[19][19];
-        for(int i = 0;i<19;i++)
-        {
-            for(int j = 0;j<19;j++)
-                arr[i][j] = tabImg[i][j];
-        }
+	    int **tabImg = imgToArray(image);       
         integralImg(tabImg, image->w, image->h);
-        printf("OK\n");
-        struct HaarFeat *vect = malloc(2*sizeof(struct HaarFeat));
-        MakeVectWithFeat(vect,arr);
+        for(int x = 0;x<19;x++)
+        {
+            for(int y = 0;y<19;y++)
+                img->wc[i-1].integ[x][y] = tabImg[x][y];
+        }
+        
     }
+    char n[] = "./src/nface/negat0000.pgm";
+    for(int j = 2401;j<6401;j++)
+    {
+        n[20] = (j-2400) % 10 +'0';
+        n[19] = (j-2400)/10 % 10 +'0';
+        n[18] = (j-2400)/100 % 10 + '0';
+        n[17] = (j-2400)/1000 % 10 + '0';
+        image = loadimg(n);
+	    int **tabImg = imgToArray(image);       
+        integralImg(tabImg, image->w, image->h);
+        for(int x = 0;x<19;x++)
+        {
+            for(int y = 0;y<19;y++)
+                img->wc[j-1].integ[x][y] = tabImg[x][y];
+        }
+    }
+
 }

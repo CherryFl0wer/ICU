@@ -106,6 +106,4 @@ void displayImg(SDL_Surface* img) {
 		} 
 	}
 
-	SDL_FreeSurface(img);
-	SDL_Quit();
 }

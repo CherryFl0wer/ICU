@@ -7,7 +7,6 @@ int compare(const void *p1, const void *p2)
 {
     struct WeakClassifier *s1 = (struct WeakClassifier*)p1;
     struct WeakClassifier *s2 = (struct WeakClassifier*)p2;
-
     return (s1->feature->val - s2->feature->val);
 }
 

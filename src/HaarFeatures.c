@@ -4,7 +4,7 @@
 #include"HaarFeatures.h"
 
 
-void ValFeatA(struct HaarFeat *haar,int arr[24][24])
+void ValFeatA(struct HaarFeat *haar,int arr[19][19])
 {
     int x = haar->x;
     int y = haar->y;
@@ -22,7 +22,7 @@ void ValFeatA(struct HaarFeat *haar,int arr[24][24])
    
 }
 
-void ValFeatB(struct HaarFeat *haar,int arr[24][24])
+void ValFeatB(struct HaarFeat *haar,int arr[19][19])
 { 
     int x = haar->x;
     int y = haar->y;
@@ -44,7 +44,7 @@ void ValFeatB(struct HaarFeat *haar,int arr[24][24])
 
 }
 
-void ValFeatC(struct HaarFeat *haar,int arr[24][24])
+void ValFeatC(struct HaarFeat *haar,int arr[19][19])
 { 
     int x = haar->x;
     int y = haar->y;
@@ -62,7 +62,7 @@ void ValFeatC(struct HaarFeat *haar,int arr[24][24])
 }
 
 
-void ValFeatD(struct HaarFeat *haar,int arr[24][24])
+void ValFeatD(struct HaarFeat *haar,int arr[19][19])
 { 
     int x = haar->x;
     int y = haar->y;
@@ -83,7 +83,7 @@ void ValFeatD(struct HaarFeat *haar,int arr[24][24])
 }
 
 
-void ValFeatE(struct HaarFeat *haar,int arr[24][24])
+void ValFeatE(struct HaarFeat *haar,int arr[19][19])
 { 
     int x = haar->x;
     int y = haar->y;

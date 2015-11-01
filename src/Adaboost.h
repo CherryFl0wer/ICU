@@ -8,17 +8,16 @@
 
 #define NBIMG 1000
 
-const int T = 190; //nbr of round
 
 struct WeakClassifier { 
     struct HaarFeat* feature;
     int w,threshold;
-    int integ[24][24];
+    int integ[19][19];
     int polarity;
 };
 
 struct ImgVal {
-    struct WeakClassifier wc[1000];// 1000 = number of image to test
+    struct WeakClassifier wc[6400];// 1000 = number of image to test
     int theta;
     int T;
     int M;
@@ -32,14 +31,14 @@ struct StrongClassifier {
 };
 
 
-void add_wc(struct StrongClassifier* sc, struct HaarFeat* feat, int threshold, int pol, int sw[24][24], int epsError, int round);
+void add_wc(struct StrongClassifier* sc, struct HaarFeat* feat, int threshold, int pol, int sw[19][19], int epsError, int round);
 
-double alpha_calcul(int epsError);
+double alpha_calcul(double epsError);
 
 int wc_calcul(struct WeakClassifier* wc);
 
 
-void update_weight(int epsError, struct ImgVal* img,int round);
+void update_weight(double epsError, struct ImgVal* img,int round);
 
 int final_sc(struct StrongClassifier* sc);
 
