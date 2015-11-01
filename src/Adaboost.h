@@ -8,7 +8,7 @@
 
 #define NBIMG 1000
 
-const int T = 200; //nbr of round
+const int T = 190; //nbr of round
 
 struct WeakClassifier { 
     struct HaarFeat* feature;
@@ -27,8 +27,8 @@ struct ImgVal {
 
 
 struct StrongClassifier {
-    struct WeakClassifier wc[200]; /* 200 = number of weakclassifier needed */
-    int alpha[200]; /* same as above */
+    struct WeakClassifier wc[190]; /* 190 = number of weakclassifier needed */
+    int alpha[190]; /* same as above */
 };
 
 
