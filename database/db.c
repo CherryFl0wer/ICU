@@ -113,18 +113,17 @@ void serialization(char name[20], FILE *database)
 			
 			if(choice_nb_pics >= 1)
 			{
-				for (int i = 1; i <= choice_nb_pics; i++)
+				int nb = choice_nb_pics;
+				for(int i = 1; i <= nb; i++)
 				{
 					char pat;
 
 					char *path = &pat;
-					do
-					{	
-						printf("Path of the picture : ");
-						scanf("%s", path);
+		
+					printf("Path of the picture : ");
+					scanf("%s", path);
 
-						add_picture(new, path);
-					}while(!add_picture(new, path));
+					add_picture(new, path);
 				}
 			}
 			else
