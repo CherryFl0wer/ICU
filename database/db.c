@@ -2,10 +2,20 @@
 
 int path_in_array(person guy, char *path)
 {
-	int ret = 0;
-	int nb = guy.nb_pics;
-	int i = 0;
-	int j=0;
+	int nb = guy.nb_pics - 1;
+
+	while (nb>=0)
+	{
+		if(strcmp(guy.pics[nb], path))
+		{
+			return 1; 
+		}
+		nb--;
+	}
+
+	return 0;
+}
+/*
 	while (nb !=0)
 	{
 		while (*(guy.pics + i) != '|' && *(path+j) != '\0')
@@ -34,20 +44,37 @@ int path_in_array(person guy, char *path)
 		j=0;
 		nb--;
 	}
-
-	return ret;
 }
+*/
 
 
-
-int add_picture(person new,  int nb)
+void add_picture(person new,  int nb)
 {
-	while (nb > 0)
+	//char pat = 'l';
+	char my_path[] = "";
+	for (int i =0; i< nb;i++)
 	{
-		char pat;
-		char *my_path = &pat;
+	//	char pat;
+	//	char *my_path = &pat;		
+//		char *my_path = NULL;
+
 		scanf("%s",my_path);
+
+	//	if(path_in_array(new, my_path))
+	//	{
+	//		printf("Sorry, this picture already exist\n");
+	//	}
+	//	else
+	//	{
+			new.pics[i] = my_path;
+			new.nb_pics++;
+	//	}
+	}
+//	free(my_path);
+}
+/*
 		char *output = malloc(strlen(new.pics) + strlen(my_path) + 1);
+
 		if(path_in_array(new, my_path))
 		{	
 			printf("Sorry, this picture already exist\n");
@@ -82,12 +109,7 @@ int add_picture(person new,  int nb)
 //		strcpy(my_path, output); //Here we add the new path to the string of path
 		//strcpy(new.pics, output);
 		//free(output);
-		return 1;
-	
-
-}
-
-
+*/
 
 void serialization(char name[20], FILE *database) 
 {	
@@ -104,10 +126,9 @@ void serialization(char name[20], FILE *database)
 	}
 	if (!find)
 	{
-		person new;
-		strcpy(new.name,name); // Ici que le nom est add
-		new.nb_pics = 0;
-		strcpy(new.pics, "");
+		person *new;
+		strcpy(*new.name, name); // Ici que le nom est add
+		*new.nb_pics = 0;
 
 		int choice;
 		printf("Add picture(s) of %s ?\n", name);
@@ -126,7 +147,6 @@ void serialization(char name[20], FILE *database)
 
 				int nb = choice_nb_pics;
 				add_picture(new, nb);
-				printf("Path: %s",new.pics);	
 					/*
 				int nb = choice_nb_pics;
 				for(int i = 1; i <= nb; i++)
@@ -141,7 +161,6 @@ void serialization(char name[20], FILE *database)
 					add_picture(new, path);
 					new.nb_pics++;
 				}*/
-				new.nb_pics++;
 			}
 			else
 			{
@@ -155,8 +174,8 @@ void serialization(char name[20], FILE *database)
 			exit(-1);
 		}
 		
-	 printf("%10s      %10d     %30s \n\n", new.name, new.nb_pics, new.pics);
-	 fseek(database, 0, SEEK_END);
+//	 	printf("%10s      %10d     %30s \n\n", new.name, new.nb_pics, new.pics);
+//	 	fseek(database, 0, SEEK_END);
 		fwrite(&new, sizeof(person), 1, database);
 		printf("Add %s succeed\n",name);
 		
@@ -166,18 +185,24 @@ void serialization(char name[20], FILE *database)
 static void print(FILE *f)
 {
   f = fopen("database.obj", "r");
-  fseek(f, 0, SEEK_SET);
+ // fseek(f, 0, SEEK_SET);
 
   person a;
-  printf("\n");
-  printf("Print database : \n\n");
+  printf("\nPrint database : \n\n");
 
   while ((!feof(f))&&(fread(&a, sizeof(person), 1, f)))   
 		  //for(int i = 0; i < 4; i++)
   {
-	printf("On a:\n");
-    printf("%10s      %10d     %30s \n\n", a.name, a.nb_pics, a.pics);
+    printf("%10s      %10d    ", a.name, a.nb_pics);
+	
+	int nb = a.nb_pics - 1;
+	while(nb>=0)
+	{
+		printf("%s ", a.pics[nb]);
+		nb--;
+	}
   }
+  printf("\n");
 
   fclose(f);
 }
@@ -272,7 +297,7 @@ void ManageDatabase()
 
 		switch(choice)
 		{
-			case 1:      			
+			case 1:{      			
 				db = fopen("database.obj","r+b");
         		serialization(maxou,db);
         		serialization(bapt,db);
@@ -282,25 +307,25 @@ void ManageDatabase()
 				printf("Init database: ok");
         		fclose(db);
         		print(db);
-				break;
+				break;}
 
-			case 2: //Add working good
+			case 2:{ //Add working good
 				db = fopen("database.obj","r+b");
 				printf("Enter a name : ");
 				scanf("%s", name);
 				serialization(name,db);
 				fclose(db);
-				break;
+				break;}
 				
-			case 3: //Remove working
+			case 3: {//Remove working
 				db = fopen("database.obj","r+b");
 				printf("Enter a name : ");
 				scanf("%s",name);
 				remov(name);
 				fclose(db);
-				break;	
+				break;}	
 	
-			case 4: // some problem here but it's basically working or not :p
+			case 4:{ // some problem here but it's basically working or not :p
 				db = fopen("database.obj","r+b");
 				printf("Enter a name to modif : ");
 				char namemodif[20];
@@ -310,11 +335,11 @@ void ManageDatabase()
 				scanf("%s",newname);
 				modify(namemodif,newname);
 				fclose(db);
-				break;
-			case 5:
+				break;}
+			case 5:{
 				db = fopen("database.obj","r+b");
 				print(db);
-				break;
+				break;}
 
 			case 6:
 				break;
