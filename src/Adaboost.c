@@ -61,13 +61,13 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
       if(feat ==1)
       {
         haar->feat = 1;
-        for(haar->x = 0; haar->x<24; haar->x++)
+        for(haar->x = 0; haar->x<20; haar->x++)
         {
-          for(haar->y = 0; haar->y<24; haar->y++)
+          for(haar->y = 0; haar->y<20; haar->y++)
           {
-            for(haar->h = 1; haar->x+haar->h<24; haar->h++)
+            for(haar->h = 1; haar->x+haar->h<20; haar->h++)
             {
-              for(haar->w = 1;haar->y+2*haar->w<24; haar->w++)
+              for(haar->w = 1;haar->y+2*haar->w<20; haar->w++)
               {
                 for(int i = 0;i<nbImg;i++)
                 {
@@ -89,13 +89,13 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
       else if(feat == 2)
       {
         haar->feat = 2;
-        for(haar->x = 0; haar->x<24; haar->x++)
+        for(haar->x = 0; haar->x<20; haar->x++)
         {
-          for(haar->y = 0; haar->y<24; haar->y++)
+          for(haar->y = 0; haar->y<20; haar->y++)
           {
-            for(haar->h = 1; haar->x+haar->h<24; haar->h++)
+            for(haar->h = 1; haar->x+haar->h<20; haar->h++)
             {
-              for(haar->w = 1;haar->y+3*haar->w<24; haar->w++)
+              for(haar->w = 1;haar->y+3*haar->w<20; haar->w++)
               {
                 for(int i = 0;i<nbImg;i++)
                 {
@@ -118,13 +118,13 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
       else if(feat == 3)
       {
         haar->feat = 3;
-        for(haar->x = 0; haar->x<24; haar->x++)
+        for(haar->x = 0; haar->x<20; haar->x++)
         {
-          for(haar->y = 0; haar->y<24; haar->y++)
+          for(haar->y = 0; haar->y<20; haar->y++)
           {
-            for(haar->h = 1; haar->x+2*haar->h<24; haar->h++)
+            for(haar->h = 1; haar->x+2*haar->h<20; haar->h++)
             {
-              for(haar->w = 1; haar->y+haar->w<24; haar->w++)
+              for(haar->w = 1; haar->y+haar->w<20; haar->w++)
               {
                 for(int i = 0;i<nbImg;i++)
                 {
@@ -147,13 +147,13 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
       else if(feat == 4)
       {
         haar->feat = 4;
-        for(haar->x = 0; haar->x<24; haar->x++)
+        for(haar->x = 0; haar->x<20; haar->x++)
         {
-          for(haar->y = 0; haar->y<24; haar->y++)
+          for(haar->y = 0; haar->y<20; haar->y++)
           {
-            for(haar->h = 1; haar->x+3*haar->h<24; haar->h++)
+            for(haar->h = 1; haar->x+3*haar->h<20; haar->h++)
             {
-              for(haar->w = 1; haar->y+haar->w<24; haar->w++)
+              for(haar->w = 1; haar->y+haar->w<20; haar->w++)
               {
                 for(int i = 0;i<nbImg;i++)
                 {
@@ -176,13 +176,13 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
       else if(feat == 5)
       {
         haar->feat = 5;
-        for(haar->x = 0; haar->x<24; haar->x++)
+        for(haar->x = 0; haar->x<20; haar->x++)
         {
-          for(haar->y = 0; haar->y<24; haar->y++)
+          for(haar->y = 0; haar->y<20; haar->y++)
           {
-            for(haar->h = 1; haar->x+2*haar->h<24; haar->h++)
+            for(haar->h = 1; haar->x+2*haar->h<20; haar->h++)
             {
-              for(haar->w = 1;haar->y+2*haar->w<24; haar->w++)
+              for(haar->w = 1;haar->y+2*haar->w<20; haar->w++)
               {
                 for(int i = 0;i<nbImg;i++)
                 {
@@ -219,14 +219,14 @@ double alpha_calcul(double epsError) {
 
 
 // Don't know if it's better to replace by WeakClassifier wc
-void add_wc(struct StrongClassifier* sc, struct HaarFeat* feat, int threshold, int pol, int sw[24][24], int epsError, int round) {
+void add_wc(struct StrongClassifier* sc, struct HaarFeat* feat, int threshold, int pol, int sw[20][20], int epsError, int round) {
   struct WeakClassifier weak;
   weak.feature 		= feat;
   weak.threshold = threshold;
   weak.polarity 	= pol;
-  for(int i =0;i<24;i++)
+  for(int i =0;i<20;i++)
   {
-    for(int j = 0;j<24;j++)
+    for(int j = 0;j<20;j++)
       weak.integ[i][j]			= sw[i][j];
   }
 
