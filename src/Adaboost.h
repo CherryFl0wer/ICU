@@ -31,7 +31,7 @@ struct StrongClassifier {
 };
 
 
-void add_wc(struct StrongClassifier* sc, struct HaarFeat* feat, int threshold, int pol, int sw[19][19], int epsError, int round);
+//void add_wc(struct StrongClassifier* sc, struct HaarFeat* feat, int threshold, int pol, int sw[19][19], int epsError, int round);
 
 double alpha_calcul(double epsError);
 
