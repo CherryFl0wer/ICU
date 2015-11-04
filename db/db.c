@@ -43,12 +43,13 @@ void print(FILE *f)
   person a;
   printf("\n");
   printf("Print database : \n\n");
+  printf(" Name      Nb of pics           Pics\n\n");
   while ((!feof(f))&&(fread(&a, sizeof(person), 1, f))) 
   {
-    printf(" Name      Nb of pics           Pics\n");
     printf(" %s          %d         ", a.name,a.nb_pics);
     for (int i = 0; i < a.nb_pics;i++)
-      printf("%s\n",a.pics[i]);
+      printf("%s ",a.pics[i]);
+    printf("\n");
   }
   fclose(f);
 }
