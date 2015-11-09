@@ -340,9 +340,10 @@ void selectBestFeat(struct ImgVal *img,int nbImg)
       M = MIter;
       Te = TIter;
     }
-    if(jIter == nbImg-1)
+    if(jIter == nbImg)
       break;
-    jIter++;
+    else
+      jIter++;
     while(1){
       if(img->wc[jIter].polarity == -1)
       {
@@ -354,12 +355,12 @@ void selectBestFeat(struct ImgVal *img,int nbImg)
         Sp += img->wc[jIter].w;
         Tp -= img->wc[jIter].w;
       }
-      if(jIter == nbImg-1 || img->wc[jIter].feature->val)
+      if(jIter == nbImg || img->wc[jIter].feature->val != img->wc[jIter+1].feature->val)
         break;
       else
         jIter++;
     }
-    if(jIter == nbImg-1)
+    if(jIter == nbImg)
     {
       tIter = img->wc[jIter].feature->val + 1;
       MIter = 0;
