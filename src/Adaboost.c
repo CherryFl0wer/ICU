@@ -244,7 +244,7 @@ double alpha_calcul(double epsError) {
   return log((1-epsError)/epsError);
 }
 
-
+/* Deleted 
 // Don't know if it's better to replace by WeakClassifier wc
 void add_wc(struct StrongClassifier* sc, struct HaarFeat* feat, int threshold, int pol, int sw[19][19], int epsError, int round) {
   struct WeakClassifier weak;
@@ -262,7 +262,7 @@ void add_wc(struct StrongClassifier* sc, struct HaarFeat* feat, int threshold, i
   // calcul alpha
   sc->alpha[round] = alpha_calcul(epsError);
 }
-
+*/
 int wc_calcul(struct WeakClassifier* wc) {
   return (wc->feature->val * wc->polarity < wc->threshold * wc->polarity) ? 1 : 0;  
 }

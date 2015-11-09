@@ -15,7 +15,7 @@ typedef struct Person 	//Have to implement some caracteritic for each
 } person;
 
 void ManageDatabase();
-void serialization(person new, FILE *database);
+void serialization(person *new, FILE *database);
 void deserialization(char name[20]);
 void modify(char name[20], char *n);
 void remov(char name[20]);
