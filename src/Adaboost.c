@@ -15,38 +15,37 @@ double sumWeight(struct WeakClassifier *wc,int size)
 void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
 {
   int t = 0;
-  double e = 2;
   struct HaarFeat* haar = malloc(sizeof(struct HaarFeat));
   int T = 5;
+  struct HaarFeat features[T];
   /* initialisation of weights */
   for(int i = 0;i<pos;i++)
   {
-    img->wc[i].w = 1/(2*pos);
+    img->wc[i].w = 1/((double)nbImg);
     img->wc[i].polarity = 1;
   }
 
   for(int i = pos;i<nbImg;i++)
   {
-    img->wc[i].w = 1/(2*(nbImg-pos));
+    img->wc[i].w = 1/((double)nbImg);
     img->wc[i].polarity = -1;                
   }
-
 
 
   /* main loop */
   for(;t<T;t++)
   {
-    printf("start");
-    for(int i = 0;i<nbImg;i++)
+    double e = 2;
+    printf("WeakClassifier num : %d \n",t);
+    double sum = sumWeight(img->wc,nbImg);
+    for(int i = 0;t>0 && i<nbImg;i++)
     {
-      img->wc[i].w /= sumWeight(img->wc,nbImg);
+      img->wc[i].w /= sum;
     }
-    printf("end");
 
     /* select the best weak classifier */
     for(int feat = 1;feat<=5;feat++)
     {
-      printf("%d",feat);
       haar->x = 0;
       haar->y = 0;
       haar->w = 0;
@@ -67,18 +66,23 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
                 {
                   ValFeatA(haar,img->wc[i].integ);
                   img->wc[i].feature = haar;
+                  img->wc[i].val = haar->val;
                 }
                 selectBestFeat(img,nbImg);
                 if(img->e<e)
                 {
+                  printf("trouver : %d %d %d %d %d\n",haar->x,haar->y,haar->w,haar->h,haar->feat);
                   e = img->e;
                   for(int i = 0;i<nbImg;i++)
                   {
                     img->wc[i].threshold = img->theta;
                   }
-                  
-                  sc->wc[t].feature = haar;
-                  printf("%d %d %d %d %d\n",haar->x,haar->y,haar->w,haar->h,haar->feat);
+                  features[t].val = haar->val;
+                  features[t].x = haar->x;
+                  features[t].y = haar->y;
+                  features[t].w = haar->w;
+                  features[t].h = haar->h;
+                  features[t].feat = haar->feat;
                   sc->wc[t].threshold = img->theta;
                   sc->wc[t].polarity = img->T;
                 }
@@ -102,17 +106,24 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
                 {
                   ValFeatB(haar,img->wc[i].integ);
                   img->wc[i].feature = haar;
+                  img->wc[i].val = haar->val;
                 }
                 selectBestFeat(img,nbImg);
                 if(img->e<e)
                 {
                   e = img->e;
+                  printf("trouver : %d %d %d %d %d\n",haar->x,haar->y,haar->w,haar->h,haar->feat);
                   for(int i = 0;i<nbImg;i++)
                   {
                     img->wc[i].threshold = img->theta;
                   }
+                  features[t].val = haar->val;
+                  features[t].x = haar->x;
+                  features[t].y = haar->y;
+                  features[t].w = haar->w;
+                  features[t].h = haar->h;
+                  features[t].feat = haar->feat;
                   
-                  sc->wc[t].feature = img->wc[0].feature;
                   sc->wc[t].threshold = img->theta;
                   sc->wc[t].polarity = img->T;
                 }
@@ -137,17 +148,26 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
                 {
                   ValFeatC(haar,img->wc[i].integ);
                   img->wc[i].feature = haar;
+                  img->wc[i].val = haar->val;
                 }
                 selectBestFeat(img,nbImg);
                 if(img->e<e)
                 {
                   e = img->e;
+                  printf("trouver : %d %d %d %d %d\n",haar->x,haar->y,haar->w,haar->h,haar->feat);
                   for(int i = 0;i<nbImg;i++)
                   {
                     img->wc[i].threshold = img->theta;
                   }
                   
-                  sc->wc[t].feature = img->wc[0].feature;
+                  features[t].val = haar->val;
+                  features[t].x = haar->x;
+                  features[t].y = haar->y;
+                  features[t].w = haar->w;
+                  features[t].h = haar->h;
+                  features[t].feat = haar->feat;
+                  
+
                   sc->wc[t].threshold = img->theta;
                   sc->wc[t].polarity = img->T;
                 }
@@ -172,19 +192,26 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
                 {
                   ValFeatD(haar,img->wc[i].integ);
                   img->wc[i].feature = haar;
+                  img->wc[i].val = haar->val;
                 }
                 selectBestFeat(img,nbImg);
                 if(img->e<e)
                 {
                   e = img->e;
+                  printf("trouver : %d %d %d %d %d\n",haar->x,haar->y,haar->w,haar->h,haar->feat);
                   for(int i = 0;i<nbImg;i++)
                   {
                     img->wc[i].threshold = img->theta;
                   }
+                  features[t].val = haar->val;
+                  features[t].x = haar->x;
+                  features[t].y = haar->y;
+                  features[t].w = haar->w;
+                  features[t].h = haar->h;
+                  features[t].feat = haar->feat;
                   
-                   sc->wc[t].feature = img->wc[0].feature;
-                   sc->wc[t].threshold = img->theta;
-                   sc->wc[t].polarity = img->T;
+                  sc->wc[t].threshold = img->theta;
+                  sc->wc[t].polarity = img->T;
                 }
               }
             }
@@ -207,19 +234,27 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
                 {
                   ValFeatE(haar,img->wc[i].integ);
                   img->wc[i].feature = haar;
+                  img->wc[i].val = haar->val;
                 }
                 selectBestFeat(img,nbImg);
                 if(img->e<e)
                 {
                   e = img->e;
+                  printf("trouver : %d %d %d %d %d\n",haar->x,haar->y,haar->w,haar->h,haar->feat);
                   for(int i = 0;i<nbImg;i++)
                   {
                     img->wc[i].threshold = img->theta;
                   }
+                  features[t].val = haar->val;
+                  features[t].x = haar->x;
+                  features[t].y = haar->y;
+                  features[t].w = haar->w;
+                  features[t].h = haar->h;
+                  features[t].feat = haar->feat;
                   
-                   sc->wc[t].feature = img->wc[0].feature;
-                   sc->wc[t].threshold = img->theta;
-                   sc->wc[t].polarity = img->T;
+
+                  sc->wc[t].threshold = img->theta;
+                  sc->wc[t].polarity = img->T;
                 }
               }
             }
@@ -229,10 +264,10 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
       }
 
     }
+    sc->wc[t].feature = &(features[t]);
     sc->alpha[t] = alpha_calcul(e);
     update_weight(e,img,t);
-    printf("%d",t);
-
+    printf("%d %d %d %d %d\n",sc->wc[t].feature->x,sc->wc[t].feature->y,sc->wc[t].feature->w,sc->wc[t].feature->h,sc->wc[t].feature->feat);
 
   }  
   free(haar);
@@ -264,7 +299,7 @@ void add_wc(struct StrongClassifier* sc, struct HaarFeat* feat, int threshold, i
 }
 */
 int wc_calcul(struct WeakClassifier* wc) {
-  return (wc->feature->val * wc->polarity < wc->threshold * wc->polarity) ? 1 : 0;  
+  return (wc->val * wc->polarity < wc->threshold * wc->polarity) ? 1 : 0;  
 }
 
 void update_weight(double epsError, struct ImgVal* img, int round) {
@@ -297,13 +332,16 @@ int	final_sc(struct StrongClassifier* sc) {
 }
 
 
-void selectBestFeat(struct ImgVal *img,int nbImg)
+void selectBestFeat(struct ImgVal *c,int nbImg)
 {
+  // voir avec MITER POUR LE PROBLEME 
   //    sorted img + weights
+  struct ImgVal *img = c;
   sort(img);
+  
   double Sp = 0,Sn = 0, Tp = 0, Tn = 0;
   int Te = 0;
-  int t = img->wc[0].feature->val;
+  int t = img->wc[0].val;
   int M = 0;
   double e = 2;
 
@@ -340,7 +378,7 @@ void selectBestFeat(struct ImgVal *img,int nbImg)
       M = MIter;
       Te = TIter;
     }
-    if(jIter == nbImg)
+    if(jIter == nbImg-1)
       break;
     else
       jIter++;
@@ -355,25 +393,24 @@ void selectBestFeat(struct ImgVal *img,int nbImg)
         Sp += img->wc[jIter].w;
         Tp -= img->wc[jIter].w;
       }
-      if(jIter == nbImg || img->wc[jIter].feature->val != img->wc[jIter+1].feature->val)
+      if(jIter == nbImg-1 || img->wc[jIter].val != img->wc[jIter+1].val)
         break;
       else
         jIter++;
     }
-    if(jIter == nbImg)
+    if(jIter == nbImg-1)
     {
-      tIter = img->wc[jIter].feature->val + 1;
+      tIter = img->wc[jIter].val + 1;
       MIter = 0;
     }
     else
     {
-      tIter=(img->wc[jIter].feature->val+img->wc[jIter+1].feature->val)/2;
-      MIter = img->wc[jIter+1].feature->val -img->wc[jIter].feature->val;
+      tIter=(img->wc[jIter].val+img->wc[jIter+1].val)/2;
+      MIter = img->wc[jIter+1].val -img->wc[jIter].val;
     }
   }
   img->theta = t;
   img->e=e;
   img->M=M;
   img->T=Te;
-
 }

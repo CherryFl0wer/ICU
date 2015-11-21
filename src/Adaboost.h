@@ -11,6 +11,7 @@
 
 struct WeakClassifier { 
     struct HaarFeat* feature;
+    int val;
     int w,threshold;
     int integ[19][19];
     int polarity;
