@@ -10,9 +10,11 @@ int compare(const void *p1, const void *p2)
     return (s1->feature->val - s2->feature->val);
 }
 
-void sort(struct ImgVal *img)
+struct ImgVal* sort(struct ImgVal *img)
 {
-
-    qsort(img->wc, 6400, sizeof(struct WeakClassifier), compare);
-
+    struct ImgVal *res = malloc(sizeof(struct ImgVal));
+    for(int i = 0; i<6400;i++)
+      res->wc[i] = img->wc[i];
+    qsort(res->wc, 6400, sizeof(struct WeakClassifier), compare);
+    return res;
 }

@@ -16,7 +16,7 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
 {
   int t = 0;
   struct HaarFeat* haar = malloc(sizeof(struct HaarFeat));
-  int T = 5;
+  int T = 200;
   struct HaarFeat features[T];
   /* initialisation of weights */
   for(int i = 0;i<pos;i++)
@@ -271,7 +271,7 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
 
   }  
   free(haar);
-  save_training(sc,5);
+  save_training(sc,200);
 }
 
 
@@ -303,15 +303,18 @@ int wc_calcul(struct WeakClassifier* wc) {
 }
 
 void update_weight(double epsError, struct ImgVal* img, int round) {
-  if(round < 5) {
+  if(round < 200) {
     double beta = epsError / (1 - epsError);
     int ei = 0;
     for(int i = 1; i < 6400; i++) { 
       if(wc_calcul(&(img->wc[i])) * img->wc[i].polarity * -alpha_calcul(epsError) > 0)
+      {
         ei = 1;
+      }
       else
+      {
         ei = 0;
-
+      }
       img->wc[i].w *= pow(beta, 1-ei);
     } 
 
@@ -323,7 +326,7 @@ void update_weight(double epsError, struct ImgVal* img, int round) {
 // TODO : final_sc(SDL_Surface* img, StrongClassifier* sc) ??
 int	final_sc(struct StrongClassifier* sc) {
   double sumSC = 0, sumAlpha = 0;
-  for(int i = 0; i < 5; i++) {
+  for(int i = 0; i < 200; i++) {
     sumSC += sc->alpha[i] * wc_calcul(&(sc->wc[i]));
     sumAlpha += sc->alpha[i] * 0.5;
   }
@@ -336,9 +339,7 @@ void selectBestFeat(struct ImgVal *c,int nbImg)
 {
   // voir avec MITER POUR LE PROBLEME 
   //    sorted img + weights
-  struct ImgVal *img = c;
-  sort(img);
-  
+  struct ImgVal *img = sort(c);
   double Sp = 0,Sn = 0, Tp = 0, Tn = 0;
   int Te = 0;
   int t = img->wc[0].val;

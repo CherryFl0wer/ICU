@@ -131,5 +131,6 @@ void loadImg(struct ImgVal *img)
                 img->wc[j-1].integ[x][y] = tabImg[x][y];
         }
     }
+    printf("Initialsation des images OK\n");
 
 }
