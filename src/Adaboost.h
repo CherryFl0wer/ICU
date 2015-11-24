@@ -12,7 +12,8 @@
 struct WeakClassifier { 
     struct HaarFeat* feature;
     int val;
-    int w,threshold;
+    double w;
+    int threshold;
     int integ[19][19];
     int polarity;
 };
@@ -27,8 +28,8 @@ struct ImgVal {
 
 
 struct StrongClassifier {
-    struct WeakClassifier wc[200]; /* 190 = number of weakclassifier needed */
-    int alpha[200]; /* same as above */
+    struct WeakClassifier wc[5]; /* 190 = number of weakclassifier needed */
+    int alpha[5]; /* same as above */
 };
 
 
