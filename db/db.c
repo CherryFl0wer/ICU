@@ -3,7 +3,6 @@
 void serialization(person *new, FILE *database) 
 {
   person *answer = calloc(1,sizeof(struct Person));
-  //person *new = calloc(1,sizeof(struct Person));
   bool find = false;
   while((fread(answer, sizeof(struct Person), 1, database)) && !find)
   {
@@ -61,20 +60,22 @@ void modify(char oldname[20], char n[20])
   FILE *database = fopen("database.obj","r+");
   fseek(database, 0, SEEK_SET);
   person *answer = calloc(1,sizeof(struct Person));
-  person *modif = calloc(1,sizeof(struct Person));
   while(fread(answer, sizeof(struct Person), 1, database))
   {
     if (strcmp(answer->name, oldname)==0)
     {
+      person *new = calloc(1,sizeof(struct Person));
+      *new = *answer;
+      strcpy(new->name,n);
+      printf("%s",new->name);
       fseek(database, -sizeof(struct Person), SEEK_CUR);
-      strcpy(modif->name,n);
-
-      fwrite(modif, sizeof(struct Person), 1, database);
+      fwrite(new, sizeof(struct Person), 1, database);
+      free(new);
       printf("Modified with success\n");
     }
   }
+
   free(answer);
-  free(modif);
 }
 void remov(char name[20])
 {
@@ -97,10 +98,12 @@ void remov(char name[20])
       fwrite(answer, sizeof(struct Person), 1, ndb);
     }
   }
+
   if (found == 0)
   {
-    printf("No record(s) found with the requested name: %s\n", name); //Name doesn't exists in database
+    printf("No record(s) found with the requested name: %s\n", name);
   }
+
   fclose(database);
   fclose(ndb);
   free(answer);
@@ -116,22 +119,13 @@ void ergo()
 }
 void ManageDatabase()
 {
-  FILE *bd = fopen("database.obj","a"); // create database if she doesn't exists
+  FILE *bd = fopen("database.obj","a"); 
   fclose(bd);
-
   int choice = 0;
-  /*
-  char maxou[20] = "Maxime";
-  char bapt[20] = "Baptiste";
-  char coco[20] = "Corentin";
-  char adri[20] = "Adrien"; */
-  //  char name[20];
-  //person *new  = calloc(1,sizeof(struct Person));
   char name[20];
   while(choice != 6)
   {
     printf("\nChoose an option : \n");
-    //printf("1 - Initialize with basic person faces\n");
     printf("2 - Add a person\n");
     printf("3 - Remove a person\n");
     printf("4 - Modify a person\n");
