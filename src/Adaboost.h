@@ -28,8 +28,8 @@ struct ImgVal {
 
 
 struct StrongClassifier {
-    struct WeakClassifier wc[5]; /* 190 = number of weakclassifier needed */
-    double alpha[5]; /* same as above */
+    struct WeakClassifier wc[200]; /* 190 = number of weakclassifier needed */
+    double alpha[200]; /* same as above */
 };
 
 
