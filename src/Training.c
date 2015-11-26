@@ -48,7 +48,7 @@ int create_sc_with_string(struct StrongClassifier* sc, char* str, int round) {
    const char delimiter[2] = ","; 
    char* token;
    int i = 0;
-   int scValues[8] = { 0 };
+   double scValues[8] = { 0 };
    token = strtok(str, delimiter);
   
    while(token != NULL) {
@@ -56,7 +56,7 @@ int create_sc_with_string(struct StrongClassifier* sc, char* str, int round) {
     memset(tokenval, '\0', sizeof(tokenval));
     strcpy(tokenval, token+3);
 
-    scValues[i] = atoi(tokenval);
+    scValues[i] = atof(tokenval);
     
     token = strtok(NULL, delimiter);
     i++;
@@ -64,16 +64,16 @@ int create_sc_with_string(struct StrongClassifier* sc, char* str, int round) {
     
    struct WeakClassifier weak;
    weak.feature = malloc(sizeof(struct HaarFeat));
-   weak.feature->x = scValues[0];
-   weak.feature->y = scValues[1];
-   weak.feature->w = scValues[2];
-   weak.feature->h = scValues[3];
-   weak.feature->feat = scValues[4];
+   weak.feature->x = (int)scValues[0];
+   weak.feature->y = (int)scValues[1];
+   weak.feature->w = (int)scValues[2];
+   weak.feature->h = (int)scValues[3];
+   weak.feature->feat = (int)scValues[4];
    weak.feature->val = 0;
 
    weak.w = 0;
-   weak.threshold = scValues[5];
-   weak.polarity  = scValues[6];
+   weak.threshold = (int)scValues[5];
+   weak.polarity  = (int)scValues[6];
    for(int i = 0; i < 19; i++)
      for(int j = 0; j < 19; j++)
        weak.integ[i][j] = 0;
