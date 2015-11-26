@@ -10,7 +10,7 @@ void save_training(struct StrongClassifier* sc, int round) {
  
   for(int i = 0; i < round; i++) {
      fprintf(trainingFile, 
-        "Fx:%d,Fy:%d,Fw:%d,Fh:%d,Ft:%d,Th:%d,Po:%d,Al:%d\n",
+        "Fx:%d,Fy:%d,Fw:%d,Fh:%d,Ft:%d,Th:%d,Po:%d,Al:%f\n",
         sc->wc[i].feature->x,
         sc->wc[i].feature->y,
         sc->wc[i].feature->w,

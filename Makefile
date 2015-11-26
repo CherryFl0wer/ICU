@@ -2,7 +2,7 @@ CC=gcc
 EXE=facedetect
 
 CPPFLAGS= `pkg-config --cflags sdl gtk+-2.0`
-CFLAGS= -Wall -Wextra -std=c99 -pedantic -O3
+CFLAGS= -Wall -Wextra -std=c99 -pedantic -O3 -g
 LDFLAGS=
 LDLIBS= `pkg-config --libs sdl gtk+-2.0` -lSDL_image -lm
 
