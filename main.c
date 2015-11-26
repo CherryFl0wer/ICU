@@ -13,6 +13,7 @@
 #include "./src/HaarFeatures.h"
 #include "./src/Adaboost.h"
 #include "./db/db.h"
+#include "./src/Training.h"
 
 void loadImg(struct ImgVal *img);
 
@@ -31,6 +32,7 @@ int main()
   }
   SDL_Surface  *image;  
   struct ImgVal *img;
+  struct StrongClassifier *strong;
   switch(input)
   {
     case 1:
@@ -76,6 +78,9 @@ int main()
       SDL_Quit();
       break;
     case 2:
+      strong = malloc(sizeof(struct StrongClassifier));
+      get_training(strong);
+      printf("pause\n");
       break;
     case 3:
       ManageDatabase();
@@ -86,10 +91,12 @@ int main()
       struct StrongClassifier *sc = malloc(sizeof(struct StrongClassifier));
       Boost(sc,img,6400,2400);
       free(img);
+      free(sc);
       break;
     default:
       break;
   }
+  free(strong);
   return 0;
 }
 
