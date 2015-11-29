@@ -15,6 +15,7 @@
 #include "./db/db.h"
 #include "./src/Training.h"
 #include "./src/Detection.h"
+
 void loadImg(struct ImgVal *img);
 
 int main()
@@ -98,10 +99,10 @@ int main()
 	    SDL_LockSurface(image);
       int **tabImg2 = imgToArray(image);
 	    integralImg(tabImg2, image->w, image->h);
-      struct Rect rects[50];
+      struct Rect rects[250];
       detect(rects,strong,tabImg2,image->w,image->h);
       int cpt = 0;
-      while(cpt < 50 && rects[cpt].x >= 0)
+      while(cpt < 250 && rects[cpt].x >= 0)
       {
         square(image,rects[cpt].x,rects[cpt].y,rects[cpt].w);
         cpt++;
@@ -130,6 +131,8 @@ int main()
       break;
     default:
       break;
+    
+
   }
   return 0;
 }
