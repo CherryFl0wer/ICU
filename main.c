@@ -14,7 +14,7 @@
 #include "./src/Adaboost.h"
 #include "./db/db.h"
 #include "./src/Training.h"
-
+#include "./src/Detection.h"
 void loadImg(struct ImgVal *img);
 
 int main()
@@ -80,7 +80,42 @@ int main()
     case 2:
       strong = malloc(sizeof(struct StrongClassifier));
       get_training(strong);
-      printf("pause\n");
+      SDLInit();
+      printf("entrez le chemin d'une image\n");
+      char path2[255];
+      if(!(scanf("%s",path2)))
+      {
+        printf("erreur d'acquisition");
+        return 0;
+      }      
+      image = loadimg(path2);
+      
+	  // _____________________ //
+      displayImg(image);
+	    imgToGreyScale(image);
+	    normalize(image);
+	    equalize(image);
+	    SDL_LockSurface(image);
+      int **tabImg2 = imgToArray(image);
+	    integralImg(tabImg2, image->w, image->h);
+      struct Rect rects[50];
+      detect(rects,strong,tabImg2,image->w,image->h);
+      int cpt = 0;
+      while(cpt < 50 && rects[cpt].x >= 0)
+      {
+        square(image,rects[cpt].x,rects[cpt].y,rects[cpt].w);
+        cpt++;
+      }
+      printf("number of faces : %d\n",cpt);
+
+	    SDL_UnlockSurface(image);
+      displayImg(image);
+
+      
+
+      SDL_FreeSurface(image);
+      SDL_Quit();
+      free(strong);
       break;
     case 3:
       ManageDatabase();
@@ -96,7 +131,6 @@ int main()
     default:
       break;
   }
-  free(strong);
   return 0;
 }
 
