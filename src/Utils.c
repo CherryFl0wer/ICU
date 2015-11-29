@@ -109,3 +109,4 @@ int getlines (lineptr, n, stream)
 {
   return getstr (lineptr, n, stream, '\n', 0);
 }
+

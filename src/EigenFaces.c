@@ -21,8 +21,8 @@ int** declare_set(size_t nbImg, char** pathListImg) {
   return set;
 }
 
-void destroy_set(int** set) {
-  for(size_t i = 0; i < NB_IMG_TEST; i++) 
+void destroy_set(int** set, size_t nbImg) {
+  for(size_t i = 0; i < nbImg; i++) 
    free(set[i]); 
 
   free(set);
@@ -67,10 +67,20 @@ void rm_common_data(int** set, size_t nbImg, double meanEps) {
       set[i][j] -= meanEps;
 }
 
-void transposed(int** set, size_t nbImg) {
+int**  transposed(int** set, size_t nbImg) {
+  int** nSet = malloc(SIZE_IMG * sizeof(int*));
+  for(size_t i = 0; i < SIZE_IMG; i++) {
+     nSet[i] = calloc(nbImg, sizeof(int));
+     for(size_t j = 0; j < nbImg; j++)
+       nSet[i][j] = set[j][i];
+  }
 
+  return (nSet == NULL) ? NULL : nSet;
 }
 
+int** covariance(int** set, int** transposedSet) {
+  
+}
 
 int main() {
   // Get all samples of images 
@@ -82,19 +92,37 @@ int main() {
   for(size_t i = 1; i <= NB_IMG_TEST; i++) {
     pathListImg[i-1] = calloc(30,sizeof(char));
     char path[30]; 
-    snprintf(path, 30, "./src/pface/face%zu.pgm", i);
+    snprintf(path, 30, "./src/face/face%zu.pgm", i);
     strcpy(pathListImg[i-1], path);
   }
   
 
-  int** setofimg = declare_set(NB_IMG_TEST, pathListImg);
+  int** setOfImg = declare_set(NB_IMG_TEST, pathListImg);
+
+  for(size_t i = 0; i < 1; i++) {
+    printf("[ ");
+    for(size_t j = 0; j < SIZE_IMG; j++) {
+      printf("%d ",setOfImg[0][j]);
+    }
+    printf(" ]");
+  }
+  int** setOfImgT = transposed(setOfImg, NB_IMG_TEST);
+  printf("\n\n\n [ ");
+  for(size_t i = 0; i < SIZE_IMG; i++) { 
+    printf("%d ", setOfImgT[i][0]);
+  }
+  printf("\n ]");
+
 
   // clear pathListImg
-  for(size_t i = 0; i < NB_IMG_TEST; i++) {
+  for(size_t i = 0; i < NB_IMG_TEST; i++) 
     free(pathListImg[i]);
-  } 
   free(pathListImg);
   
-  destroy_set(setofimg);
+  for(size_t i = 0; i < SIZE_IMG; i++) 
+    free(setOfImgT[i]);
+  free(setOfImgT);
+
+  destroy_set(setOfImg, NB_IMG_TEST);
   return 0;
 }

@@ -103,15 +103,12 @@ int main()
 void loadImg(struct ImgVal *img)
 {
     SDL_Surface *image;
-    char s[] = "./src/face/face00000.pgm";
     for(int i = 1;i<2401;i++)
     {
-        s[19] = i % 10 + '0';
-        s[18] = i/10 % 10 + '0';
-        s[17] = i/100 % 10 + '0';
-        s[16] = i/1000 % 10 + '0';
-        image = loadimg(s);
-	    int **tabImg = imgToArray(image);       
+        char path[30];
+        snprintf(path, 30, "./src/face/face%d.pgm", i);
+        image = loadimg(path);
+	      int **tabImg = imgToArray(image);       
         integralImg(tabImg, image->w, image->h);
         for(int x = 0;x<19;x++)
         {
@@ -122,14 +119,12 @@ void loadImg(struct ImgVal *img)
         }
         
     }
-    char n[] = "./src/nface/negat0000.pgm";
+ 
     for(int j = 2401;j<6401;j++)
     {
-        n[20] = (j-2400) % 10 +'0';
-        n[19] = (j-2400)/10 % 10 +'0';
-        n[18] = (j-2400)/100 % 10 + '0';
-        n[17] = (j-2400)/1000 % 10 + '0';
-        image = loadimg(n);
+      char path[30];
+      snprintf(path, 30, "./src/nface/negat%d.pgm", j);
+      image = loadimg(path);
 	    int **tabImg = imgToArray(image);       
         integralImg(tabImg, image->w, image->h);
         for(int x = 0;x<19;x++)

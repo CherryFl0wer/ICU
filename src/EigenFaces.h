@@ -13,9 +13,9 @@
 # define SIZE_IMG        (SIZE_IMG_HEIGHT * SIZE_IMG_WIDTH)
 
 int** declare_set(size_t nbImg, char** pathListImg);
-void destroy_set(int** set);
+void destroy_set(int** set, size_t nbImg);
 int* flatten(SDL_Surface* image, size_t width, size_t height);
 double mean(int** set, size_t nbImg);
 void rm_common_data(int** set, size_t nbImg, double meanEps);
-void transposed(int** set, size_t nbImg);
+int** transposed(int** set, size_t nbImg);
 #endif
