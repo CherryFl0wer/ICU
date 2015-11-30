@@ -78,13 +78,29 @@ int**  transposed(int** set, size_t nbImg) {
   return (nSet == NULL) ? NULL : nSet;
 }
 
-int** covariance(int** set, int** transposedSet) {
-  
+int** covariance(int** set, int** transposedSet, size_t nbImg) {
+  // Matrix of M x M where M = nb Img
+  // and not N^2 x N^2 because too large 
+  // C = A^t * A and not C = A*A^t 
+
+  int** covMatrix = malloc(nbImg * sizeof(int*));
+  for(size_t i = 0; i < nbImg; i++) {
+    covMatrix[i] = calloc(nbImg, sizeof(int));
+    for(size_t j = 0; j < nbImg; j++) {
+      for(size_t k = 0; k < nbImg; k++) { 
+        covMatrix[i][j] += set[i][k] * transposedSet[k][j];
+      } 
+    }
+  }
+
+  return (covMatrix == NULL) ? NULL : covMatrix;
 }
+
+
 
 int main() {
   // Get all samples of images 
-  // By loading all the files
+  // By   loading all the files
   char** pathListImg = malloc(NB_IMG_TEST * sizeof(char*));
 
   // Fill the path of img

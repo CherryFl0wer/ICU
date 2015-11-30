@@ -18,4 +18,5 @@ int* flatten(SDL_Surface* image, size_t width, size_t height);
 double mean(int** set, size_t nbImg);
 void rm_common_data(int** set, size_t nbImg, double meanEps);
 int** transposed(int** set, size_t nbImg);
+int** covariance(int** set, int** transposedSet, size_t nbImg);
 #endif
