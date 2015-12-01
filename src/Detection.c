@@ -18,6 +18,7 @@ void detect(struct Rect rects[250],struct StrongClassifier *sc,int **array,int w
   int squh = 20;
   int count_squ = 0;
   double som_alpha, som;
+  
   while(squ->x +squw < w_max && squ->y + squh < h_max)
   {
     while(squ->y + squh < h_max)
@@ -53,7 +54,7 @@ void detect(struct Rect rects[250],struct StrongClassifier *sc,int **array,int w
             default :
               break;
           }
-          if(haar->val*sc->wc[i].polarity <=  sc->wc[i].threshold * sc->wc[i].polarity)
+          if(haar->val*sc->wc[i].polarity >=  sc->wc[i].threshold * sc->wc[i].polarity)
             som += sc->alpha[i];
           som_alpha += sc->alpha[i];
           free(haar);

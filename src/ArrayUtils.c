@@ -15,9 +15,11 @@ int** imgToArray(SDL_Surface* img) {
 	for(int i = 0; i < img->w; i++)
 		arr[i] = malloc(img->h * sizeof(int));
 
+  Uint8 r = 0;
 	for(int i = 0; i < img->h; i++) {
 		for(int j = 0; j < img->w; j++) {
-			arr[j][i] =  getpixel(img, j, i);		
+			SDL_GetRGB(getpixel(img,j,i),img->format,&r,&r,&r);
+      arr[j][i] = r;		
 		}
 	}
 
