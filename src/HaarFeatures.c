@@ -103,7 +103,105 @@ void ValFeatE(struct HaarFeat *haar,int arr[19][19])
     haar->val = -a -4*d + 2*b + 2*c -e + 2*f +2*i - g - j;
 }
 
+
 //fonction for detection
+
+void ValFeatE_det(struct HaarFeat *haar,int **arr)
+{
+  //haar->t = 4 ;
+  int dist = (haar->h)/2;
+  int dist2 = (haar->w)/2;
+  int x = haar->x - 1;
+  int y = haar->y - 1;
+  
+  long i = arr[x][y];
+  long f = arr[x + dist2][y];
+  long c = arr[x + haar->w][y];
+  long h = arr[x][y + dist];
+  long e = arr[x + dist2][y + dist];
+  long b = arr[x + haar->w][y + dist];
+  long g = arr[x][y + haar->h];
+  long d = arr[x + dist2][y + haar->h];
+  long a = arr[x + haar->w][y + haar->h];
+  
+  haar->val = a - 2*b + c - 2*d + 4*e - 2*f + i - 2*h + g; 
+}
+
+void ValFeatD_det(struct HaarFeat *haar, int **arr)
+{
+  //haar->t = 3 ;
+  
+  int dist = (haar->w)/3;
+  int x = haar->x - 1;
+  int y = haar->y - 1;
+  long h = arr[x][y];
+  long f = arr[x + dist][y];
+  long d = arr[x + haar->w - dist][y];
+  long b = arr[x + haar->w][y];
+  long g = arr[x][y + haar->h];
+  long e = arr[x + dist][y + haar->h];
+  long c = arr[x + haar->w - dist][y + haar->h];
+  long a = arr[x + haar->w][y + haar->h];
+ 
+  haar->val = a - b - 2 * c + 2 * d + 2 * e - 2 * f - g + h; 
+}
+
+void ValFeatC_det(struct HaarFeat *haar, int **arr)
+{
+  //haar->t = 2 ;
+  int dist = (haar->h)/3;
+  int x = haar->x - 1;
+  int y = haar->y - 1;
+  
+  long a = arr[x][y];
+  long c = arr[x][y + dist];
+  long e = arr[x][y + haar->h - dist];
+  long g = arr[x][y + haar->h];
+  long b = arr[x + haar->w][y];
+  long d = arr[x + haar->w][y + dist];
+  long f = arr[x + haar->w][y + haar->h - dist];
+  long h = arr[x + haar->w][y + haar->h];
+
+  haar->val = h + 2*e - g - 2*f + a + 2*d - b - 2*c ;
+
+}
+
+void ValFeatB_det(struct HaarFeat *haar, int **arr)
+{
+  //haar->t = 1 ;
+  int dist = (haar->h / 2) ;
+  int x = haar->x - 1;
+  int y = haar->y - 1;
+  
+  long f = arr[x][y];
+  long c = arr[x + haar->w][y];
+  long e = arr[x][y + dist];
+  long b = arr[x + haar->w][y + dist];
+  long d = arr[x][y + haar->h];
+  long a = arr[x + haar->w][y + haar->h];
+
+  haar->val = a - 2*b + c - d + 2*e - f ;
+}
+
+void ValFeatA_det(struct HaarFeat *haar, int **arr)
+{ 
+    //haar->t = 0 ;
+    int dist = (haar->w / 2) ;
+    int x = haar->x - 1;
+    int y = haar->y - 1;
+    
+    long a = arr[x][y];
+    long b = arr[x + dist][y];
+    long c = arr[x + haar->w][y];
+    long d = arr[x][y + haar->h];
+    long e = arr[x + dist][y + haar->h];
+    long f = arr[x + haar->w][y + haar->h];
+
+    haar->val = a + 2*e - 2*b - d - f + c ;  
+}
+
+/*
+
 void ValFeatA_det(struct HaarFeat *haar,int **arr)
 {
     int x = haar->x;
@@ -202,7 +300,7 @@ void ValFeatE_det(struct HaarFeat *haar,int **arr)
 
     haar->val = -a -4*d + 2*b + 2*c -e + 2*f +2*i - g - j;
 }
-
+*/
 
 // Fill vect with all different features with different sizes
 void MakeVectWithFeat(struct HaarFeat *vect,int arr[19][19])

@@ -145,7 +145,10 @@ void loadImg(struct ImgVal *img)
         char path[30];
         snprintf(path, 30, "./src/face/face%d.pgm", i);
         image = loadimg(path);
-	      int **tabImg = imgToArray(image);       
+	      imgToGreyScale(image);
+	      normalize(image);
+	      equalize(image);
+        int **tabImg = imgToArray(image);       
         integralImg(tabImg, image->w, image->h);
         for(int x = 0;x<19;x++)
         {
@@ -160,15 +163,18 @@ void loadImg(struct ImgVal *img)
     for(int j = 2401;j<6401;j++)
     {
       char path[30];
-      snprintf(path, 30, "./src/nface/negat%d.pgm", j);
+      snprintf(path, 30, "./src/nface/negat%d.pgm", j-2400);
       image = loadimg(path);
-	    int **tabImg = imgToArray(image);       
-        integralImg(tabImg, image->w, image->h);
-        for(int x = 0;x<19;x++)
-        {
-            for(int y = 0;y<19;y++)
-                img->wc[j-1].integ[x][y] = tabImg[x][y];
-        }
+	    imgToGreyScale(image);
+	    normalize(image);
+	    equalize(image);
+      int **tabImg = imgToArray(image);       
+      integralImg(tabImg, image->w, image->h);
+      for(int x = 0;x<19;x++)
+      {
+        for(int y = 0;y<19;y++)
+          img->wc[j-1].integ[x][y] = tabImg[x][y];
+      }
     }
     printf("Initialsation des images OK\n");
 

@@ -7,7 +7,7 @@
 
 void detect(struct Rect rects[250],struct StrongClassifier *sc,int **array,int w_max,int h_max)
 {
-  for(int i = 0;i<50;i++)
+  for(int i = 0; i< 250;i++)
     rects[i].x = -1;
   struct Rect *squ = malloc(sizeof(struct Rect));
   squ->x = 1;
@@ -60,7 +60,7 @@ void detect(struct Rect rects[250],struct StrongClassifier *sc,int **array,int w
           free(haar);
         }
         //printf("%f    %f\n",som,som_alpha);
-        if(count_squ < 250 &&som >= 0.675 * som_alpha)
+        if(count_squ < 250 &&som >= 0.746 * som_alpha)
         {
           rects[count_squ].x = squ->x;
           rects[count_squ].y = squ->y;
