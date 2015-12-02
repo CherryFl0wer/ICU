@@ -26,7 +26,7 @@ void save_training(struct StrongClassifier* sc, int round) {
 
 void get_training(struct StrongClassifier* sc) {
   FILE *trainingFile = NULL;
-  trainingFile = fopen("./training2.bin", "r");
+  trainingFile = fopen("./training3.bin", "r");
   if(!trainingFile) {
    exit(1);
   }

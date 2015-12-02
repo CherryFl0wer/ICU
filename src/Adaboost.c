@@ -16,7 +16,7 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
 {
   int t = 0;
   struct HaarFeat* haar = malloc(sizeof(struct HaarFeat));
-  int T = 200;
+  int T = 110;
   int values[nbImg];
   struct HaarFeat features[T];
   /* initialisation of weights */
@@ -322,7 +322,7 @@ void Boost(struct StrongClassifier *sc,struct ImgVal *img, int nbImg, int pos)
 
   }  
   free(haar);
-  save_training(sc,200);
+  save_training(sc,110);
 }
 
 
@@ -354,7 +354,7 @@ int wc_calcul(struct WeakClassifier* wc) {
 }
 
 void update_weight(double epsError, struct ImgVal* img, int round) {
-  if(round < 200) {
+  if(round < 110) {
     double beta = epsError / (1 - epsError);
     int ei = 0;
     for(int i = 1; i < 6400; i++) { 
@@ -375,7 +375,7 @@ void update_weight(double epsError, struct ImgVal* img, int round) {
 // TODO : final_sc(SDL_Surface* img, StrongClassifier* sc) ??
 int	final_sc(struct StrongClassifier* sc) {
   double sumSC = 0, sumAlpha = 0;
-  for(int i = 0; i < 200; i++) {
+  for(int i = 0; i < 110; i++) {
     sumSC += sc->alpha[i] * wc_calcul(&(sc->wc[i]));
     sumAlpha += sc->alpha[i] * 0.5;
   }

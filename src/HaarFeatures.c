@@ -105,7 +105,7 @@ void ValFeatE(struct HaarFeat *haar,int arr[19][19])
 
 
 //fonction for detection
-
+/*
 void ValFeatE_det(struct HaarFeat *haar,int **arr)
 {
   //haar->t = 4 ;
@@ -199,8 +199,8 @@ void ValFeatA_det(struct HaarFeat *haar, int **arr)
 
     haar->val = a + 2*e - 2*b - d - f + c ;  
 }
+*/
 
-/*
 
 void ValFeatA_det(struct HaarFeat *haar,int **arr)
 {
@@ -300,7 +300,7 @@ void ValFeatE_det(struct HaarFeat *haar,int **arr)
 
     haar->val = -a -4*d + 2*b + 2*c -e + 2*f +2*i - g - j;
 }
-*/
+
 
 // Fill vect with all different features with different sizes
 void MakeVectWithFeat(struct HaarFeat *vect,int arr[19][19])
