@@ -1,9 +1,9 @@
 CC=clang
 
-CPPFLAGS= `pkg-config --cflags gtk+-2.0`
+CPPFLAGS= `pkg-config --cflags gtk+-3.0`
 CFLAGS= -Wall -Wextra -std=c99 -pedantic -O3 -g
 LDFLAGS=
-LDLIBS= `pkg-config --libs gtk+-2.0` -lSDL_image -lm
+LDLIBS= `pkg-config --libs gtk+-3.0` -lSDL_image -lm
 
 SRC= gtk.c
 OBJ= ${SRC:.c=.o}
