@@ -2,7 +2,10 @@
 
 void serialization(person *new, FILE *database) 
 {
-  person *answer = calloc(1,sizeof(struct Person));
+  person *answer = malloc(sizeof(new));
+  answer->name = malloc(sizeof(new->name));
+  answer->nb_pics = 0;
+  printf("On init");
   bool find = false;
   while((fread(answer, sizeof(struct Person), 1, database)) && !find)
   {
@@ -31,7 +34,9 @@ void print(FILE *f)
   int indexer = 0;
   f = fopen("database.obj", "r");
   fseek(f, 0, SEEK_CUR);
-  person *a = calloc(1,sizeof(struct Person));
+  person *a = malloc(sizeof(struct Person));
+  a->name = malloc(sizeof(char*));
+  a->nb_pics = 0;
   printf("\n");
   printf("Print database : \n\n");
   printf("      Name              Nb of pics\n\n");
@@ -52,12 +57,16 @@ void modify(char *oldname, char *n)
 {
   FILE *database = fopen("database.obj","r+");
   fseek(database, 0, SEEK_SET);
-  person *answer = calloc(1,sizeof(struct Person));
+  person *answer = malloc(sizeof(struct Person));
+  answer->name = malloc(sizeof(char*));
+  answer->nb_pics = 0;
   while(fread(answer, sizeof(struct Person), 1, database))
   {
     if (strcmp(answer->name, oldname)==0)
     {
-      person *new = calloc(1,sizeof(struct Person));
+      person *new = malloc(sizeof(struct Person));
+      new->name = malloc(sizeof(char*));
+      new->nb_pics = 0;
       *new = *answer;
       strcpy(new->name,n);
       fseek(database, -sizeof(struct Person), SEEK_CUR);
@@ -74,7 +83,9 @@ void remov(char *name)
   database = fopen("database.obj", "rb");
   ndb = fopen("temp.obj", "w+b");
   fseek(database, 0, SEEK_SET);
-  person *answer = calloc(1,sizeof(struct Person));
+  person *answer = malloc(sizeof(struct Person));
+  answer->name = malloc(sizeof(char*));
+  answer->nb_pics = 0;
   int found = 0;
   while ((fread(answer, sizeof(struct Person), 1, database))) 
   {
@@ -130,11 +141,16 @@ void ManageDatabase()
       case 1:{ 
                db = fopen("database.obj","r+b");
                printf("Enter a name : ");
-	           person *new  = calloc(1,sizeof(struct Person));
+	           person *new  = malloc(sizeof(struct Person));
                char *name = malloc(sizeof(char*));
                if(!scanf("%s",name))
                  exit(0);
+               printf("name dans name");
+               new->name = malloc(sizeof(char*));
+               new->nb_pics = 0;
                strcpy(new->name,name);
+               //new->name = name
+               printf("free");
                free(name);
                serialization(new,db);
   	           free(new);
@@ -143,7 +159,7 @@ void ManageDatabase()
       case 2:{ 
                db = fopen("database.obj","r+b");
                printf("Enter a name : ");
-               char *name = malloc(sizeof(char*));
+               char *name = calloc(1,sizeof(char*));
                if(!scanf("%s",name))
                  exit(0);
 
