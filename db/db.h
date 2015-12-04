@@ -8,17 +8,15 @@
 
 typedef struct Person 	//Have to implement some caracteritic for each
 { 
-	char name[20];	//name of the person
-	int nb_pics;	//number of pictures
-	char pics[3][50]; //Paths to images
-	//long* vect; //Images to vector
+	char name[20];
+    int nb_pics;
 } person;
 
 void ManageDatabase();
 void serialization(person *new, FILE *database);
-void deserialization(char name[20]);
-void modify(char name[20], char *n);
-void remov(char name[20]);
+void deserialization(char *name);
+void modify(char *name, char *n);
+void remov(char *name);
 void print(FILE *f);
 
 #endif

@@ -18,44 +18,37 @@ void serialization(person *new, FILE *database)
     int choice = 0;
     if(!scanf("%d",&choice))
       exit(0);
-    if (choice > 0)
-    {
-      int nb = choice;
-      char pat;
-      char *path = &pat;
-      for (int i = 0; i<nb;i++)
-      {
-        printf("Enter a path: ");
-        if(!scanf("%s",path))
-          exit(0);
-        strcpy(new->pics[i],path);
-        new->nb_pics++;
-      }
-    }
+    //Here we add image in a folder. Coming soon Inshallah
+    new->nb_pics = choice;
     fwrite(new, sizeof(struct Person), 1, database);
-    free(answer);
-    printf("Add %s succeed\n",new->name);
   }
+  free(answer);
+  printf("Add %s succeed\n",new->name);
 }
+
 void print(FILE *f)
 {
+  int indexer = 0;
   f = fopen("database.obj", "r");
   fseek(f, 0, SEEK_CUR);
   person *a = calloc(1,sizeof(struct Person));
   printf("\n");
   printf("Print database : \n\n");
-  printf(" Name      Nb of pics           Pics\n\n");
+  printf("      Name              Nb of pics\n\n");
   while ((!feof(f))&&(fread(a, sizeof(struct Person), 1, f))) 
   {
-    printf(" %s          %d         ", a->name,a->nb_pics);
-    for (int i = 0; i < a->nb_pics;i++)
-      printf("%s ",a->pics[i]);
+    indexer++;
+    printf("%d.  %s",indexer, a->name);
+    for (int i = (25-strlen(a->name)); i>0;i--)
+      printf(" ");
+    printf("%d",a->nb_pics);
     printf("\n");
   }
+  printf("\n");
   free(a);
   fclose(f);
 }
-void modify(char oldname[20], char n[20])
+void modify(char *oldname, char *n)
 {
   FILE *database = fopen("database.obj","r+");
   fseek(database, 0, SEEK_SET);
@@ -67,17 +60,15 @@ void modify(char oldname[20], char n[20])
       person *new = calloc(1,sizeof(struct Person));
       *new = *answer;
       strcpy(new->name,n);
-      printf("%s",new->name);
       fseek(database, -sizeof(struct Person), SEEK_CUR);
       fwrite(new, sizeof(struct Person), 1, database);
       free(new);
       printf("Modified with success\n");
     }
   }
-
   free(answer);
 }
-void remov(char name[20])
+void remov(char *name)
 {
   FILE *database, *ndb;
   database = fopen("database.obj", "rb");
@@ -119,65 +110,69 @@ void ergo()
 }
 void ManageDatabase()
 {
-  FILE *bd = fopen("database.obj","a"); 
+  FILE *bd = fopen("database.obj","a"); //create db if it doesn't exist 
   fclose(bd);
   int choice = 0;
-  char name[20];
-  while(choice != 6)
+  while(choice != 5)
   {
-    printf("\nChoose an option : \n");
-    printf("2 - Add a person\n");
-    printf("3 - Remove a person\n");
-    printf("4 - Modify a person\n");
-    printf("5 - Print database\n");
-    printf("6 - Quit\n");
+    printf("\nChoose an option : \n\n");
+    printf("1 - Add a person\n");
+    printf("2 - Remove a person\n");
+    printf("3 - Modify a person\n");
+    printf("4 - Print database\n");
+    printf("5 - Quit\n");
     FILE *db;
     if(!scanf("%d",&choice))
       exit(0);
 
     switch(choice)
     {
-      case 2:{ 
+      case 1:{ 
                db = fopen("database.obj","r+b");
                printf("Enter a name : ");
-	       person *new  = calloc(1,sizeof(struct Person));
+	           person *new  = calloc(1,sizeof(struct Person));
+               char *name = malloc(sizeof(char*));
                if(!scanf("%s",name))
                  exit(0);
                strcpy(new->name,name);
+               free(name);
                serialization(new,db);
-  	       free(new);
+  	           free(new);
                fclose(db);
                break;}
-      case 3:{ 
+      case 2:{ 
                db = fopen("database.obj","r+b");
                printf("Enter a name : ");
+               char *name = malloc(sizeof(char*));
                if(!scanf("%s",name))
                  exit(0);
 
                remov(name);
-              // free(new);
+               free(name);
                fclose(db);
                break;}
-      case 4:{ 
+      case 3:{ 
                db = fopen("database.obj","r+b");
                printf("Enter a name to modif : ");
-               char namemodif[20];
+               char *namemodif = calloc(1,sizeof(char*));
                if(!scanf("%s",namemodif))
                  exit(0);
 
                printf("Enter the new name : ");
-               char newname[20];
+               char *newname = calloc(1,sizeof(char*));
                if(!scanf("%s",newname))
                  exit(0);
 
                modify(namemodif,newname);
+               free(namemodif);
+               free(newname);
                fclose(db);
                break;}
-      case 5:{
+      case 4:{
              db = fopen("database.obj","r+b");
              print(db);
              break;}
-      case 6:
+      case 5:
              break;
       default:
              fputs("Incorrect option\n", stderr);
