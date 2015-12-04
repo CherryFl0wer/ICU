@@ -16,7 +16,7 @@
 double** declare_set(size_t nbImg, char** pathListImg);
 void free_mat(double** mat, size_t row);
 double* flatten(SDL_Surface* image, size_t width, size_t height);
-double mean(double** set, size_t nbImg);
+double mean_img(double** set, size_t nbImg);
 void matSubVal(double** mat, size_t nMat, size_t mMat, double eps);
 double** matSub(double** mat1, double** mat2, size_t nMat, size_t mMat);
 void matAddVal(double** mat, size_t nMat, size_t mMat, double eps);
