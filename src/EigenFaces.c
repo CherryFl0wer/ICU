@@ -153,6 +153,36 @@ double* proj(double* v1, double* v2, size_t col) {
     vect[i] = v1[i] * v2[i];
     vect[i] *= v1[i];
   }
+
+
+double** compute_Q(double** A,size_t nbImg)
+{
+  double** Q = malloc(nbImg * sizeof(double*));
+  for(size_t i = 0; i < SIZE_IMG; i++)
+    Q[i] = malloc(nbImg, sizeof(double));
+  Q[0] = A[0]/mat_norm(A[0],nbImg);
+  for(size_t i = 1;i<nbImg;i++)
+  {
+    Q[i]=A[i];
+    for(size_t j = i-1;j>=0;j--)
+      Q[i] = matSub(Q[i],proj(Q[j],A[i],SIZE_IMG),1,SIZE_IMG);
+    Q[i]/=mat_norm(A[i],nbImg);
+  }
+
+  return Q;
+}
+
+double** Compute_R(double** A, double** Q,size_t nbImg)
+{
+  double** trans_Q = transposed(Q,nbImg);
+  double** R = matMul(trans_Q,A,SIZE_IMG,nbImg,SIZE_IMG);
+  return R;
+}  
+
+
+
+
+void vector_unitary(double** matrix, size_t col) {
   
   return (vect == NULL) ? NULL : vect;
 }
