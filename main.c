@@ -14,6 +14,7 @@
 #include "./src/Adaboost.h"
 #include "./db/db.h"
 #include "./src/Training.h"
+#include "./src/Detection.h"
 
 void loadImg(struct ImgVal *img);
 
@@ -80,7 +81,42 @@ int main()
     case 2:
       strong = malloc(sizeof(struct StrongClassifier));
       get_training(strong);
-      printf("pause\n");
+      SDLInit();
+      printf("entrez le chemin d'une image\n");
+      char path2[255];
+      if(!(scanf("%s",path2)))
+      {
+        printf("erreur d'acquisition");
+        return 0;
+      }      
+      image = loadimg(path2);
+      
+	  // _____________________ //
+      displayImg(image);
+	    imgToGreyScale(image);
+	    normalize(image);
+	    equalize(image);
+	    SDL_LockSurface(image);
+      int **tabImg2 = imgToArray(image);
+	    integralImg(tabImg2, image->w, image->h);
+      struct Rect rects[250];
+      detect(rects,strong,tabImg2,image->w,image->h);
+      int cpt = 0;
+      while(cpt < 250 && rects[cpt].x >= 0)
+      {
+        square(image,rects[cpt].x,rects[cpt].y,rects[cpt].w);
+        cpt++;
+      }
+      printf("number of faces : %d\n",cpt);
+
+	    SDL_UnlockSurface(image);
+      displayImg(image);
+
+      
+
+      SDL_FreeSurface(image);
+      SDL_Quit();
+      free(strong);
       break;
     case 3:
       ManageDatabase();
@@ -95,8 +131,9 @@ int main()
       break;
     default:
       break;
+    
+
   }
-  free(strong);
   return 0;
 }
 
@@ -108,7 +145,10 @@ void loadImg(struct ImgVal *img)
         char path[30];
         snprintf(path, 30, "./src/face/face%d.pgm", i);
         image = loadimg(path);
-	      int **tabImg = imgToArray(image);       
+	      imgToGreyScale(image);
+	      normalize(image);
+	      equalize(image);
+        int **tabImg = imgToArray(image);       
         integralImg(tabImg, image->w, image->h);
         for(int x = 0;x<19;x++)
         {
@@ -123,15 +163,18 @@ void loadImg(struct ImgVal *img)
     for(int j = 2401;j<6401;j++)
     {
       char path[30];
-      snprintf(path, 30, "./src/nface/negat%d.pgm", j);
+      snprintf(path, 30, "./src/nface/negat%d.pgm", j-2400);
       image = loadimg(path);
-	    int **tabImg = imgToArray(image);       
-        integralImg(tabImg, image->w, image->h);
-        for(int x = 0;x<19;x++)
-        {
-            for(int y = 0;y<19;y++)
-                img->wc[j-1].integ[x][y] = tabImg[x][y];
-        }
+	    imgToGreyScale(image);
+	    normalize(image);
+	    equalize(image);
+      int **tabImg = imgToArray(image);       
+      integralImg(tabImg, image->w, image->h);
+      for(int x = 0;x<19;x++)
+      {
+        for(int y = 0;y<19;y++)
+          img->wc[j-1].integ[x][y] = tabImg[x][y];
+      }
     }
     printf("Initialsation des images OK\n");
 
