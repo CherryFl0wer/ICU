@@ -141,7 +141,7 @@ double** covariance(double** set, double** transposedSet, size_t nbImg) {
   // and not N^2 x N^2 because too large 
   // C = A^t * A and not C = A*A^t 
 
-  double** covMatrix =  matMul(set, transposedImg, nbImg, nbImg, nbImg, nbImg);
+  double** covMatrix =  matMul(set, transposedSet, nbImg, nbImg, nbImg);
   return covMatrix;
 }
 
@@ -153,49 +153,62 @@ double* proj(double* v1, double* v2, size_t col) {
     vect[i] = v1[i] * v2[i];
     vect[i] *= v1[i];
   }
+  return (vect == NULL) ? NULL : vect;
+}
 
+double* vectDiv(double* v1,double v2,size_t col){
+  double* vect = calloc(col,sizeof(double));
+  for(size_t i = 0; i<col;i++)
+    vect[i] = v1[i]/v2;
+  return vect;
+}
+
+double* vectSub(double* v1, double* v2,size_t col){
+  double* vect = calloc(col,sizeof(double));
+  for(size_t i = 0; i<col;i++)
+    vect[i] = v1[i]-v2[i];
+  return vect;
+}
 
 double** compute_Q(double** A,size_t nbImg)
 {
   double** Q = malloc(nbImg * sizeof(double*));
-  for(size_t i = 0; i < SIZE_IMG; i++)
-    Q[i] = malloc(nbImg, sizeof(double));
-  Q[0] = A[0]/mat_norm(A[0],nbImg);
+  for(size_t i = 0; i < nbImg; i++)
+    Q[i] = calloc(nbImg, sizeof(double));
+  
+  Q[0] = vectDiv(A[0],mat_norm(A[0],nbImg),nbImg);
   for(size_t i = 1;i<nbImg;i++)
   {
     Q[i]=A[i];
-    for(size_t j = i-1;j>=0;j--)
-      Q[i] = matSub(Q[i],proj(Q[j],A[i],SIZE_IMG),1,SIZE_IMG);
-    Q[i]/=mat_norm(A[i],nbImg);
+    for(size_t j = i-1;j+1>=1;j--)
+      Q[i] = vectSub(Q[i],proj(Q[j],A[i],nbImg),nbImg);
+    Q[i]=vectDiv(Q[i],mat_norm(A[i],nbImg),nbImg);
   }
 
   return Q;
 }
 
-double** Compute_R(double** A, double** Q,size_t nbImg)
+double** compute_R(double** A, double** Q,size_t nbImg)
 {
-  double** trans_Q = transposed(Q,nbImg);
-  double** R = matMul(trans_Q,A,SIZE_IMG,nbImg,SIZE_IMG);
+  double** trans_Q = transposed(Q,nbImg,nbImg);
+  double** R = matMul(trans_Q,A,SIZE_IMG,nbImg,nbImg);
   return R;
 }  
 
 
 
 
-void vector_unitary(double** matrix, size_t col) {
   
-  return (vect == NULL) ? NULL : vect;
-}
 
 double mat_norm(double* vect, size_t col) {
   double norm = 0.0;
   for(size_t i = 0; i < col; i++) {
-    norm += vect[i] * vect[i];
+    norm += pow(vect[i],2);
   }
 
   return sqrt(norm);
 }
-/*
+
 
 int main() {
   // Get all samples of images 
@@ -217,17 +230,17 @@ int main() {
   for(size_t i = 0; i < 1; i++) {
     printf("[ ");
     for(size_t j = 0; j < SIZE_IMG; j++) {
-      printf("%d ",setOfImg[0][j]);
+      printf("%f ",setOfImg[0][j]);
     }
     printf(" ]");
   }
 
-  double** setOfImgT = transposed(setOfImg, NB_IMG_TEST);
+  double** setOfImgT = transposed(setOfImg,SIZE_IMG, NB_IMG_TEST);
   printf("\n\n\n [ ");
   for(size_t i = 0; i < SIZE_IMG; i++) { 
-    printf("%d ", setOfImgT[i][0]);
+    printf("%f ", setOfImgT[i][0]);
   }
-  printf("\n ]");
+  printf(" ]");
 
 
   // clear pathListImg
@@ -239,7 +252,6 @@ int main() {
     free(setOfImgT[i]);
   free(setOfImgT);
 
-  destroy_set(setOfImg, NB_IMG_TEST);
+  free_mat(setOfImg, NB_IMG_TEST);
   return 0;
 }
-*/
