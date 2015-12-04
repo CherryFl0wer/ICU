@@ -28,4 +28,8 @@ double** covariance(double** set, double** transposedSet, size_t nbImg);
 
 double* proj(double* v1, double* v2, size_t col);
 double mat_norm(double* vect, size_t col);
+double** compute_Q(double** A,size_t nbImg)
+
+double** compute_R(double** A,,double **Q,size_t nbImg)
+
 #endif
