@@ -6,6 +6,7 @@
 # include <string.h>
 # include <stdint.h>
 # include "SDLPixel.h"
+# include <math.h>
 
 # define NB_IMG_TEST 20
 # define SIZE_IMG_HEIGHT 19
@@ -13,10 +14,18 @@
 # define SIZE_IMG        (SIZE_IMG_HEIGHT * SIZE_IMG_WIDTH)
 
 double** declare_set(size_t nbImg, char** pathListImg);
-void destroy_set(double** set, size_t nbImg);
+void free_mat(double** mat, size_t row);
 double* flatten(SDL_Surface* image, size_t width, size_t height);
 double mean(double** set, size_t nbImg);
-void rm_common_data(double** set, size_t nbImg, double meanEps);
+void matSubVal(double** mat, size_t nMat, size_t mMat, double eps);
+double** matSub(double** mat1, double** mat2, size_t nMat, size_t mMat);
+void matAddVal(double** mat, size_t nMat, size_t mMat, double eps);
+double** matAdd(double** mat1, double** mat2, size_t nMat, size_t mMat);
+double** matMul(double** A, double** B, size_t nA, size_t nm, size_t mB);
+void matMulVal(double** mat, size_t nMat, size_t mMat);
 double** transposed(double** set, size_t nbImg);
 double** covariance(double** set, double** transposedSet, size_t nbImg);
+
+double* proj(double* v1, double* v2, size_t col);
+double mat_norm(double* vect, size_t col);
 #endif

@@ -21,11 +21,11 @@ double** declare_set(size_t nbImg, char** pathListImg) {
   return set;
 }
 
-void destroy_set(double** set, size_t nbImg) {
-  for(size_t i = 0; i < nbImg; i++) 
-   free(set[i]); 
+void free_mat(double** mat, size_t row) {
+  for(size_t i = 0; i < row; i++) 
+   free(mat[i]); 
 
-  free(set);
+  free(mat);
 }
 
 
@@ -61,45 +61,111 @@ double mean_img(double** set, size_t nbImg ) {
 }
 
 
-void rm_common_data(double** set, size_t nbImg, double meanEps) {
-  for(size_t i = 0; i < nbImg; i++) 
-    for(size_t j = 0; j < SIZE_IMG; j++) 
-      set[i][j] -= meanEps;
+void matSubVal(double** mat, size_t nMat, size_t mMat, double eps) {
+  for(size_t i = 0; i < nMat; i++)  // nbImg
+    for(size_t j = 0; j < mMat; j++)  // SIZE_IMG
+      mat[i][j] -= eps;
 }
 
-double**  transposed(double** set, size_t nbImg) {
-  double** nSet = malloc(SIZE_IMG * sizeof(double*));
-  for(size_t i = 0; i < SIZE_IMG; i++) {
-     nSet[i] = calloc(nbImg, sizeof(double));
-     for(size_t j = 0; j < nbImg; j++)
-       nSet[i][j] = set[j][i];
+double** matSub(double** mat1, double** mat2, size_t nMat, size_t mMat) {
+  double** mat = malloc(nMat * sizeof(double*));
+  for(size_t i = 0; i < nMat; i++) {
+    mat[i] = calloc(mMat, sizeof(double));
+    for(size_t j = 0; j < mMat; j++) {
+      mat[i][j] = mat1[i][j] - mat2[i][j];
+    }
   }
 
-  return (nSet == NULL) ? NULL : nSet;
+  return (mat == NULL) ? NULL : mat;
 }
+
+void matAddVal(double** mat, size_t nMat, size_t mMat, double eps) {
+  for(size_t i = 0; i < nMat; i++)  
+    for(size_t j = 0; j < mMat; j++) 
+      mat[i][j] += eps;
+}
+
+
+double** matAdd(double** mat1, double** mat2, size_t nMat, size_t mMat) {
+  double** mat = malloc(nMat * sizeof(double*));
+  for(size_t i = 0; i < nMat; i++) {
+    mat[i] = calloc(mMat, sizeof(double));
+    for(size_t j = 0; j < mMat; j++) {
+      mat[i][j] = mat1[i][j] + mat2[i][j];
+    }
+  }
+
+  return (mat == NULL) ? NULL : mat;
+}
+
+double** matMul(double** A, double** B, size_t nA, size_t nm, size_t mB) { 
+  double** mat = malloc(nA * mB * sizeof(double*));
+  for(size_t i = 0; i < nA; i++) {
+    mat[i] = calloc(mB, sizeof(double));
+    for(size_t j = 0; j < mB; j++) {
+      for(size_t k = 0; k < nm; k++) { 
+        mat[i][j] += A[i][k] * B[k][j];
+      } 
+    }
+  }
+
+  return (mat == NULL) ? NULL : mat;
+}
+
+void matMulVal(double** mat, size_t nA, size_t mA, double eps) {  
+  for(size_t i = 0; i < nA; i++) { 
+    for(size_t j = 0; j < mA; j++) { 
+        mat[i][j] *= eps;
+    }
+  }
+}
+
+
+
+double**  transposed(double** mat, size_t nMat, size_t mMat) {
+  double** mat_T = malloc(nMat * sizeof(double*));
+  for(size_t i = 0; i < nMat; i++) { // Size_IMG
+     mat_T[i] = calloc(mMat, sizeof(double));
+     for(size_t j = 0; j < mMat; j++) // nbImg
+       mat_T[i][j] = mat[j][i];
+  }
+
+  return (mat_T == NULL) ? NULL : mat_T;
+}
+
+
+
 
 double** covariance(double** set, double** transposedSet, size_t nbImg) {
   // Matrix of M x M where M = nb Img
   // and not N^2 x N^2 because too large 
   // C = A^t * A and not C = A*A^t 
 
-  double** covMatrix = malloc(nbImg * sizeof(double*));
-  for(size_t i = 0; i < nbImg; i++) {
-    covMatrix[i] = calloc(nbImg, sizeof(double));
-    for(size_t j = 0; j < nbImg; j++) {
-      for(size_t k = 0; k < nbImg; k++) { 
-        covMatrix[i][j] += set[i][k] * transposedSet[k][j];
-      } 
-    }
+  double** covMatrix =  matMul(set, transposedImg, nbImg, nbImg, nbImg, nbImg);
+  return covMatrix;
+}
+
+
+
+double* proj(double* v1, double* v2, size_t col) {
+  double* vect = calloc(col, sizeof(double));
+  for(size_t i = 0; i < col; i++) {
+    vect[i] = v1[i] * v2[i];
+    vect[i] *= v1[i];
+  }
+  
+  return (vect == NULL) ? NULL : vect;
+}
+
+double mat_norm(double* vect, size_t col) {
+  double norm = 0.0;
+  for(size_t i = 0; i < col; i++) {
+    norm += vect[i] * vect[i];
   }
 
-  return (covMatrix == NULL) ? NULL : covMatrix;
+  return sqrt(norm);
 }
 /*
-void vector_unitary(double** matrix, size_t col) {
-  
-}
-
 
 int main() {
   // Get all samples of images 
