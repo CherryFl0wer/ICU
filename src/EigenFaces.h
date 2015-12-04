@@ -12,11 +12,11 @@
 # define SIZE_IMG_WIDTH  19
 # define SIZE_IMG        (SIZE_IMG_HEIGHT * SIZE_IMG_WIDTH)
 
-int** declare_set(size_t nbImg, char** pathListImg);
-void destroy_set(int** set, size_t nbImg);
-int* flatten(SDL_Surface* image, size_t width, size_t height);
-double mean(int** set, size_t nbImg);
-void rm_common_data(int** set, size_t nbImg, double meanEps);
-int** transposed(int** set, size_t nbImg);
-int** covariance(int** set, int** transposedSet, size_t nbImg);
+double** declare_set(size_t nbImg, char** pathListImg);
+void destroy_set(double** set, size_t nbImg);
+double* flatten(SDL_Surface* image, size_t width, size_t height);
+double mean(double** set, size_t nbImg);
+void rm_common_data(double** set, size_t nbImg, double meanEps);
+double** transposed(double** set, size_t nbImg);
+double** covariance(double** set, double** transposedSet, size_t nbImg);
 #endif

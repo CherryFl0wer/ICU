@@ -1,7 +1,7 @@
 # include "EigenFaces.h"
 
-int** declare_set(size_t nbImg, char** pathListImg) {
-  int** set = malloc(nbImg * sizeof(int*));
+double** declare_set(size_t nbImg, char** pathListImg) {
+  double** set = malloc(nbImg * sizeof(double*));
 
   for(size_t i = 0; i < nbImg; i++) {
     printf("loading : %s \n", pathListImg[i]);
@@ -11,7 +11,7 @@ int** declare_set(size_t nbImg, char** pathListImg) {
       exit(1);
     }
     
-    set[i] = malloc(sizeof(int) * SIZE_IMG);
+    set[i] = malloc(sizeof(double) * SIZE_IMG);
     if(set[i] == NULL) 
       exit(1); // error not enough memory
 
@@ -21,7 +21,7 @@ int** declare_set(size_t nbImg, char** pathListImg) {
   return set;
 }
 
-void destroy_set(int** set, size_t nbImg) {
+void destroy_set(double** set, size_t nbImg) {
   for(size_t i = 0; i < nbImg; i++) 
    free(set[i]); 
 
@@ -30,9 +30,9 @@ void destroy_set(int** set, size_t nbImg) {
 
 
 // The matrix will be a vector of size m*n containing greyscale value 
-int* flatten(SDL_Surface* image, size_t width, size_t height) {
+double* flatten(SDL_Surface* image, size_t width, size_t height) {
   size_t newsize = width * height;
-  int* mat = calloc(newsize, sizeof(int));
+  double* mat = calloc(newsize, sizeof(double));
   uint8_t r;
   
   for(size_t i = 0; i < width; i++) {
@@ -46,8 +46,8 @@ int* flatten(SDL_Surface* image, size_t width, size_t height) {
 
 
 // Mean Image is going to calcul the average of each pixel
-double mean_img(int** set, size_t nbImg ) {
-  int* avgvect = calloc(SIZE_IMG, sizeof(int));
+double mean_img(double** set, size_t nbImg ) {
+  double* avgvect = calloc(SIZE_IMG, sizeof(double));
  
   for(size_t i = 0; i < SIZE_IMG; i++) {
     for(size_t j = 0; j < nbImg; j++) 
@@ -61,16 +61,16 @@ double mean_img(int** set, size_t nbImg ) {
 }
 
 
-void rm_common_data(int** set, size_t nbImg, double meanEps) {
+void rm_common_data(double** set, size_t nbImg, double meanEps) {
   for(size_t i = 0; i < nbImg; i++) 
     for(size_t j = 0; j < SIZE_IMG; j++) 
       set[i][j] -= meanEps;
 }
 
-int**  transposed(int** set, size_t nbImg) {
-  int** nSet = malloc(SIZE_IMG * sizeof(int*));
+double**  transposed(double** set, size_t nbImg) {
+  double** nSet = malloc(SIZE_IMG * sizeof(double*));
   for(size_t i = 0; i < SIZE_IMG; i++) {
-     nSet[i] = calloc(nbImg, sizeof(int));
+     nSet[i] = calloc(nbImg, sizeof(double));
      for(size_t j = 0; j < nbImg; j++)
        nSet[i][j] = set[j][i];
   }
@@ -78,14 +78,14 @@ int**  transposed(int** set, size_t nbImg) {
   return (nSet == NULL) ? NULL : nSet;
 }
 
-int** covariance(int** set, int** transposedSet, size_t nbImg) {
+double** covariance(double** set, double** transposedSet, size_t nbImg) {
   // Matrix of M x M where M = nb Img
   // and not N^2 x N^2 because too large 
   // C = A^t * A and not C = A*A^t 
 
-  int** covMatrix = malloc(nbImg * sizeof(int*));
+  double** covMatrix = malloc(nbImg * sizeof(double*));
   for(size_t i = 0; i < nbImg; i++) {
-    covMatrix[i] = calloc(nbImg, sizeof(int));
+    covMatrix[i] = calloc(nbImg, sizeof(double));
     for(size_t j = 0; j < nbImg; j++) {
       for(size_t k = 0; k < nbImg; k++) { 
         covMatrix[i][j] += set[i][k] * transposedSet[k][j];
@@ -95,7 +95,10 @@ int** covariance(int** set, int** transposedSet, size_t nbImg) {
 
   return (covMatrix == NULL) ? NULL : covMatrix;
 }
-
+/*
+void vector_unitary(double** matrix, size_t col) {
+  
+}
 
 
 int main() {
@@ -113,7 +116,7 @@ int main() {
   }
   
 
-  int** setOfImg = declare_set(NB_IMG_TEST, pathListImg);
+  double** setOfImg = declare_set(NB_IMG_TEST, pathListImg);
 
   for(size_t i = 0; i < 1; i++) {
     printf("[ ");
@@ -122,7 +125,8 @@ int main() {
     }
     printf(" ]");
   }
-  int** setOfImgT = transposed(setOfImg, NB_IMG_TEST);
+
+  double** setOfImgT = transposed(setOfImg, NB_IMG_TEST);
   printf("\n\n\n [ ");
   for(size_t i = 0; i < SIZE_IMG; i++) { 
     printf("%d ", setOfImgT[i][0]);
@@ -142,3 +146,4 @@ int main() {
   destroy_set(setOfImg, NB_IMG_TEST);
   return 0;
 }
+*/
