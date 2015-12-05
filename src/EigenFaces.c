@@ -27,7 +27,12 @@ void free_mat(double** mat, size_t row) {
 
   free(mat);
 }
+void free_mat_char(char** mat, size_t row) {
+  for(size_t i = 0; i < row; i++) 
+   free(mat[i]); 
 
+  free(mat);
+}
 
 // The matrix will be a vector of size m*n containing greyscale value 
 double* flatten(SDL_Surface* image, size_t width, size_t height) {
@@ -104,8 +109,7 @@ double** matMul(double** A, double** B, size_t nA, size_t nm, size_t mB) {
     mat[i] = calloc(mB, sizeof(double));
     for(size_t j = 0; j < mB; j++) {
       for(size_t k = 0; k < nm; k++) { 
-        mat[i][j] += A[k][i] * B[j][k];
-        printf("(i:%zu,j:%zu,k:%zu)%f = %f * %f \n",i,j,k, mat[i][j], A[i][k], B[k][j]);
+        mat[i][j] += A[i][k] * B[k][j];
       } 
     }
   }
@@ -242,7 +246,7 @@ int main() {
   for(size_t i = 1; i <= NB_IMG_TEST; i++) {
     pathListImg[i-1] = calloc(30,sizeof(char));
     char path[30]; 
-    snprintf(path, 30, "./src/face/%zu.jpeg", i);
+    snprintf(path, 30, "./Reco/%zu.jpeg", i);
     strcpy(pathListImg[i-1], path);
   }
   
@@ -251,20 +255,21 @@ int main() {
   // Step 2 : Average Vector Calcul
   double eps = mean_img(set, NB_IMG_TEST);
   // Step 3 : Substract A.V with the pixel
-  matSubVal(set, NB_IMG_TEST, SIZE_IMG);
+  matSubVal(set, NB_IMG_TEST, SIZE_IMG,eps);
   // Step 4 : Covariance
-  double** setT = transposed(set, NB_IMG_TEST, SIZE_IMG);
-  double** covSet = covariance(set, setT, NB_IMG_TEST, SIZE_IMG); 
-  
+  double** setT = transposed(set,SIZE_IMG, NB_IMG_TEST);
+  double** covSet = covariance(set, setT, NB_IMG_TEST, SIZE_IMG);
   double** Q = compute_Q(covSet, NB_IMG_TEST);
-  double** R = compute_R(covSet, Q, NB_IMG_TEST, SIZE_IMG);
-
-
-  free_mat(pathListImg, NB_IMG_TEST);
+  double** R = compute_R(covSet, Q, NB_IMG_TEST, NB_IMG_TEST);
+  
+  SDL_Surface *img = loadimg("./Reco/1.jpeg");
+  display_Q(Q,NB_IMG_TEST,SIZE_IMG,SIZE_IMG_WIDTH,img);
+  
+  free_mat_char(pathListImg, NB_IMG_TEST);
   free_mat(set, NB_IMG_TEST);
   free_mat(setT, SIZE_IMG);
   free_mat(covSet, NB_IMG_TEST);
-  
+  SDL_FreeSurface(img);
   free_mat(Q, NB_IMG_TEST);
   free_mat(R, NB_IMG_TEST);
   return 0;
