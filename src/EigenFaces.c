@@ -225,80 +225,30 @@ int main() {
   for(size_t i = 1; i <= NB_IMG_TEST; i++) {
     pathListImg[i-1] = calloc(30,sizeof(char));
     char path[30]; 
-    snprintf(path, 30, "./src/face/face%zu.pgm", i);
+    snprintf(path, 30, "./src/face/%zu.jpeg", i);
     strcpy(pathListImg[i-1], path);
   }
   
-
-  double** setOfImg = declare_set(NB_IMG_TEST, pathListImg);
-
-  for(size_t i = 0; i < 1; i++) {
-    printf("[ ");
-    for(size_t j = 0; j < SIZE_IMG; j++) {
-      printf("%f ",setOfImg[0][j]);
-    }
-    printf(" ]");
-  }
-
-  double** setOfImgT = transposed(setOfImg,SIZE_IMG, NB_IMG_TEST);
-  printf("\n\n\n [ ");
-  for(size_t i = 0; i < SIZE_IMG; i++) { 
-    printf("%f ", setOfImgT[i][0]);
-  }
-  printf(" ]\n\n");
-
-
-  // clear pathListImg
-  for(size_t i = 0; i < NB_IMG_TEST; i++) 
-    free(pathListImg[i]);
-  free(pathListImg);
+  // Step 1 : Flatten img
+  double** set = declare_set(NB_IMG_TEST, pathListImg);
+  // Step 2 : Average Vector Calcul
+  double eps = mean_img(set, NB_IMG_TEST);
+  // Step 3 : Substract A.V with the pixel
+  matSubVal(set, NB_IMG_TEST, SIZE_IMG);
+  // Step 4 : Covariance
+  double** setT = transposed(set, NB_IMG_TEST, SIZE_IMG);
+  double** covSet = covariance(set, setT, NB_IMG_TEST, SIZE_IMG); 
   
-  for(size_t i = 0; i < SIZE_IMG; i++) 
-    free(setOfImgT[i]);
-  free(setOfImgT);
+  double** Q = compute_Q(covSet, NB_IMG_TEST);
+  double** R = compute_R(covSet, Q, NB_IMG_TEST, SIZE_IMG);
 
-  free_mat(setOfImg, NB_IMG_TEST);
-  double **Mat = malloc(3*sizeof(double*)); 
-  for(size_t i = 0; i < 3; i++)
-    Mat[i] = calloc(3, sizeof(double));
-  //{{2,2,1},{-2,1,2},{18,0,0}};
-  Mat[0][0] = 2;
-  Mat[0][1] = -1;
-  Mat[0][2] = 2;
-  Mat[1][0] = 4;
-  Mat[1][1] = 0;
-  Mat[1][2] = 2;
-  Mat[2][0] = 2;
-  Mat[2][1] = -4;
-  Mat[2][2] = -1;
-  double **Q = compute_Q(Mat,3);
-  double **R = compute_R(Mat, Q, 3, 3);
 
-  for(size_t i = 0;i<3;i++)
-  {
-    printf("[ ");
-    for(size_t j = 0;j<3;j++)
-      printf("%f ",Mat[i][j]);
-    printf("]\n");
-  }
-  printf("\n");
-  for(size_t i = 0;i<3;i++)
-  {
-    printf("[ ");
-    for(size_t j = 0;j<3;j++)
-      printf("%f ",Q[i][j]);
-    printf("]\n");
-  }
-
-  printf("\n");
-
-  for(size_t i = 0; i < 3; i++) {
-    printf("[ ");
-    for(size_t j = 0; j < 3; j++)
-      printf("%f ", R[i][j]);
-    printf("]\n");
-  }
-  free_mat(Q,3);
-  free_mat(R,3); 
+  free_mat(pathListImg, NB_IMG_TEST);
+  free_mat(set, NB_IMG_TEST);
+  free_mat(setT, SIZE_IMG);
+  free_mat(covSet, NB_IMG_TEST);
+  
+  free_mat(Q, NB_IMG_TEST);
+  free_mat(R, NB_IMG_TEST);
   return 0;
 }
