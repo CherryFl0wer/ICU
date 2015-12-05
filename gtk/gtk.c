@@ -52,31 +52,30 @@ void init_list(GtkWidget *list)
   g_object_unref(store);
 }
 
-/*
-void add_to_list(GtkWidget *list, const gchar *str) 
+void add_database(GtkWidget *list)
 {
+
   GtkListStore *store;
   GtkTreeIter iter;
 
   store = GTK_LIST_STORE(gtk_tree_view_get_model
       (GTK_TREE_VIEW(list)));
 
-  gtk_list_store_append(store, &iter);
-  gtk_list_store_set(store, &iter, LIST_ITEM, str, -1);
-}
-*/
-
-void add_dabase(GtkWidget *list)
-{
-  GtkListStore *strore;
-  GtkTreeIter iter;
-
-  store = GTK_LIST_STORE(gtk_tree_view_get_model
-      (GTK_TREE_VIEW(list)));
-  
   FILE *db;
-  db = fopen(
+  db = fopen("database.obj", "r");
+  fseek(db, 0, SEEK_CUR);
+  person *a = malloc(sizeof(struct Person));
+  a->nb_pics = 0;
 
+  while ((!feof(db))&&(fread(a, sizeof(struct Person), 1, db)))
+  {
+    gtk_list_store_append(store, &iter);
+    gtk_list_store_set(store, &iter, LIST_ITEM, a->name, -1);
+    printf("%s\n", a->name);
+  }
+
+  free(a);
+  fclose(db);
 }
 
 void on_changed(GtkWidget *widget, gpointer label) 
@@ -127,11 +126,7 @@ void database()
 
   // init list (suite)
   init_list(list);
-  // add_to_list(list, "Alien");
-  // add_to_list(list, "Leon");
-  // add_to_list(list, "The Verdict");
-  // add_to_list(list, "North Face");
-  // add_to_list(list, "Der Untergang");
+  add_database(list);
 
   // init tree
   selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(list));
