@@ -30,8 +30,8 @@ double** declare_set(size_t nbImg, char** pathListImg) {
 
     set[i] = flatten(img, SIZE_IMG_WIDTH, SIZE_IMG_HEIGHT);
   }
-
-  return set;
+  
+  return set; //transposed(set, nbImg, SIZE_IMG);
 }
 
 void free_mat(double** mat, size_t row) {
@@ -123,6 +123,22 @@ double** matMul(double** A, double** B, size_t nA, size_t nm, size_t mB) {
     for(size_t j = 0; j < mB; j++) {
       for(size_t k = 0; k < nm; k++) { 
         mat[i][j] += A[i][k] * B[k][j];
+      
+      } 
+    }
+  }
+
+  return (mat == NULL) ? NULL : mat;
+}
+
+double** mulR(double** A, double** B, size_t nA, size_t nm, size_t mB) { 
+  double** mat = malloc(nA * sizeof(double*));
+  for(size_t i = 0; i < nA; i++) {
+    mat[i] = calloc(mB, sizeof(double));
+    for(size_t j = 0; j < mB; j++) {
+      for(size_t k = 0; k < nm; k++) { 
+        mat[i][j] += A[k][i] * B[j][k];
+        //printf("(i=%zu,j=%zu,k=%zu) %f = %f * %f \n", i, j, k, mat[i][j], A[i][k], B[k][j]);
       } 
     }
   }
@@ -192,19 +208,19 @@ double* vectSub(double* v1, double* v2,size_t col){
   return vect;
 }
 
-double** compute_Q(double** A,size_t nbImg)
+double** compute_Q(double** A,size_t nbImg, size_t size)
 {
   double** Q = malloc(nbImg * sizeof(double*));
   for(size_t i = 0; i < nbImg; i++)
-    Q[i] = calloc(nbImg, sizeof(double));
+    Q[i] = calloc(size, sizeof(double));
   
-  Q[0] = vectDiv(A[0],mat_norm(A[0],nbImg),nbImg);
+  Q[0] = vectDiv(A[0],mat_norm(A[0],size),size);
   for(size_t i = 1;i<nbImg;i++)
   {
     Q[i]=A[i];
     for(size_t j = i-1;j+1>=1;j--)
-      Q[i] = vectSub(Q[i],proj(Q[j],A[i],nbImg),nbImg);
-    Q[i]=vectDiv(Q[i],mat_norm(Q[i],nbImg),nbImg);
+      Q[i] = vectSub(Q[i],proj(Q[j],A[i],size),size);
+    Q[i]=vectDiv(Q[i],mat_norm(Q[i],size),size);
   }
 
   return Q;
@@ -212,8 +228,9 @@ double** compute_Q(double** A,size_t nbImg)
 
 double** compute_R(double** A, double** Q, size_t nbImg, size_t size)
 {
-  double** trans_Q = transposed(Q,nbImg,nbImg);
-  double** R = matMul(trans_Q,A,size,nbImg,nbImg);
+  double** trans_Q = transposed(Q,size,nbImg);
+  print_matrix(trans_Q, 3, 2);
+  double** R = mulR(trans_Q,A, nbImg,size,nbImg);
   return R;
 }  
 
@@ -275,7 +292,7 @@ int main() {
     snprintf(path, 30, "./Reco/%zu.jpeg", i);
     strcpy(pathListImg[i-1], path);
   }
-  
+ /* 
   // Step 1 : Flatten img
   double** set = declare_set(NB_IMG_TEST, pathListImg);
   // Step 2 : Average Vector Calcul
@@ -288,38 +305,39 @@ int main() {
   double** Q = compute_Q(covSet, NB_IMG_TEST);
   double** R = compute_R(covSet, Q, NB_IMG_TEST, NB_IMG_TEST);
   double** U = compute_U(set,R,NB_IMG_TEST,SIZE_IMG);
-
+*/
 //  SDL_Surface *img = loadimg("./Reco/1.jpeg");
  // display_Q(U,NB_IMG_TEST,SIZE_IMG,SIZE_IMG_WIDTH,img);
   
   // Matrice Example
-  double** matrice = malloc(3 * sizeof(double*));
-  for(size_t i = 0; i < 3; i++) {
+  double** matrice = malloc(2 * sizeof(double*));
+  for(size_t i = 0; i < 2; i++) {
     matrice[i] = calloc(3, sizeof(double));
   }
+  
   matrice[0][0] = 2;
-  matrice[0][1] = -1;
-  matrice[0][2] = 2;
-  matrice[1][0] = 4;
-  matrice[1][1] = 0;
-  matrice[1][2] = 2;
-  matrice[2][0] = 2;
-  matrice[2][1] = -4;
-  matrice[2][2] = -1;
+  matrice[0][1] = 2;
+  matrice[0][2] = 1;
+  matrice[1][0] = 1;
+  matrice[1][1] = 1;
+  matrice[1][2] = 5;
+ 
+  //matrice = transposed(matrice, 3, 3);
 
-  print_matrix(matrice, 3, 3);
-  double** Qmatrice = compute_Q(matrice, 3);
-  double** Rmatrice = compute_R(matrice, Q, 3, 3);
-  print_matrix(Qmatrice, 3, 3);
-  print_matrix(Rmatrice, 3, 3);
+  print_matrix(matrice, 2, 3);
+  double** Qmatrice = compute_Q(matrice, 2, 3);
+  print_matrix(Qmatrice, 2, 3);
+  double** Rmatrice = compute_R(matrice, Qmatrice, 2, 3);
+  print_matrix(Rmatrice, 2, 2);
   free_mat(matrice, 3);
   free_mat_char(pathListImg, NB_IMG_TEST);
-  free_mat(set, NB_IMG_TEST);
+ /* free_mat(set, NB_IMG_TEST);
   free_mat(setT, SIZE_IMG);
   free_mat(covSet, NB_IMG_TEST);
  // SDL_FreeSurface(img);
   free_mat(Q, NB_IMG_TEST);
   free_mat(R, NB_IMG_TEST);
   free_mat(U, NB_IMG_TEST);
+ */ 
   return 0;
 }
