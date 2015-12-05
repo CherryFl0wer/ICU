@@ -24,7 +24,7 @@ double** matAdd(double** mat1, double** mat2, size_t nMat, size_t mMat);
 double** matMul(double** A, double** B, size_t nA, size_t nm, size_t mB);
 void matMulVal(double** mat, size_t nMat, size_t mMat, double eps);
 double** transposed(double** mat,size_t nMat,size_t mMat);
-double** covariance(double** set, double** transposedSet, size_t nbImg);
+double** covariance(double** set, double** transposedSet, size_t nbImg,size_t size);
 double* vectDiv(double* v1, double v2,size_t nbImg);
 double* vectSub(double* v1, double* v2,size_t nbImg);
 double* proj(double* v1, double* v2, size_t col);

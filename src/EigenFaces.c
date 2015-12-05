@@ -137,12 +137,12 @@ double**  transposed(double** mat, size_t nMat, size_t mMat) {
 
 
 
-double** covariance(double** set, double** transposedSet, size_t nbImg) {
+double** covariance(double** set, double** transposedSet, size_t nbImg, size_t size) {
   // Matrix of M x M where M = nb Img
   // and not N^2 x N^2 because too large 
   // C = A^t * A and not C = A*A^t 
 
-  double** covMatrix =  matMul(set, transposedSet, nbImg, nbImg, nbImg);
+  double** covMatrix =  matMul(set, transposedSet, nbImg, size, nbImg);
   return covMatrix;
 }
 
@@ -298,6 +298,7 @@ int main() {
       printf("%f ", R[i][j]);
     printf("]\n");
   }
- 
+  free_mat(Q,3);
+  free_mat(R,3); 
   return 0;
 }
