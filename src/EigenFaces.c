@@ -99,12 +99,13 @@ double** matAdd(double** mat1, double** mat2, size_t nMat, size_t mMat) {
 }
 
 double** matMul(double** A, double** B, size_t nA, size_t nm, size_t mB) { 
-  double** mat = malloc(nA * mB * sizeof(double*));
+  double** mat = malloc(nA * sizeof(double*));
   for(size_t i = 0; i < nA; i++) {
     mat[i] = calloc(mB, sizeof(double));
     for(size_t j = 0; j < mB; j++) {
       for(size_t k = 0; k < nm; k++) { 
-        mat[i][j] += A[i][k] * B[k][j];
+        mat[i][j] += A[k][i] * B[j][k];
+        printf("(i:%zu,j:%zu,k:%zu)%f = %f * %f \n",i,j,k, mat[i][j], A[i][k], B[k][j]);
       } 
     }
   }
@@ -192,10 +193,10 @@ double** compute_Q(double** A,size_t nbImg)
   return Q;
 }
 
-double** compute_R(double** A, double** Q,size_t nbImg)
+double** compute_R(double** A, double** Q, size_t nbImg, size_t size)
 {
   double** trans_Q = transposed(Q,nbImg,nbImg);
-  double** R = matMul(trans_Q,A,SIZE_IMG,nbImg,nbImg);
+  double** R = matMul(trans_Q,A,size,nbImg,nbImg);
   return R;
 }  
 
@@ -244,7 +245,7 @@ int main() {
   for(size_t i = 0; i < SIZE_IMG; i++) { 
     printf("%f ", setOfImgT[i][0]);
   }
-  printf(" ]");
+  printf(" ]\n\n");
 
 
   // clear pathListImg
@@ -262,15 +263,16 @@ int main() {
     Mat[i] = calloc(3, sizeof(double));
   //{{2,2,1},{-2,1,2},{18,0,0}};
   Mat[0][0] = 2;
-  Mat[0][1] = 2;
-  Mat[0][2] = 1;
-  Mat[1][0] = -2;
-  Mat[1][1] = 1;
+  Mat[0][1] = -1;
+  Mat[0][2] = 2;
+  Mat[1][0] = 4;
+  Mat[1][1] = 0;
   Mat[1][2] = 2;
-  Mat[2][0] = 18;
-  Mat[2][1] = 0;
-  Mat[2][2] = 0;
+  Mat[2][0] = 2;
+  Mat[2][1] = -4;
+  Mat[2][2] = -1;
   double **Q = compute_Q(Mat,3);
+  double **R = compute_R(Mat, Q, 3, 3);
 
   for(size_t i = 0;i<3;i++)
   {
@@ -279,6 +281,7 @@ int main() {
       printf("%f ",Mat[i][j]);
     printf("]\n");
   }
+  printf("\n");
   for(size_t i = 0;i<3;i++)
   {
     printf("[ ");
@@ -286,5 +289,15 @@ int main() {
       printf("%f ",Q[i][j]);
     printf("]\n");
   }
+
+  printf("\n");
+
+  for(size_t i = 0; i < 3; i++) {
+    printf("[ ");
+    for(size_t j = 0; j < 3; j++)
+      printf("%f ", R[i][j]);
+    printf("]\n");
+  }
+ 
   return 0;
 }
