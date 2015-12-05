@@ -214,6 +214,23 @@ double mat_norm(double* vect, size_t col) {
   return sqrt(norm);
 }
 
+void display_Q(double** Q,size_t nbImg, size_t size,size_t cote,SDL_Surface *img)
+{
+  Uint32 pix = 0;
+  Uint8 r = 0;
+  for(size_t i = 0;i<nbImg;i++)
+  {
+    for(size_t j = 0;j<size;j++)
+    {
+      r = Q[j/cote][j%cote];
+      pix = SDL_MapRGB(img->format,r,r,r);
+      putpixel(img,j/cote,j%cote,pix);
+    }
+    displayImg(img);
+  }
+
+}
+
 
 int main() {
   // Get all samples of images 
