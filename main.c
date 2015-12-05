@@ -12,7 +12,7 @@
 #include "./src/Treatment.h"
 #include "./src/HaarFeatures.h"
 #include "./src/Adaboost.h"
-#include "./db/db.h"
+#include "./gtk/db/db.h"
 #include "./src/Training.h"
 #include "./src/Detection.h"
 
