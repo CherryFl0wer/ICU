@@ -1,5 +1,18 @@
 # include "EigenFaces.h"
 
+void print_matrix(double** mat, size_t row, size_t col) {
+  printf(" ------ Matrice [%zu x %zu] ------- \n\n", row, col);
+  printf(" [\n");
+  for(size_t j = 0; j < row; j++) { 
+    printf(" ");
+    for(size_t i = 0; i < col; i++) {
+      printf(" %f ", mat[j][i]);
+    }
+    printf("\n");
+  }
+  printf(" ] \n");
+}
+
 double** declare_set(size_t nbImg, char** pathListImg) {
   double** set = malloc(nbImg * sizeof(double*));
 
@@ -276,14 +289,35 @@ int main() {
   double** R = compute_R(covSet, Q, NB_IMG_TEST, NB_IMG_TEST);
   double** U = compute_U(set,R,NB_IMG_TEST,SIZE_IMG);
 
-  SDL_Surface *img = loadimg("./Reco/1.jpeg");
-  display_Q(U,NB_IMG_TEST,SIZE_IMG,SIZE_IMG_WIDTH,img);
+//  SDL_Surface *img = loadimg("./Reco/1.jpeg");
+ // display_Q(U,NB_IMG_TEST,SIZE_IMG,SIZE_IMG_WIDTH,img);
   
+  // Matrice Example
+  double** matrice = malloc(3 * sizeof(double*));
+  for(size_t i = 0; i < 3; i++) {
+    matrice[i] = calloc(3, sizeof(double));
+  }
+  matrice[0][0] = 2;
+  matrice[0][1] = -1;
+  matrice[0][2] = 2;
+  matrice[1][0] = 4;
+  matrice[1][1] = 0;
+  matrice[1][2] = 2;
+  matrice[2][0] = 2;
+  matrice[2][1] = -4;
+  matrice[2][2] = -1;
+
+  print_matrix(matrice, 3, 3);
+  double** Qmatrice = compute_Q(matrice, 3);
+  double** Rmatrice = compute_R(matrice, Q, 3, 3);
+  print_matrix(Qmatrice, 3, 3);
+  print_matrix(Rmatrice, 3, 3);
+  free_mat(matrice, 3);
   free_mat_char(pathListImg, NB_IMG_TEST);
   free_mat(set, NB_IMG_TEST);
   free_mat(setT, SIZE_IMG);
   free_mat(covSet, NB_IMG_TEST);
-  SDL_FreeSurface(img);
+ // SDL_FreeSurface(img);
   free_mat(Q, NB_IMG_TEST);
   free_mat(R, NB_IMG_TEST);
   free_mat(U, NB_IMG_TEST);

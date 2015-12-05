@@ -35,4 +35,6 @@ double** compute_Q(double** A,size_t nbImg);
 double** compute_U(double** A,double** R,size_t nbImg,size_t size);
 double** compute_R(double** A,double **Q,size_t nbImg, size_t size);
 void display_Q(double** Q,size_t nbImg, size_t size,size_t cote,SDL_Surface *img);
+
+void print_matrix(double** mat, size_t row, size_t col);
 #endif
