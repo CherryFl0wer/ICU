@@ -8,7 +8,7 @@
 
 typedef struct Person 	//Have to implement some caracteritic for each
 { 
-	char name[20];
+	 char name[20];
     int nb_pics;
 } person;
 

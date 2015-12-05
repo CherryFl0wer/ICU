@@ -1,6 +1,5 @@
 #include <stdlib.h>
-#include <gtk/gtk.h> 
-#include "db/db.c"
+#include <gtk/gtk.h>
 #include "db/db.h"
 
 /********************/
@@ -35,20 +34,58 @@ enum
 
 GtkWidget *list;
 
+char* constchar_to_char(const char *mcc)
+{
+  char *result = malloc(strlen(mcc) + 1);
+  unsigned long i = 0;
+  while(i < strlen(mcc))
+  {
+    result[i] = mcc[i];
+    i++;
+  }
+  result[i] = 0;
+
+  return result;
+  free(result);
+}
+
 /*** entry ***/
 void append_item(GtkWidget *widget, gpointer entry) 
 {
   GtkListStore *store;
   GtkTreeIter iter;
 
-  const gchar *str = gtk_entry_get_text(entry); 
+  const char *str = gtk_entry_get_text(entry); 
 
+  FILE *db = fopen("database.obj", "r+b");
+  person *new = calloc(1,sizeof(struct Person));
+  strcpy(new->name, constchar_to_char(str));
+  person *answer = calloc(1,sizeof(struct Person));
+  bool find = false;
+  while((fread(answer, sizeof(struct Person), 1, db)) && !find)
+  {
+    if (strcmp(answer->name, new->name)==0)
+    {
+      find = true;
+    }
+  }
+  if(!find)
+  {
+    new->nb_pics = 2;
+    fwrite(new, sizeof(struct Person), 1, db);
+  }
+  
   store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(list)));
-
+  
   gtk_list_store_append(store, &iter);
   gtk_list_store_set(store, &iter, LIST_ITEM, str, -1);
-
+  
   gtk_entry_set_text(entry, "");
+
+  free(answer);
+  free(new);
+  fclose(db);
+
   widget = 0;
 }
 
@@ -131,7 +168,6 @@ void init_list(GtkWidget *list)
    }
    */
 
-
 void add_database(GtkWidget *list)
 {
 
@@ -151,7 +187,6 @@ void add_database(GtkWidget *list)
   {
     gtk_list_store_append(store, &iter);
     gtk_list_store_set(store, &iter, LIST_ITEM, a->name, -1);
-    printf("%s\n", a->name);
   }
 
   free(a);
@@ -160,28 +195,27 @@ void add_database(GtkWidget *list)
 
 
 /*
-void on_changed(GtkWidget *widget, gpointer label) 
-{
+   void on_changed(GtkWidget *widget, gpointer label) 
+   {
 
-  GtkTreeIter iter;
-  GtkTreeModel *model;
-  gchar *value;
+   GtkTreeIter iter;
+   GtkTreeModel *model;
+   gchar *value;
 
-  if (gtk_tree_selection_get_selected(
-        GTK_TREE_SELECTION(widget), &model, &iter)) {
+   if (gtk_tree_selection_get_selected(
+   GTK_TREE_SELECTION(widget), &model, &iter)) {
 
-    gtk_tree_model_get(model, &iter, LIST_ITEM, &value,  -1);
-    gtk_label_set_text(GTK_LABEL(label), value);
-    g_free(value);
-  }
-}
-*/
+   gtk_tree_model_get(model, &iter, LIST_ITEM, &value,  -1);
+   gtk_label_set_text(GTK_LABEL(label), value);
+   g_free(value);
+   }
+   }
+   */
 
 void database()
 { 
   GtkWidget* dWindow;
   GtkWidget *sw;
-  // GtkWidget *list;
 
   GtkWidget *remove;
   GtkWidget *add;
@@ -190,7 +224,6 @@ void database()
 
   GtkWidget *box;
   GtkWidget *hbox;
-  // GtkWidget *label;
   GtkTreeSelection *selection;
 
   // creation of the window
@@ -236,10 +269,6 @@ void database()
 
   gtk_container_add(GTK_CONTAINER(dWindow), box);
 
-  // init list
-  // label = gtk_label_new("");
-  // gtk_box_pack_start(GTK_BOX(box), label, FALSE, FALSE, 5);
-
   // init list (suite)
   init_list(list);
   add_database(list);
@@ -248,7 +277,7 @@ void database()
   selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(list));
 
   // test buttons clicked
-  g_signal_connect(/*G_OBJECT(add)*/GTK_BUTTON(add), "clicked",
+  g_signal_connect(G_OBJECT(add), "clicked",
       G_CALLBACK(append_item), entry);
 
   g_signal_connect(G_OBJECT(remove), "clicked",
@@ -257,12 +286,6 @@ void database()
   g_signal_connect(G_OBJECT(removeAll), "clicked",
       G_CALLBACK(remove_all), selection);
 
-  //g_signal_connect(G_OBJECT(dWindow), "destroy",
-  //    G_CALLBACK(gtk_main_quit), NULL);
-
-  // g_signal_connect(selection, "changed", G_CALLBACK(on_changed), label);
-
-  // printf("clicked database button\n");
   gtk_widget_show_all(dWindow); 
 }
 
