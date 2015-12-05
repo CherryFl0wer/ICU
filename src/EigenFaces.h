@@ -8,9 +8,9 @@
 # include "SDLPixel.h"
 # include <math.h>
 
-# define NB_IMG_TEST 20
-# define SIZE_IMG_HEIGHT 19
-# define SIZE_IMG_WIDTH  19
+# define NB_IMG_TEST 22
+# define SIZE_IMG_HEIGHT 50
+# define SIZE_IMG_WIDTH  50
 # define SIZE_IMG        (SIZE_IMG_HEIGHT * SIZE_IMG_WIDTH)
 
 double** declare_set(size_t nbImg, char** pathListImg);
