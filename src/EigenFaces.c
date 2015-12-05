@@ -226,7 +226,7 @@ void display_Q(double** Q,size_t nbImg, size_t size,size_t cote,SDL_Surface *img
   {
     for(size_t j = 0;j<size;j++)
     {
-      r = Q[j/cote][j%cote];
+      r = Q[i][j];
       pix = SDL_MapRGB(img->format,r,r,r);
       putpixel(img,j/cote,j%cote,pix);
     }
@@ -235,6 +235,19 @@ void display_Q(double** Q,size_t nbImg, size_t size,size_t cote,SDL_Surface *img
 
 }
 
+double** compute_U(double** A,double** R,size_t nbImg,size_t size)
+{
+  double** U = malloc(nbImg * sizeof(double*));
+  for(size_t i = 0; i < nbImg; i++)
+    U[i] = calloc(size, sizeof(double));
+  for(size_t i = 0 ; i<nbImg;i++)
+  {
+    for(size_t j = 0; j<size;j++)
+      U[i][j] = R[i][i] * A[i][j];
+    printf("%f\n",R[i][i]);
+  }   
+  return U;
+}
 
 int main() {
   // Get all samples of images 
@@ -261,9 +274,10 @@ int main() {
   double** covSet = covariance(set, setT, NB_IMG_TEST, SIZE_IMG);
   double** Q = compute_Q(covSet, NB_IMG_TEST);
   double** R = compute_R(covSet, Q, NB_IMG_TEST, NB_IMG_TEST);
-  
+  double** U = compute_U(set,R,NB_IMG_TEST,SIZE_IMG);
+
   SDL_Surface *img = loadimg("./Reco/1.jpeg");
-  display_Q(Q,NB_IMG_TEST,SIZE_IMG,SIZE_IMG_WIDTH,img);
+  display_Q(U,NB_IMG_TEST,SIZE_IMG,SIZE_IMG_WIDTH,img);
   
   free_mat_char(pathListImg, NB_IMG_TEST);
   free_mat(set, NB_IMG_TEST);
@@ -272,5 +286,6 @@ int main() {
   SDL_FreeSurface(img);
   free_mat(Q, NB_IMG_TEST);
   free_mat(R, NB_IMG_TEST);
+  free_mat(U, NB_IMG_TEST);
   return 0;
 }

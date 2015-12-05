@@ -13,6 +13,7 @@
 # define SIZE_IMG_WIDTH  50
 # define SIZE_IMG        (SIZE_IMG_HEIGHT * SIZE_IMG_WIDTH)
 
+void free_mat_char(char** mat, size_t row); 
 double** declare_set(size_t nbImg, char** pathListImg);
 void free_mat(double** mat, size_t row);
 double* flatten(SDL_Surface* image, size_t width, size_t height);
@@ -31,6 +32,7 @@ double* proj(double* v1, double* v2, size_t col);
 double mat_norm(double* vect, size_t col);
 double** compute_Q(double** A,size_t nbImg);
 
+double** compute_U(double** A,double** R,size_t nbImg,size_t size);
 double** compute_R(double** A,double **Q,size_t nbImg, size_t size);
 void display_Q(double** Q,size_t nbImg, size_t size,size_t cote,SDL_Surface *img);
 #endif
