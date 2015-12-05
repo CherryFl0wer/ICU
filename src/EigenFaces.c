@@ -49,12 +49,12 @@ double* flatten(SDL_Surface* image, size_t width, size_t height) {
 double mean_img(double** set, size_t nbImg ) {
   double* avgvect = calloc(SIZE_IMG, sizeof(double));
  
-  for(size_t i = 0; i < SIZE_IMG; i++) {
-    for(size_t j = 0; j < nbImg; j++) 
-      avgvect[i] += set[j][i];
+  for(size_t i = 0; i < nbImg; i++) {
+    for(size_t j = 0; j < SIZE_IMG; j++) 
+      avgvect[i] += set[i][j];
   }
   double sum = 0;
-  for(size_t i = 0; i < SIZE_IMG; i++) 
+  for(size_t i = 0; i < nbImg; i++) 
     sum += avgvect[i] / nbImg;
 
   return sum;
