@@ -149,9 +149,13 @@ double** covariance(double** set, double** transposedSet, size_t nbImg) {
 
 double* proj(double* v1, double* v2, size_t col) {
   double* vect = calloc(col, sizeof(double));
+  double p = 0;
   for(size_t i = 0; i < col; i++) {
-    vect[i] = v1[i] * v2[i];
-    vect[i] *= v1[i];
+    p += v1[i] * v2[i];
+  }
+  for(size_t i = 0;i<col;i++)
+  {
+    vect[i] = p * v1[i];
   }
   return (vect == NULL) ? NULL : vect;
 }
@@ -182,7 +186,7 @@ double** compute_Q(double** A,size_t nbImg)
     Q[i]=A[i];
     for(size_t j = i-1;j+1>=1;j--)
       Q[i] = vectSub(Q[i],proj(Q[j],A[i],nbImg),nbImg);
-    Q[i]=vectDiv(Q[i],mat_norm(A[i],nbImg),nbImg);
+    Q[i]=vectDiv(Q[i],mat_norm(Q[i],nbImg),nbImg);
   }
 
   return Q;
@@ -253,5 +257,34 @@ int main() {
   free(setOfImgT);
 
   free_mat(setOfImg, NB_IMG_TEST);
+  double **Mat = malloc(3*sizeof(double*)); 
+  for(size_t i = 0; i < 3; i++)
+    Mat[i] = calloc(3, sizeof(double));
+  //{{2,2,1},{-2,1,2},{18,0,0}};
+  Mat[0][0] = 2;
+  Mat[0][1] = 2;
+  Mat[0][2] = 1;
+  Mat[1][0] = -2;
+  Mat[1][1] = 1;
+  Mat[1][2] = 2;
+  Mat[2][0] = 18;
+  Mat[2][1] = 0;
+  Mat[2][2] = 0;
+  double **Q = compute_Q(Mat,3);
+
+  for(size_t i = 0;i<3;i++)
+  {
+    printf("[ ");
+    for(size_t j = 0;j<3;j++)
+      printf("%f ",Mat[i][j]);
+    printf("]\n");
+  }
+  for(size_t i = 0;i<3;i++)
+  {
+    printf("[ ");
+    for(size_t j = 0;j<3;j++)
+      printf("%f ",Q[i][j]);
+    printf("]\n");
+  }
   return 0;
 }
