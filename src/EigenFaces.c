@@ -64,18 +64,18 @@ double* flatten(SDL_Surface* image, size_t width, size_t height) {
 
 
 // Mean Image is going to calcul the average of each pixel
-double mean_img(double** set, size_t nbImg ) {
+double* mean_img(double** set, size_t nbImg ) {
   double* avgvect = calloc(SIZE_IMG, sizeof(double));
  
-  for(size_t i = 0; i < nbImg; i++) {
-    for(size_t j = 0; j < SIZE_IMG; j++) 
-      avgvect[i] += set[i][j];
+  for(size_t j = 0; j < SIZE_IMG; j++) 
+  {
+    for(size_t i = 0; i < nbImg; i++)
+      avgvect[j] += set[i][j];
+    avgvect[j]/=nbImg;
   }
-  double sum = 0;
-  for(size_t i = 0; i < nbImg; i++) 
-    sum += avgvect[i];
 
-  return sum/(nbImg*SIZE_IMG);
+
+  return avgvect;
 }
 
 
@@ -174,7 +174,6 @@ double** covariance(double** set, double** transposedSet, size_t nbImg, size_t s
   // Matrix of M x M where M = nb Img
   // and not N^2 x N^2 because too large 
   // C = A^t * A and not C = A*A^t 
-
   double** covMatrix =  mulR(transposedSet,set, nbImg, size, nbImg);
   return covMatrix;
 }
@@ -304,12 +303,16 @@ int main() {
   }
  
   // Step 1 : Flatten img
+  SDL_Surface *img = loadimg("./Reco/1.jpeg");
   double** set = declare_set(NB_IMG_TEST, pathListImg);
 
   // Step 2 : Average Vector Calcul
-  double eps = mean_img(set, NB_IMG_TEST);
+  double* eps = mean_img(set, NB_IMG_TEST);
   // Step 3 : Substract A.V with the pixel
-  matSubVal(set, NB_IMG_TEST, SIZE_IMG,eps);
+  for(size_t i = 0;i<NB_IMG_TEST;i++)
+    for(size_t j = 0;j<SIZE_IMG;j++)
+      set[i][j] -= eps[j];
+  display_Q(&eps,1,SIZE_IMG,SIZE_IMG_WIDTH,img);
   // Step 4 : Covariance
   double** setT = transposed(set,SIZE_IMG, NB_IMG_TEST);
   double** covSet = covariance(set, setT, NB_IMG_TEST, SIZE_IMG);
@@ -318,9 +321,8 @@ int main() {
   double** U = compute_U(set,Q,NB_IMG_TEST,SIZE_IMG);
   diagoR(R,NB_IMG_TEST);
   print_matrix(R,NB_IMG_TEST,NB_IMG_TEST);
-  SDL_Surface *img = loadimg("./Reco/1.jpeg");
-  displayImg(img);
-  display_Q(set,NB_IMG_TEST,SIZE_IMG,SIZE_IMG_WIDTH,img);
+  double** EV = matMul(covSet,set,NB_IMG_TEST,NB_IMG_TEST,SIZE_IMG);
+  display_Q(EV,NB_IMG_TEST,SIZE_IMG,SIZE_IMG_WIDTH,img);
   
   // Matrice Example
   double** matrice = malloc(3 * sizeof(double*));
