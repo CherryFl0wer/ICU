@@ -8,11 +8,12 @@
 # include "SDLPixel.h"
 # include <math.h>
 
-# define NB_IMG_TEST 6
+# define NB_IMG_TEST 22
 # define SIZE_IMG_HEIGHT 50
 # define SIZE_IMG_WIDTH  50
 # define SIZE_IMG        (SIZE_IMG_HEIGHT * SIZE_IMG_WIDTH)
 
+void diagoR(double** R,size_t nbImg);
 void free_mat_char(char** mat, size_t row); 
 double** declare_set(size_t nbImg, char** pathListImg);
 void free_mat(double** mat, size_t row);
