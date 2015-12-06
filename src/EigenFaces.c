@@ -6,7 +6,7 @@ void print_matrix(double** mat, size_t row, size_t col) {
   for(size_t j = 0; j < row; j++) { 
     printf(" ");
     for(size_t i = 0; i < col; i++) {
-      printf(" %f", mat[j][i]);
+      printf(" %d", (int)mat[j][i]);
     }
     printf("\n");
   }
@@ -290,7 +290,7 @@ void diagoR(double** R,size_t nbImg)
 }
 
 
-void Eigen(double** A, size_t nbImg, size_t sizeImg, size_t nbIter) {
+void Eigen(double** A, size_t nbImg, size_t sizeImg, size_t nbIter,double**Si,double**Qi) {
   size_t count = 0;
   double **Q = NULL, **R = NULL, **Anext = A;
   
@@ -308,16 +308,24 @@ void Eigen(double** A, size_t nbImg, size_t sizeImg, size_t nbIter) {
       S = mulR(Q, S, nbImg, sizeImg, nbImg);
     
     Anext = matMul(R, Q, nbImg, sizeImg, nbImg);
-    printf(" Iteration n°%zu : \n\n", count);
-    print_matrix(S, nbImg, sizeImg);
-    printf(" Iteration n°%zu : \n\n", count);
-    print_matrix(Anext, nbImg, sizeImg);
-    count++;
+       count++;
   } 
  /*
   print_matrix(Anext, nbImg, sizeImg);
   print_matrix(S, nbImg, sizeImg); 
   */
+  printf(" Iteration n°%zu : \n\n", count);
+  print_matrix(S, nbImg, sizeImg);
+  printf(" Iteration n°%zu : \n\n", count);
+  print_matrix(Anext, nbImg, sizeImg);
+  for(size_t i = 0;i<nbImg;i++)
+  {
+    for(size_t j = 0;j<sizeImg;j++)
+    {
+      Si[i][j] = S[i][j];
+      Qi[i][j] = Q[i][j];
+    }
+  }
   if( R != NULL || Q != NULL || S != NULL) {
     free_mat(Q, nbImg);
     free_mat(R, nbImg);
@@ -325,7 +333,7 @@ void Eigen(double** A, size_t nbImg, size_t sizeImg, size_t nbIter) {
   }
 }
 
-int main() {
+void Eigenface() {
   // Get all samples of images 
   // By   loading all the files
   char** pathListImg = malloc(NB_IMG_TEST * sizeof(char*));
@@ -376,7 +384,10 @@ int main() {
   matrice[2][0] = 0;
   matrice[2][1] = -1;
   matrice[2][2] = 6;
-  Eigen(matrice, 3, 3, 22);
+  Eigen(covSet, NB_IMG_TEST, NB_IMG_TEST,1000,Q,R);
+  
+  double** EV = matMul(Q,set,NB_IMG_TEST,NB_IMG_TEST,SIZE_IMG);
+  display_Q(EV,NB_IMG_TEST,SIZE_IMG,SIZE_IMG_WIDTH,img);
   //matrice = transposed(matrice, 3, 3);
   /*
   print_matrix(matrice, 3, 3);
@@ -395,5 +406,4 @@ int main() {
   free_mat(R, NB_IMG_TEST);
   free_mat(U, NB_IMG_TEST);
   
-  return 0;
 }

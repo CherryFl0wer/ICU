@@ -13,6 +13,7 @@
 # define SIZE_IMG_WIDTH  50
 # define SIZE_IMG        (SIZE_IMG_HEIGHT * SIZE_IMG_WIDTH)
 
+void Eigenface();
 void diagoR(double** R,size_t nbImg);
 void free_mat_char(char** mat, size_t row); 
 double** declare_set(size_t nbImg, char** pathListImg);
@@ -40,5 +41,5 @@ void display_Q(double** Q,size_t nbImg, size_t size,size_t cote,SDL_Surface *img
 double** mulR(double** A, double** B, size_t nA, size_t nm, size_t mB);
 void print_matrix(double** mat, size_t row, size_t col);
 
-void Eigen(double** A, size_t nbImg, size_t sizeImg, size_t nbIter);
+void Eigen(double** A, size_t nbImg, size_t sizeImg, size_t nbIter,double**Si,double**Qi);
 #endif
