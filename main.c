@@ -15,16 +15,17 @@
 #include "./gtk/db/db.h"
 #include "./src/Training.h"
 #include "./src/Detection.h"
-
+#include "./src/EigenFaces.h"
 void loadImg(struct ImgVal *img);
 
 int main()
 {
   printf("Tapez l'étape voulue : \n");
-  printf("-1 : pré-traitement de l'image\n");
-  printf("-2 : reconnaissance visage\n");
-  printf("-3 : accès à la base de donnée\n");
-  printf("-4 : création du strongclassifier\n");
+  printf("-1 : Pre-treatment\n");
+  printf("-2 : Detection of faces\n");
+  printf("-3 : Manage DataBase\n");
+  printf("-4 : Recognition of faces\n");
+  printf("-5 : creation of strongclassifier\n");
   int input = 0;
   if(!(scanf("%d",&(input))))
   {
@@ -122,6 +123,9 @@ int main()
       ManageDatabase();
       break;
     case 4:
+      Eigenface();
+      break;
+    case 5:
       img = malloc(sizeof(struct ImgVal));
       loadImg(img);
       struct StrongClassifier *sc = malloc(sizeof(struct StrongClassifier));
