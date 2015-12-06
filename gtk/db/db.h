@@ -3,15 +3,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h> // Try to avoid stdbool and use int 0 = false 1 = true 
+#include <dirent.h>
+#include <libgen.h>
+#include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
+#include <stdbool.h>
 
 
-typedef struct Person 	//Have to implement some caracteritic for each
+typedef struct Person 	
 { 
-	char *name;
+    char name[20];
     int nb_pics;
+
 } person;
 
+int search_in_database(FILE *db, char *name);
+char** get_pict(char *name);
+void add_in_folder(char *path,char *name);
 void ManageDatabase();
 void serialization(person *new, FILE *database);
 void deserialization(char *name);
