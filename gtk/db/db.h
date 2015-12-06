@@ -21,7 +21,7 @@ int search_in_database(FILE *db, char *name);
 char** get_pict(char *name);
 void add_in_folder(char *path,char *name);
 void ManageDatabase();
-void serialization(person *new, FILE *database);
+void serialization(person *new);
 void deserialization(char *name);
 void modify(char *name, char *n);
 void remov(char *name);

@@ -1,5 +1,5 @@
 #include "db.h"
-#include "SDLPixel.h"
+#include "../../src/SDLPixel.h"
 
 char** get_pict(char *name)
 {
@@ -81,13 +81,15 @@ void add_in_folder(char *path,char *name)
   rename(a,str3);
 }
 
-void serialization(person *new, FILE *database)
+void serialization(person *new)
 {
+
+  FILE *data = fopen("database.obj","rb+");
   person *answer = calloc(1,sizeof(struct Person));
   char *name_copy = malloc(sizeof(char*));
   strcpy(name_copy,new->name);
   bool find = false;
-  while((fread(answer, sizeof(struct Person), 1, database)) && !find)
+  while((fread(answer, sizeof(struct Person), 1, data)) && !find)
   {
     if (strcmp(answer->name, new->name)==0)
     {
@@ -115,8 +117,11 @@ void serialization(person *new, FILE *database)
     new->nb_pics = 0;
     new->nb_pics = nb1;
     strcpy(new->name,name_copy);
-    fwrite(new, sizeof(struct Person), 1, database);
+    printf("avtn");
+    fwrite(new, sizeof(struct Person), 1, data);
+    printf("apres");
   }
+  fclose(data);
   printf("Add %s succeed\n",new->name);
 }
 void print(FILE *f)
@@ -310,7 +315,7 @@ void ManageDatabase()
     switch(choice)
     {
       case 1:{
-               db = fopen("database.obj","r+b");
+              // db = fopen("database.obj","rb+");
                printf("Enter a name : ");
                person *new = calloc(1,sizeof(struct Person));
                char *name = malloc(sizeof(char*));
@@ -318,9 +323,9 @@ void ManageDatabase()
                  exit(0);
                strcpy(new->name,name);
                //free(name);
-               serialization(new,db);
+               serialization(new);
                //free(new);
-               fclose(db);
+              // fclose(db);
                break;}
       case 2:{
                db = fopen("database.obj","r+b");
@@ -363,9 +368,11 @@ void ManageDatabase()
                }
                else
                {
+                 printf("%s",name);
                  char **ways = get_pict(name);
                  for(int e = 0; e<3;e++)
                  {
+                   //printf("%s",ways[e]);
                    SDL_Surface *im = loadimg(ways[e]);
                    displayImg(im);
                    SDL_FreeSurface(im);
