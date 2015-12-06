@@ -1,4 +1,63 @@
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <dirent.h>
+#include <libgen.h>
 #include "db.h"
+
+char** get_pict(char *name)
+{
+  DIR *d = opendir("imagesreco/");
+  struct dirent *dir;
+  char** names = (char**) malloc(sizeof(char) * (3*20));
+  int i = 0;
+  int compt = 0;
+  DIR *f = opendir("imagesreco/");
+  struct dirent *di;
+  while((di = readdir(f)))
+  {
+    compt++;
+  }
+  while((dir = readdir(d)))
+  {
+    if (!(!strcmp(dir->d_name, ".") || !strcmp(dir->d_name, "..")))
+    {
+      printf("%s\n",dir->d_name);
+      char *n = malloc(sizeof(char*));
+      if(dir->d_name[0] == name[0])
+      {
+        for (int j = 0; dir->d_name[j] != '1';j++)
+        {
+          n[j]=dir->d_name[j];
+        }
+      }
+      if (strcmp(n,name) == 0)
+      {
+        char *str3 = (char *) malloc(1 + strlen(dir->d_name) +  strlen("imagesreco/"));
+        strcpy(str3,"imagesreco/");
+        strcat(str3,dir->d_name);
+        printf("%s\n",str3);
+        names[i] = str3;
+        i++;
+      }
+    }
+  }
+  closedir(d);
+  closedir(f);
+  return names;
+}
+
+void add_in_folder(char *path)
+{
+  mkdir("imagesreco",S_IRWXU | S_IRWXG | S_IRWXO);
+  char *way = "imagesreco/";
+  const char *a = path;
+  const char *b = basename(path);
+  char *str3 = (char *) malloc(1 + strlen(way) +  strlen(b) );
+  strcpy(str3, way);
+  strcat(str3, b);
+  rename(a,str3);
+}
+
 
 void serialization(person *new, FILE *database) 
 {
