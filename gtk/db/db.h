@@ -12,6 +12,8 @@ typedef struct Person 	//Have to implement some caracteritic for each
     int nb_pics;
 } person;
 
+char** get_pict(char *name);
+void add_in_folder(char *path);
 void ManageDatabase();
 void serialization(person *new, FILE *database);
 void deserialization(char *name);

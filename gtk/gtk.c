@@ -141,7 +141,7 @@ void pics_window(char *name)
   GtkWidget *window;
   GtkWidget *box;
   GtkWidget *Imag;
-  char *pics[] = get_pict(name);
+  char **pics = get_pict(name);
 
   // init window
   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
