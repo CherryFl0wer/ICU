@@ -142,7 +142,26 @@ void pics_window(char *name)
   GtkWidget *box;
   GtkWidget *Imag;
   char **pics = get_pict(name);
-
+  /*
+  int size=0;
+  DIR *d = opendir("imagesreco/");
+  struct dirent *dir;
+  while (dir == readdir(d))
+  {
+    char *s1 = malloc(sizeof(char*));
+    char *s2 = malloc(sizeof(char*));
+    char *s3 = malloc(sizeof(char*));
+    strcpy(s1,name);
+    strcpy(s2,name);
+    strcpy(s3,name);
+    strcpy(s1,"1.jpeg");
+    strcpy(s2,"11.jpeg");
+    strcpy(s3,"111.jpeg");
+    if (dir->d_name == s1 || dir->d_name == s2 || dir->d_name == s3)
+      size++;
+  }
+  printf("\n\n%d\n\n",size);
+  */
   // init window
   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_MOUSE);
