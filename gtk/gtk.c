@@ -3,13 +3,124 @@
 #include "db/db.h"
 #include "db/db.c"
 
+char* constchar_to_char(const char *mcc)
+{
+  char *result = malloc(strlen(mcc) + 1);
+  unsigned long i = 0;
+  while(i < strlen(mcc))
+  {
+    result[i] = mcc[i];
+    i++;
+  }
+  result[i] = 0;
+
+  return result;
+  free(result);
+}
+
 /********************/
 /***Identification***/
 /********************/
 
+void pre_traitement(GtkWidget *widget, gpointer entry)
+{
+  SDL_Surface  *image;
+  struct ImgVal *img;
+  struct StrongClassifier *strong;
+
+  SDLInit();
+  const char *str = gtk_entry_get_text(entry);
+  char *path = constchar_to_char(str);
+
+  image = loadimg(path);
+
+  // _____________________ //
+  displayImg(image);
+  segIm(image);
+  displayImg(image);
+  int **array = imgToArrayFace(image);
+  integralImg(array,image->w,image->h);
+  int *x = malloc(sizeof(int)),*y = malloc(sizeof(int)),*w = malloc(sizeof(int));
+  face(array,x,y,w,image->w,image->h);
+  square(image,*x,*y,*w);
+  displayImg(image);
+  image = loadimg(path);
+  displayImg(image);
+  imgToGreyScale(image);
+  displayImg(image);
+  normalize(image);
+  displayImg(image);
+  equalize(image);
+  displayImg(image);
+  SDL_LockSurface(image);
+  int **tabImg = imgToArray(image);
+  integralImg(tabImg, image->w, image->h);
+
+  SDL_UnlockSurface(image);
+
+  freeUint8Array(tabImg, image->w);
+
+  SDL_FreeSurface(image);
+  SDL_Quit();
+
+  widget = 0;
+}
+
+void reconnaissance(GtkWidget *widget, gpointer entry)
+{
+  SDL_Surface  *image;
+  struct ImgVal *img;
+  struct StrongClassifier *strong;
+
+  const char *str = gtk_entry_get_text(entry);
+  char *path = constchar_to_char(str);
+
+
+  strong = malloc(sizeof(struct StrongClassifier));
+  get_training(strong);
+  SDLInit();
+  printf("entrez le chemin d'une image\n");
+  char path2[255];
+  if(!(scanf("%s",path2)))
+  {
+    printf("erreur d'acquisition");
+    return 0;
+  }      
+  image = loadimg(path2);
+
+  // _____________________ //
+  displayImg(image);
+  imgToGreyScale(image);
+  normalize(image);
+  equalize(image);
+  SDL_LockSurface(image);
+  int **tabImg2 = imgToArray(image);
+  integralImg(tabImg2, image->w, image->h);
+  struct Rect rects[250];
+  detect(rects,strong,tabImg2,image->w,image->h);
+  int cpt = 0;
+  while(cpt < 250 && rects[cpt].x >= 0)
+  {
+    square(image,rects[cpt].x,rects[cpt].y,rects[cpt].w);
+    cpt++;
+  }
+  printf("number of faces : %d\n",cpt);
+
+  SDL_UnlockSurface(image);
+  displayImg(image);
+
+  SDL_FreeSurface(image);
+  SDL_Quit();
+  free(strong);
+}
+
 void identification()
 {
-  GtkWidget* iWindow;
+  GtkWidget *iWindow;
+  GtkWidget *entry;
+  GtkWidget *pretBtn;
+  GtkWidget *recoBtn;
+  GtkWidget *box;
 
   // creation of the window
   iWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -18,7 +129,29 @@ void identification()
   gtk_window_set_title(GTK_WINDOW(iWindow), "Identification");
   gtk_container_set_border_width(GTK_CONTAINER(iWindow), 15);
 
-  printf("clicked identification button\n");
+  // init entry
+  entry = gtk_entry_new();
+  gtk_widget_set_size_request(entry, 120, -1);
+
+  // init buttons
+  pretBtn = gtk_button_new();
+  recoBtn = gtk_button_new();
+  gtk_button_set_label(GTK_BUTTON(pretBtn), "pré-traitement");
+  gtk_button_set_label(GTK_BUTTON(recoBtn), "reconnaissance");
+
+  // init box
+  box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+  gtk_container_add(GTK_CONTAINER(iWindow), box);
+  gtk_box_pack_start(GTK_BOX(box), entry, TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(box), pretBtn, TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(box), recoBtn, TRUE, TRUE, 0);
+
+  g_signal_connect(G_OBJECT(pretBtn), "clicked",
+      G_CALLBACK(pre_traitement), entry);
+
+  g_signal_connect(G_OBJECT(recoBtn), "clicked",
+      G_CALLBACK(reconnaisaance), entry);
+
   gtk_widget_show_all(iWindow);
 }
 
@@ -34,21 +167,6 @@ enum
 };
 
 GtkWidget *list;
-
-char* constchar_to_char(const char *mcc)
-{
-  char *result = malloc(strlen(mcc) + 1);
-  unsigned long i = 0;
-  while(i < strlen(mcc))
-  {
-    result[i] = mcc[i];
-    i++;
-  }
-  result[i] = 0;
-
-  return result;
-  free(result);
-}
 
 /*** entry ***/
 void append_item(GtkWidget *widget, gpointer entry) 
@@ -75,12 +193,12 @@ void append_item(GtkWidget *widget, gpointer entry)
     new->nb_pics = 2;
     fwrite(new, sizeof(struct Person), 1, db);
   }
-  
+
   store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(list)));
-  
+
   gtk_list_store_append(store, &iter);
   gtk_list_store_set(store, &iter, LIST_ITEM, str, -1);
-  
+
   gtk_entry_set_text(entry, "");
 
   free(answer);
@@ -128,7 +246,7 @@ void remove_all(GtkWidget *widget/*, gpointer selection*/)
   if (gtk_tree_model_get_iter_first(model, &iter) == FALSE) {
     return;
   }
-  
+
   FILE *db = fopen("database.obj", "w");
   fclose(db);
   gtk_list_store_clear(store);
@@ -142,26 +260,7 @@ void pics_window(char *name)
   GtkWidget *box;
   GtkWidget *Imag;
   char **pics = get_pict(name);
-  /*
-  int size=0;
-  DIR *d = opendir("imagesreco/");
-  struct dirent *dir;
-  while (dir == readdir(d))
-  {
-    char *s1 = malloc(sizeof(char*));
-    char *s2 = malloc(sizeof(char*));
-    char *s3 = malloc(sizeof(char*));
-    strcpy(s1,name);
-    strcpy(s2,name);
-    strcpy(s3,name);
-    strcpy(s1,"1.jpeg");
-    strcpy(s2,"11.jpeg");
-    strcpy(s3,"111.jpeg");
-    if (dir->d_name == s1 || dir->d_name == s2 || dir->d_name == s3)
-      size++;
-  }
-  printf("\n\n%d\n\n",size);
-  */
+
   // init window
   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_MOUSE);
@@ -189,15 +288,15 @@ void show_pic(GtkWidget *widget, gpointer selection)
   GtkTreeModel *model;
   GtkTreeIter  iter;
   char *value;
-   
+
   store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(list)));
   model = gtk_tree_view_get_model(GTK_TREE_VIEW(list));
-   
+
   if (gtk_tree_model_get_iter_first(model, &iter) == FALSE) 
   {
     return;
   }
-  
+
   if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(selection),
         &model, &iter))
   {
@@ -227,27 +326,6 @@ void init_list(GtkWidget *list)
   g_object_unref(store);
 }
 
-/*
-   void init_list(GtkWidget *list) 
-   {
-   GtkCellRenderer *renderer;
-   GtkTreeViewColumn *column;
-   GtkListStore *store;
-
-   renderer = gtk_cell_renderer_text_new ();
-   column = gtk_tree_view_column_new_with_attributes("List Items",
-   renderer, "text", LIST_ITEM, NULL);
-   gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);
-
-   store = gtk_list_store_new(N_COLUMNS, G_TYPE_STRING);
-
-   gtk_tree_view_set_model(GTK_TREE_VIEW(list), 
-   GTK_TREE_MODEL(store));
-
-   g_object_unref(store);
-   }
-   */
-
 void add_database(GtkWidget *list)
 {
 
@@ -272,25 +350,6 @@ void add_database(GtkWidget *list)
   free(a);
   fclose(db);
 }
-
-
-/*
-   void on_changed(GtkWidget *widget, gpointer label) 
-   {
-
-   GtkTreeIter iter;
-   GtkTreeModel *model;
-   gchar *value;
-
-   if (gtk_tree_selection_get_selected(
-   GTK_TREE_SELECTION(widget), &model, &iter)) {
-
-   gtk_tree_model_get(model, &iter, LIST_ITEM, &value,  -1);
-   gtk_label_set_text(GTK_LABEL(label), value);
-   g_free(value);
-   }
-   }
-   */
 
 void database()
 { 
