@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
 #include "db/db.h"
+#include "db/db.c"
 
 /********************/
 /***Identification***/
@@ -95,6 +96,7 @@ void remove_item(GtkWidget *widget, gpointer selection)
   GtkListStore *store;
   GtkTreeModel *model;
   GtkTreeIter  iter;
+  char *value;
 
   store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(list)));
   model = gtk_tree_view_get_model(GTK_TREE_VIEW(list));
@@ -104,7 +106,10 @@ void remove_item(GtkWidget *widget, gpointer selection)
   }
 
   if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(selection), 
-        &model, &iter)) {
+        &model, &iter)) 
+  {
+    gtk_tree_model_get(model, &iter, LIST_ITEM, &value,  -1);
+    remov(value);
     gtk_list_store_remove(store, &iter);
   }
   widget = 0;
@@ -123,10 +128,66 @@ void remove_all(GtkWidget *widget/*, gpointer selection*/)
   if (gtk_tree_model_get_iter_first(model, &iter) == FALSE) {
     return;
   }
-
+  
+  FILE *db = fopen("database.obj", "w");
+  fclose(db);
   gtk_list_store_clear(store);
   widget = 0;
 }
+
+/*** new window pictures ***/
+void pics_window(char *name)
+{
+  GtkWidget *window;
+  GtkWidget *box;
+  GtkWidget *Imag;
+  char *pics[] = get_pict(name);
+
+  // init window
+  window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_MOUSE);
+  gtk_window_set_default_size(GTK_WINDOW(window), 200, 100);
+  gtk_window_set_title(GTK_WINDOW(window), name);
+  gtk_container_set_border_width(GTK_CONTAINER(window), 5);
+
+  box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+
+  for(int i = 0; i < 3; i++)
+  {
+    Imag = gtk_image_new_from_file(pics[i]);
+    gtk_box_pack_start(GTK_BOX(box), Imag, FALSE, TRUE, 3);
+  }
+
+  gtk_container_add(GTK_CONTAINER(window), box);
+
+  gtk_widget_show_all(window);
+}
+
+/*** show pictures ***/
+void show_pic(GtkWidget *widget, gpointer selection)
+{
+  GtkListStore *store;
+  GtkTreeModel *model;
+  GtkTreeIter  iter;
+  char *value;
+   
+  store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(list)));
+  model = gtk_tree_view_get_model(GTK_TREE_VIEW(list));
+   
+  if (gtk_tree_model_get_iter_first(model, &iter) == FALSE) 
+  {
+    return;
+  }
+  
+  if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(selection),
+        &model, &iter))
+  {
+    gtk_tree_model_get(model, &iter, LIST_ITEM, &value,  -1);
+    pics_window(value);
+  }
+  widget = 0;
+}
+
 
 /*** Init ***/
 void init_list(GtkWidget *list) 
@@ -221,6 +282,7 @@ void database()
   GtkWidget *add;
   GtkWidget *removeAll;
   GtkWidget *entry;
+  GtkWidget *picture;
 
   GtkWidget *box;
   GtkWidget *hbox;
@@ -257,6 +319,7 @@ void database()
   add = gtk_button_new_with_label("Add");
   remove = gtk_button_new_with_label("Remove");
   removeAll = gtk_button_new_with_label("Remove All");
+  picture = gtk_button_new_with_label("Picture");
   entry = gtk_entry_new();
   gtk_widget_set_size_request(entry, 120, -1);
 
@@ -264,6 +327,7 @@ void database()
   gtk_box_pack_start(GTK_BOX(hbox), entry, FALSE, TRUE, 3);
   gtk_box_pack_start(GTK_BOX(hbox), remove, FALSE, TRUE, 3);
   gtk_box_pack_start(GTK_BOX(hbox), removeAll, FALSE, TRUE, 3);
+  gtk_box_pack_start(GTK_BOX(hbox), picture, FALSE, TRUE, 3);
 
   gtk_box_pack_start(GTK_BOX(box), hbox, FALSE, TRUE, 3);
 
@@ -285,6 +349,9 @@ void database()
 
   g_signal_connect(G_OBJECT(removeAll), "clicked",
       G_CALLBACK(remove_all), selection);
+
+  g_signal_connect(G_OBJECT(picture), "clicked",
+      G_CALLBACK(show_pic), selection);
 
   gtk_widget_show_all(dWindow); 
 }
