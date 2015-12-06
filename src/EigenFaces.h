@@ -39,4 +39,6 @@ void display_Q(double** Q,size_t nbImg, size_t size,size_t cote,SDL_Surface *img
 
 double** mulR(double** A, double** B, size_t nA, size_t nm, size_t mB);
 void print_matrix(double** mat, size_t row, size_t col);
+
+void Eigen(double** A, size_t nbImg, size_t sizeImg, size_t nbIter);
 #endif

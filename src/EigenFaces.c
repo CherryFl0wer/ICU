@@ -6,7 +6,7 @@ void print_matrix(double** mat, size_t row, size_t col) {
   for(size_t j = 0; j < row; j++) { 
     printf(" ");
     for(size_t i = 0; i < col; i++) {
-      printf(" %d",(int) mat[j][i]);
+      printf(" %f", mat[j][i]);
     }
     printf("\n");
   }
@@ -288,6 +288,43 @@ void diagoR(double** R,size_t nbImg)
       if(j>i)
         R[i][j] = 0;
 }
+
+
+void Eigen(double** A, size_t nbImg, size_t sizeImg, size_t nbIter) {
+  size_t count = 0;
+  double **Q = NULL, **R = NULL, **Anext = A;
+  
+  double** S = malloc(nbImg * sizeof(double*));
+  for(size_t i = 0; i < nbImg; i++)
+    S[i] = calloc(sizeImg, sizeof(double)); 
+  while(count < nbIter) {
+    Q = compute_Q(Anext, nbImg, sizeImg);
+    R = compute_R(Anext, Q, nbImg, sizeImg);
+    Q = transposed(Q, nbImg, sizeImg);
+
+    if(count == 0)
+      S = Q;
+    else
+      S = mulR(Q, S, nbImg, sizeImg, nbImg);
+    
+    Anext = matMul(R, Q, nbImg, sizeImg, nbImg);
+    printf(" Iteration n°%zu : \n\n", count);
+    print_matrix(S, nbImg, sizeImg);
+    printf(" Iteration n°%zu : \n\n", count);
+    print_matrix(Anext, nbImg, sizeImg);
+    count++;
+  } 
+ /*
+  print_matrix(Anext, nbImg, sizeImg);
+  print_matrix(S, nbImg, sizeImg); 
+  */
+  if( R != NULL || Q != NULL || S != NULL) {
+    free_mat(Q, nbImg);
+    free_mat(R, nbImg);
+    free_mat(S, nbImg);
+  }
+}
+
 int main() {
   // Get all samples of images 
   // By   loading all the files
@@ -316,13 +353,13 @@ int main() {
   // Step 4 : Covariance
   double** setT = transposed(set,SIZE_IMG, NB_IMG_TEST);
   double** covSet = covariance(set, setT, NB_IMG_TEST, SIZE_IMG);
-  double** Q = compute_Q(covSet, NB_IMG_TEST,SIZE_IMG);
-  double** R = compute_R(covSet, Q, NB_IMG_TEST, SIZE_IMG);
+  double** Q = compute_Q(covSet, NB_IMG_TEST, NB_IMG_TEST);
+  double** R = compute_R(covSet, Q, NB_IMG_TEST, NB_IMG_TEST);
   double** U = compute_U(set,Q,NB_IMG_TEST,SIZE_IMG);
-  diagoR(R,NB_IMG_TEST);
-  print_matrix(R,NB_IMG_TEST,NB_IMG_TEST);
-  double** EV = matMul(covSet,set,NB_IMG_TEST,NB_IMG_TEST,SIZE_IMG);
-  display_Q(EV,NB_IMG_TEST,SIZE_IMG,SIZE_IMG_WIDTH,img);
+  //diagoR(R,NB_IMG_TEST);
+  //print_matrix(R,NB_IMG_TEST,NB_IMG_TEST);
+  //double** EV = matMul(covSet,set,NB_IMG_TEST,NB_IMG_TEST,SIZE_IMG);
+  //display_Q(EV,NB_IMG_TEST,SIZE_IMG,SIZE_IMG_WIDTH,img);
   
   // Matrice Example
   double** matrice = malloc(3 * sizeof(double*));
@@ -330,23 +367,24 @@ int main() {
     matrice[i] = calloc(3, sizeof(double));
   }
   
-  matrice[0][0] = 3;
+  matrice[0][0] = 2;
   matrice[0][1] = 1;
-  matrice[0][2] = 2;
-  matrice[1][0] = 2;
-  matrice[1][1] = 1;
-  matrice[1][2] = 1;
-  matrice[2][0] = 1;
-  matrice[2][1] = 2;
-  matrice[2][2] = 3;
- 
+  matrice[0][2] = 0;
+  matrice[1][0] = 1;
+  matrice[1][1] = 3;
+  matrice[1][2] = -1;
+  matrice[2][0] = 0;
+  matrice[2][1] = -1;
+  matrice[2][2] = 6;
+  Eigen(matrice, 3, 3, 22);
   //matrice = transposed(matrice, 3, 3);
-
+  /*
   print_matrix(matrice, 3, 3);
   double** Qmatrice = compute_Q(matrice, 3, 3);
   print_matrix(Qmatrice, 3, 3);
   double** Rmatrice = compute_R(matrice, Qmatrice, 3, 3);
   print_matrix(Rmatrice, 3, 3);
+  */
   free_mat(matrice, 3);
   free_mat_char(pathListImg, NB_IMG_TEST);
   free_mat(set, NB_IMG_TEST);
