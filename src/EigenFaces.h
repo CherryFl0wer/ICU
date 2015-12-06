@@ -8,7 +8,7 @@
 # include "SDLPixel.h"
 # include <math.h>
 
-# define NB_IMG_TEST 22
+# define NB_IMG_TEST 6
 # define SIZE_IMG_HEIGHT 50
 # define SIZE_IMG_WIDTH  50
 # define SIZE_IMG        (SIZE_IMG_HEIGHT * SIZE_IMG_WIDTH)

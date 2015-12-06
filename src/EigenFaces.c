@@ -73,9 +73,9 @@ double mean_img(double** set, size_t nbImg ) {
   }
   double sum = 0;
   for(size_t i = 0; i < nbImg; i++) 
-    sum += avgvect[i] / nbImg;
+    sum += avgvect[i];
 
-  return sum;
+  return sum/(nbImg*SIZE_IMG);
 }
 
 
@@ -175,7 +175,7 @@ double** covariance(double** set, double** transposedSet, size_t nbImg, size_t s
   // and not N^2 x N^2 because too large 
   // C = A^t * A and not C = A*A^t 
 
-  double** covMatrix =  matMul(set, transposedSet, nbImg, size, nbImg);
+  double** covMatrix =  mulR(transposedSet,set, nbImg, size, nbImg);
   return covMatrix;
 }
 
@@ -229,7 +229,6 @@ double** compute_Q(double** A,size_t nbImg, size_t size)
 double** compute_R(double** A, double** Q, size_t nbImg, size_t size)
 {
   double** trans_Q = transposed(Q,size,nbImg);
-  print_matrix(trans_Q, 3, 2);
   double** R = mulR(trans_Q,A, nbImg,size,nbImg);
   return R;
 }  
@@ -292,52 +291,60 @@ int main() {
     snprintf(path, 30, "./Reco/%zu.jpeg", i);
     strcpy(pathListImg[i-1], path);
   }
- /* 
+ 
   // Step 1 : Flatten img
   double** set = declare_set(NB_IMG_TEST, pathListImg);
+
   // Step 2 : Average Vector Calcul
   double eps = mean_img(set, NB_IMG_TEST);
+  printf("%f\n", eps);
   // Step 3 : Substract A.V with the pixel
   matSubVal(set, NB_IMG_TEST, SIZE_IMG,eps);
   // Step 4 : Covariance
   double** setT = transposed(set,SIZE_IMG, NB_IMG_TEST);
   double** covSet = covariance(set, setT, NB_IMG_TEST, SIZE_IMG);
-  double** Q = compute_Q(covSet, NB_IMG_TEST);
-  double** R = compute_R(covSet, Q, NB_IMG_TEST, NB_IMG_TEST);
+  double** Q = compute_Q(covSet, NB_IMG_TEST,SIZE_IMG);
+  double** R = compute_R(covSet, Q, NB_IMG_TEST, SIZE_IMG);
   double** U = compute_U(set,R,NB_IMG_TEST,SIZE_IMG);
-*/
-//  SDL_Surface *img = loadimg("./Reco/1.jpeg");
- // display_Q(U,NB_IMG_TEST,SIZE_IMG,SIZE_IMG_WIDTH,img);
+  print_matrix(R,NB_IMG_TEST,NB_IMG_TEST);
+  SDL_Surface *img = loadimg("./Reco/1.jpeg");
+  //display_Q(U,NB_IMG_TEST,SIZE_IMG,SIZE_IMG_WIDTH,img);
   
   // Matrice Example
-  double** matrice = malloc(2 * sizeof(double*));
-  for(size_t i = 0; i < 2; i++) {
-    matrice[i] = calloc(3, sizeof(double));
+  double** matrice = malloc(3 * sizeof(double*));
+  for(size_t i = 0; i < 3; i++) {
+    matrice[i] = calloc(4, sizeof(double));
   }
   
   matrice[0][0] = 2;
   matrice[0][1] = 2;
   matrice[0][2] = 1;
+  matrice[0][3] = -1;
   matrice[1][0] = 1;
   matrice[1][1] = 1;
   matrice[1][2] = 5;
+  matrice[1][3] = 10;
+  matrice[2][0] = -3;
+  matrice[2][1] = 4;
+  matrice[2][2] = 0.5;
+  matrice[2][3] = 1;
  
   //matrice = transposed(matrice, 3, 3);
 
-  print_matrix(matrice, 2, 3);
-  double** Qmatrice = compute_Q(matrice, 2, 3);
-  print_matrix(Qmatrice, 2, 3);
-  double** Rmatrice = compute_R(matrice, Qmatrice, 2, 3);
-  print_matrix(Rmatrice, 2, 2);
+  print_matrix(matrice, 3, 4);
+  double** Qmatrice = compute_Q(matrice, 3, 4);
+  print_matrix(Qmatrice, 3, 4);
+  double** Rmatrice = compute_R(matrice, Qmatrice, 3, 4);
+  print_matrix(Rmatrice, 3, 3);
   free_mat(matrice, 3);
   free_mat_char(pathListImg, NB_IMG_TEST);
- /* free_mat(set, NB_IMG_TEST);
+  free_mat(set, NB_IMG_TEST);
   free_mat(setT, SIZE_IMG);
   free_mat(covSet, NB_IMG_TEST);
- // SDL_FreeSurface(img);
+  SDL_FreeSurface(img);
   free_mat(Q, NB_IMG_TEST);
   free_mat(R, NB_IMG_TEST);
   free_mat(U, NB_IMG_TEST);
- */ 
+  
   return 0;
 }
