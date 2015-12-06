@@ -372,7 +372,7 @@ void ManageDatabase()
                  char **ways = get_pict(name);
                  for(int e = 0; e<3;e++)
                  {
-                   printf("%s",ways[e]);
+                   //printf("%s",ways[e]);
                    SDL_Surface *im = loadimg(ways[e]);
                    displayImg(im);
                    SDL_FreeSurface(im);
